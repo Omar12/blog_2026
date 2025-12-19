@@ -1,0 +1,81 @@
+/* Additional markdown styling for code blocks and syntax highlighting */
+.prose pre {
+  @apply rounded-lg p-4 overflow-x-auto;
+}
+
+.prose code {
+  @apply text-sm;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0;
+}
+
+/* Syntax highlighting for code blocks */
+.prose .hljs {
+  @apply bg-transparent;
+}
+
+.prose .hljs-comment,
+.prose .hljs-quote {
+  @apply text-[var(--text-secondary)] italic;
+}
+
+.prose .hljs-keyword,
+.prose .hljs-selector-tag,
+.prose .hljs-addition {
+  @apply text-[var(--primary)];
+}
+
+.prose .hljs-number,
+.prose .hljs-string,
+.prose .hljs-meta .hljs-string,
+.prose .hljs-literal,
+.prose .hljs-doctag,
+.prose .hljs-regexp {
+  @apply text-[var(--secondary)];
+}
+
+.prose .hljs-title,
+.prose .hljs-section,
+.prose .hljs-name,
+.prose .hljs-selector-id,
+.prose .hljs-selector-class {
+  @apply text-[var(--accent)];
+}
+
+.prose .hljs-attribute,
+.prose .hljs-attr,
+.prose .hljs-variable,
+.prose .hljs-template-variable,
+.prose .hljs-class .hljs-title,
+.prose .hljs-type {
+  @apply text-[var(--primary)];
+}
+
+.prose .hljs-symbol,
+.prose .hljs-bullet,
+.prose .hljs-subst,
+.prose .hljs-meta,
+.prose .hljs-meta .hljs-keyword,
+.prose .hljs-selector-attr,
+.prose .hljs-selector-pseudo,
+.prose .hljs-link {
+  @apply text-[var(--text)];
+}
+
+.prose table {
+  @apply border-collapse w-full;
+}
+
+.prose th {
+  @apply bg-[var(--surface)] border border-[var(--border)] px-4 py-2 text-left font-semibold;
+}
+
+.prose td {
+  @apply border border-[var(--border)] px-4 py-2;
+}
+
+.prose img {
+  @apply rounded-lg shadow-md;
+}

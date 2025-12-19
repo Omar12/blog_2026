@@ -1,0 +1,117 @@
+name: Proofread Blog Posts
+
+on:
+  pull_request:
+    paths:
+      - 'content/posts/**/*.md'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  proofread:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get changed markdown files
+        id: changed-files
+        uses: tj-actions/changed-files@v42
+        with:
+          files: content/posts/**/*.md
+
+      - name: Proofread changed files
+        if: steps.changed-files.outputs.any_changed == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          echo "## 📝 Proofreading Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Create comment body file
+          echo "## 📝 Proofreading Results" > comment.md
+          echo "" >> comment.md
+          echo "Claude AI has reviewed the following blog posts:" >> comment.md
+          echo "" >> comment.md
+
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "Processing: $file"
+            echo "### 📄 \`$file\`" >> comment.md
+            echo "" >> comment.md
+
+            # Run proofreading script and capture output
+            if npx tsx scripts/proofread.ts "$file" > proofread_output.txt 2>&1; then
+              cat proofread_output.txt >> comment.md
+              echo "" >> comment.md
+              echo "---" >> comment.md
+              echo "" >> comment.md
+
+              # Also add to step summary
+              echo "### 📄 \`$file\`" >> $GITHUB_STEP_SUMMARY
+              cat proofread_output.txt >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ Error proofreading $file" >> comment.md
+              echo "" >> comment.md
+            fi
+          done
+
+          echo "" >> comment.md
+          echo "---" >> comment.md
+          echo "*Powered by Claude AI via Anthropic API*" >> comment.md
+
+      - name: Post PR comment
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const commentBody = fs.readFileSync('comment.md', 'utf8');
+
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.find(comment =>
+              comment.user.type === 'Bot' &&
+              comment.body.includes('📝 Proofreading Results')
+            );
+
+            // Update or create comment
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: commentBody
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: commentBody
+              });
+            }
+
+      - name: Summary
+        if: steps.changed-files.outputs.any_changed == 'false'
+        run: |
+          echo "No markdown files were changed in this PR." >> $GITHUB_STEP_SUMMARY

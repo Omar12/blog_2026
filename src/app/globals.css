@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import '../styles/markdown.css';
+
+:root {
+  --bg: #fff9f5;
+  --surface: #ffffff;
+  --primary: #e8b4b8;
+  --secondary: #b8d4e8;
+  --accent: #d4c4e8;
+  --text: #4a4a4a;
+  --text-secondary: #7a7a7a;
+  --border: #e8d4d4;
+}
+
+.dark {
+  --bg: #1a1625;
+  --surface: #251e35;
+  --primary: #c78a8e;
+  --secondary: #8aa4ba;
+  --accent: #a48eba;
+  --text: #e8e8e8;
+  --text-secondary: #b8b8b8;
+  --border: #3a2e4a;
+}
+
+body {
+  color: var(--text);
+  background: var(--bg);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
