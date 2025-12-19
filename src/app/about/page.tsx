@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
+import { PAGE_METADATA } from '@/constants/site';
 
 export const metadata: Metadata = {
-  title: 'About | My Blog',
-  description: 'Learn more about me and this blog',
+  title: PAGE_METADATA.about.title,
+  description: PAGE_METADATA.about.description,
 };
 
 export default function AboutPage() {

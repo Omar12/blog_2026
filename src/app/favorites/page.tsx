@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
+import { PAGE_METADATA } from '@/constants/site';
 
 export const metadata: Metadata = {
-  title: 'My Favorites | My Blog',
-  description: 'A curated collection of my favorite things',
+  title: PAGE_METADATA.favorites.title,
+  description: PAGE_METADATA.favorites.description,
 };
 
 interface FavoriteItem {

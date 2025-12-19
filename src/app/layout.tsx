@@ -4,12 +4,13 @@ import './globals.css';
 import { ThemeProvider } from 'next-themes';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { PAGE_METADATA } from '@/constants/site';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'My Blog',
-  description: 'A simple, elegant blog built with Next.js',
+  title: PAGE_METADATA.home.title,
+  description: PAGE_METADATA.home.description,
 };
 
 export default function RootLayout({

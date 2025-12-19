@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
+import { PAGE_METADATA } from '@/constants/site';
 
 export const metadata: Metadata = {
-  title: "What I'm Listening To | My Blog",
-  description: 'Current music, podcasts, and audio content in rotation',
+  title: PAGE_METADATA.listening.title,
+  description: PAGE_METADATA.listening.description,
 };
 
 interface ListeningItem {
