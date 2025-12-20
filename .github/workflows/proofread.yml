@@ -44,6 +44,8 @@ jobs:
         run: |
           echo "## 📝 Proofreading Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Files processed:**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
 
           # Create comment body file
           echo "## 📝 Proofreading Results" > comment.md
@@ -53,6 +55,7 @@ jobs:
 
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "Processing: $file"
+            echo "- \`$file\`" >> $GITHUB_STEP_SUMMARY
             echo "### 📄 \`$file\`" >> comment.md
             echo "" >> comment.md
 
@@ -64,12 +67,14 @@ jobs:
               echo "" >> comment.md
 
               # Also add to step summary
+              echo "" >> $GITHUB_STEP_SUMMARY
               echo "### 📄 \`$file\`" >> $GITHUB_STEP_SUMMARY
               cat proofread_output.txt >> $GITHUB_STEP_SUMMARY
               echo "" >> $GITHUB_STEP_SUMMARY
             else
               echo "❌ Error proofreading $file" >> comment.md
               echo "" >> comment.md
+              echo "❌ Error proofreading $file" >> $GITHUB_STEP_SUMMARY
             fi
           done
 
