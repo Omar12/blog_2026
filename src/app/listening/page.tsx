@@ -13,6 +13,8 @@ interface ListeningItem {
   type: 'album' | 'playlist' | 'podcast' | 'audiobook';
   link?: string;
   addedDate?: string;
+  spotifyEmbed?: string; // Spotify embed URL
+  soundcloudEmbed?: string; // SoundCloud embed URL
 }
 
 const currentlyListening: ListeningItem[] = [
@@ -116,6 +118,36 @@ function getTypeColor(type: string): string {
   }
 }
 
+function SpotifyEmbed({ embedUrl }: { embedUrl: string }) {
+  return (
+    <div className="mt-4 rounded-lg overflow-hidden">
+      <iframe
+        src={embedUrl}
+        width="100%"
+        height="352"
+        allowFullScreen
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+        className="rounded-lg border-0"
+      ></iframe>
+    </div>
+  );
+}
+
+function SoundCloudEmbed({ embedUrl }: { embedUrl: string }) {
+  return (
+    <div className="mt-4 rounded-lg overflow-hidden">
+      <iframe
+        width="100%"
+        height="166"
+        allow="autoplay"
+        src={embedUrl}
+        className="rounded-lg border-0 overflow-hidden"
+      ></iframe>
+    </div>
+  );
+}
+
 function ListeningCard({ item }: { item: ListeningItem }) {
   return (
     <article className="p-6 rounded-lg border border-[var(--border)] bg-[var(--surface)] hover:shadow-lg hover:border-[var(--primary)] transition-all duration-300">
@@ -143,7 +175,7 @@ function ListeningCard({ item }: { item: ListeningItem }) {
         <p className="text-[var(--text-secondary)] mb-3">{item.description}</p>
       )}
       {item.addedDate && (
-        <p className="text-xs text-[var(--text-secondary)]">
+        <p className="text-xs text-[var(--text-secondary)] mb-3">
           Added{' '}
           {new Date(item.addedDate).toLocaleDateString('en-US', {
             month: 'short',
@@ -152,6 +184,8 @@ function ListeningCard({ item }: { item: ListeningItem }) {
           })}
         </p>
       )}
+      {item.spotifyEmbed && <SpotifyEmbed embedUrl={item.spotifyEmbed} />}
+      {item.soundcloudEmbed && <SoundCloudEmbed embedUrl={item.soundcloudEmbed} />}
     </article>
   );
 }

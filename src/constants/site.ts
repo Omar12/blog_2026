@@ -1,14 +1,14 @@
 export const SITE_CONFIG = {
-  name: 'My Blog',
-  description: 'A simple, elegant blog built with Next.js',
-  url: 'https://yourblog.com', // Update with your actual domain
+  name: 'Omar Martinosa',
+  description: 'Engineering Lead, Wannabe DJ, Full-time Dad',
+  url: 'https://omartinosa.dev', // Update with your actual domain
   author: {
-    name: '[Your Name]',
-    email: 'your.email@example.com',
+    name: 'Omar Martinosa',
+    email: 'o*******a@gmail.com',
   },
   social: {
     twitter: 'https://twitter.com/yourusername',
-    github: 'https://github.com/yourusername',
+    github: 'https://github.com/Omar12',
     linkedin: 'https://linkedin.com/in/yourusername',
   },
 } as const;
@@ -20,7 +20,7 @@ export const PAGE_METADATA = {
   },
   about: {
     title: `About | ${SITE_CONFIG.name}`,
-    description: 'Learn more about me and this blog',
+    description: 'Learn more about me.',
   },
   favorites: {
     title: `My Favorites | ${SITE_CONFIG.name}`,
@@ -28,10 +28,10 @@ export const PAGE_METADATA = {
   },
   listening: {
     title: `What I'm Listening To | ${SITE_CONFIG.name}`,
-    description: 'Current music, podcasts, and audio content in rotation',
+    description: 'Current music, my DJ sets, podcasts, and audio content in rotation',
   },
   blog: {
     title: `Blog | ${SITE_CONFIG.name}`,
-    description: 'Read my latest thoughts and articles',
+    description: 'Read my latest thoughts',
   },
 } as const;

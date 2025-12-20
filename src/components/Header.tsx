@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import ThemeToggle from './ThemeToggle';
+import { SITE_CONFIG } from '@/constants/site';
 
 const navLinks = [
   { href: '/' as const, label: 'Blog' },
@@ -27,7 +28,7 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] bg-clip-text text-transparent">
-              My Blog
+              {SITE_CONFIG.name}
             </h1>
           </Link>
           <nav className="flex items-center space-x-1 sm:space-x-4">

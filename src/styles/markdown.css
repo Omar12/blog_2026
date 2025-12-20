@@ -1,14 +1,133 @@
-/* Additional markdown styling for code blocks and syntax highlighting */
+/* Typography improvements for markdown content */
+
+/* Headings - Better hierarchy and spacing */
+.prose h1 {
+  @apply text-4xl font-semibold mb-6 mt-10 leading-tight tracking-tight;
+  font-weight: 800;
+}
+
+.prose h2 {
+  @apply text-3xl font-semibold mb-5 mt-10 leading-tight tracking-tight;
+  font-weight: 700;
+}
+
+.prose h3 {
+  @apply text-2xl font-semibold mb-4 mt-8 leading-snug;
+  font-weight: 600;
+}
+
+.prose h4 {
+  @apply text-xl font-semibold mb-3 mt-6 leading-snug;
+  font-weight: 600;
+}
+
+.prose h5 {
+  @apply text-lg font-semibold mb-3 mt-6 leading-normal;
+  font-weight: 500;
+}
+
+.prose h6 {
+  @apply text-base font-semibold mb-2 mt-4 leading-normal;
+  font-weight: 500;
+}
+
+/* Paragraphs - Better readability */
+.prose p {
+  @apply mb-6 leading-relaxed;
+  line-height: 1.75;
+  font-size: 1.0625rem;
+}
+
+/* Links - More emphasis */
+.prose a {
+  @apply font-medium underline decoration-2 underline-offset-2 transition-colors;
+}
+
+/* Lists - Better spacing and visual hierarchy */
+.prose ul,
+.prose ol {
+  @apply mb-6 space-y-2;
+  padding-left: 1.75rem;
+}
+
+.prose li {
+  @apply leading-relaxed;
+  line-height: 1.75;
+}
+
+.prose li > p {
+  @apply mb-3;
+}
+
+.prose ul > li {
+  @apply relative;
+}
+
+.prose ul > li::marker {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.prose ol > li::marker {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Nested lists */
+.prose ul ul,
+.prose ol ol,
+.prose ul ol,
+.prose ol ul {
+  @apply mt-2 mb-2;
+}
+
+/* Blockquotes - More distinctive */
+.prose blockquote {
+  @apply border-l-4 pl-6 pr-4 py-1 my-6 italic;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  quotes: '"' '"' ''' ''';
+}
+
+.prose blockquote p:first-of-type::before {
+  content: open-quote;
+}
+
+.prose blockquote p:last-of-type::after {
+  content: close-quote;
+}
+
+/* Strong and emphasis */
+.prose strong {
+  @apply font-bold;
+  font-weight: 700;
+}
+
+.prose em {
+  @apply italic;
+  font-style: italic;
+}
+
+/* Horizontal rules */
+.prose hr {
+  @apply my-10 border-t-2;
+}
+
+/* Code blocks - Better styling */
 .prose pre {
-  @apply rounded-lg p-4 overflow-x-auto;
+  @apply rounded-lg p-5 overflow-x-auto my-6 leading-relaxed;
+  font-size: 0.9375rem;
+  line-height: 1.7;
 }
 
 .prose code {
-  @apply text-sm;
+  @apply text-sm font-medium;
+  font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
 }
 
 .prose pre code {
   @apply bg-transparent p-0;
+  font-size: 0.9375rem;
 }
 
 /* Syntax highlighting for code blocks */
