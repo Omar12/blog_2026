@@ -1,6 +1,9 @@
 name: Proofread Blog Posts
 
 on:
+  push:
+    paths:
+      - 'content/posts/**/*.md'
   pull_request:
     paths:
       - 'content/posts/**/*.md'
