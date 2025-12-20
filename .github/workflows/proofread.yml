@@ -78,7 +78,7 @@ jobs:
           echo "*Powered by Claude AI via Anthropic API*" >> comment.md
 
       - name: Post PR comment
-        if: steps.changed-files.outputs.any_changed == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true' && github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           script: |
