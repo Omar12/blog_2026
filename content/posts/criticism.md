@@ -26,6 +26,6 @@ When you're in a position to provide feedback, you've likely received your fair 
 
 ### Avoid “Like” or “Dislike”
 
-When offering constructive criticism, avoid using words like "like" or "dislike." Instead, provide more specific feedback. For something you appreciate, consider saying: "This works well with X and Y," or "You're on the right track, but it's missing A, B, and C." For aspects you find lacking, try: "I see room for improvement," or "This isn’t quite what I had in mind; could you explain your thought process?" The goal is to be constructive and analytical rather than emotional, as "like" and "dislike" can be perceived as personal judgments.
+When offering constructive criticism, avoid using words like "like" or "dislike." Instead, provide more specific feedback. For something you appreciate, consider saying: "This works well with X and Y," or "You're on the right track, but it's missing A, B, C and D." For aspects you find lacking, try: "I see room for improvement," or "This isn’t quite what I had in mind; could you explain your thought process?" The goal is to be constructive and analytical rather than emotional, as "like" and "dislike" can be perceived as personal judgments.
 
 Aim to be a mentor, leaving a lasting positive impression on the person receiving your feedback. Strive to create a work environment where you and your colleagues can feel proud of one another. Remember, you’re part of the same team—work together, help each other improve, and be open to dialogue. Thoughtful criticism benefits everyone involved.
