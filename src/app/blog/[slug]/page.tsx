@@ -4,6 +4,7 @@ import { markdownToHtml } from '@/lib/markdown';
 import DateFormatter from '@/components/DateFormatter';
 import MarkdownContent from '@/components/MarkdownContent';
 import Link from 'next/link';
+import { SITE_CONFIG } from '@/constants/site';
 
 export async function generateStaticParams() {
   const slugs = getAllPostSlugs();
@@ -25,7 +26,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${post.title} | My Blog`,
+    title: `${post.title} | ${SITE_CONFIG.name}`,
     description: post.excerpt,
   };
 }

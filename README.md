@@ -1,4 +1,4 @@
-# My Blog
+# Omar Martinosa Blog
 
 A modern, minimalist blog built with Next.js, featuring a beautiful pastel color scheme, dark mode support, and automated proofreading powered by Claude AI.
 
