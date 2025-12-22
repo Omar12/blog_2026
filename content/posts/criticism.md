@@ -1,8 +1,9 @@
 ---
 title: "Criticism"
 excerpt: "Effective criticism, whether given or received, can significantly enhance personal and professional growth when approached with openness, specificity, and a constructive mindset."
-date: "2024-08-24
-tags: ["work"]
+date: "2024-08-24"
+author: "Omar"
+tags: ["work", "life"]
 published: true
 ---
 
