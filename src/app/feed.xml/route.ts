@@ -1,8 +1,8 @@
 import { getAllPosts } from '@/lib/posts';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://yourblog.com';
-const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || 'My Blog';
-const AUTHOR_NAME = process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Blog Author';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://omartinosa.dev';
+const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || 'Omar Martinosa';
+const AUTHOR_NAME = process.env.NEXT_PUBLIC_AUTHOR_NAME || 'Omar';
 
 function escapeXml(unsafe: string): string {
   return unsafe.replace(/[<>&'"]/g, (c) => {
