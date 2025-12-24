@@ -8,6 +8,9 @@ A modern, minimalist blog built with Next.js, featuring a beautiful pastel color
 - 📝 **Markdown-Based**: Write posts in simple markdown files
 - 🚀 **Lightning Fast**: Static site generation for optimal performance
 - 🤖 **AI Proofreading**: Automated content review using Claude API via GitHub Actions
+- ⏱️ **Reading Time**: Automatic reading time estimates for all posts
+- 📑 **Table of Contents**: Auto-generated TOC for long posts with active section tracking
+- 📡 **RSS Feed**: Dynamic RSS feed for blog subscribers
 - 🎨 **Syntax Highlighting**: Beautiful code blocks with syntax highlighting
 - 📱 **Fully Responsive**: Looks great on all devices
 - ♿ **Accessible**: Built with accessibility in mind
@@ -217,9 +220,19 @@ The feedback includes:
 
 ### Testing Proofreading Locally
 
+Proofread a single post:
+
 ```bash
-npx tsx scripts/proofread.ts content/posts/your-post.md
+npm run proofread content/posts/your-post.md
 ```
+
+Proofread all posts in the content/posts directory:
+
+```bash
+npm run proofread:all
+```
+
+Note: Make sure you have set `ANTHROPIC_API_KEY` in your `.env.local` file first.
 
 ## Building for Production
 
@@ -264,6 +277,8 @@ The blog works with any platform supporting Next.js static exports:
 - `npm run build` - Build for production
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint
+- `npm run proofread <file>` - Proofread a specific markdown file with Claude AI
+- `npm run proofread:all` - Proofread all markdown files in content/posts
 
 ### Adding Features
 
@@ -280,9 +295,9 @@ Potential features to add:
 
 - [ ] Search functionality
 - [ ] Tag filtering page
-- [ ] RSS feed generation
-- [ ] Reading time estimates
-- [ ] Table of contents for long posts
+- [x] RSS feed generation
+- [x] Reading time estimates
+- [x] Table of contents for long posts
 - [ ] Related posts suggestions
 - [ ] Comments system (Giscus)
 - [ ] Newsletter signup
