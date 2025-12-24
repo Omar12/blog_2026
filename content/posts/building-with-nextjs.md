@@ -4,7 +4,7 @@ date: "2025-12-17"
 excerpt: "A deep dive into how I built this blog using Next.js, TypeScript, and Tailwind CSS, with automated proofreading via Claude."
 author: "Blog Author"
 tags: ["nextjs", "typescript", "tutorial", "web-development"]
-published: true
+published: false
 ---
 
 # Building a Modern Blog with Next.js

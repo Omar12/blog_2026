@@ -4,7 +4,7 @@ date: "2025-12-16"
 excerpt: "Why markdown is the perfect format for blogs, documentation, and long-form content."
 author: "Blog Author"
 tags: ["markdown", "writing", "productivity"]
-published: true
+published: false
 ---
 
 # The Power of Markdown for Content Creation
