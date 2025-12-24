@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { Post, PostMetadata } from './types';
+import { calculateReadingTime } from './reading-time';
 
 const postsDirectory = path.join(process.cwd(), 'content/posts');
 
@@ -18,11 +19,12 @@ export function getAllPosts(): PostMetadata[] {
       const slug = fileName.replace(/\.md$/, '');
       const fullPath = path.join(postsDirectory, fileName);
       const fileContents = fs.readFileSync(fullPath, 'utf8');
-      const { data } = matter(fileContents);
+      const { data, content } = matter(fileContents);
 
       return {
         slug,
-        ...(data as Omit<PostMetadata, 'slug'>),
+        readingTime: calculateReadingTime(content),
+        ...(data as Omit<PostMetadata, 'slug' | 'readingTime'>),
       };
     })
     .filter((post) => post.published)
@@ -40,7 +42,8 @@ export function getPostBySlug(slug: string): Post | null {
     return {
       slug,
       content,
-      ...(data as Omit<Post, 'slug' | 'content'>),
+      readingTime: calculateReadingTime(content),
+      ...(data as Omit<Post, 'slug' | 'content' | 'readingTime'>),
     };
   } catch {
     return null;

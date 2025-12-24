@@ -67,7 +67,7 @@ npm run dev
 blog_2026/
 ├── .github/
 │   └── workflows/
-│       └── proofread.yml          # GitHub Actions workflow for proofreading
+│       └── proofread.yml          # GitHub Actions workflow for proofreading (Disabled)
 ├── content/
 │   └── posts/                     # Your blog posts (markdown files)
 ├── public/

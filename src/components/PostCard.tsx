@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import DateFormatter from './DateFormatter';
 import { PostMetadata } from '@/lib/types';
+import { formatReadingTime } from '@/lib/reading-time';
 
 interface PostCardProps {
   post: PostMetadata;
@@ -17,6 +18,8 @@ export default function PostCard({ post }: PostCardProps) {
           <DateFormatter dateString={post.date} />
           <span>•</span>
           <span>{post.author}</span>
+          <span>•</span>
+          <span>{formatReadingTime(post.readingTime)}</span>
         </div>
         <p className="text-[var(--text-secondary)] mb-4 line-clamp-3">
           {post.excerpt}

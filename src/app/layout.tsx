@@ -22,6 +22,12 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Zalando+Sans:ital,wght@0,200..900;1,200..900&display=swap"
           rel="stylesheet"
         />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="RSS Feed"
+          href="/feed.xml"
+        />
       </head>
       <body style={{ fontFamily: "'Zalando Sans', sans-serif" }}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
