@@ -5,25 +5,25 @@
 @import '../styles/markdown.css';
 
 :root {
-  --bg: #fff9f5;
-  --surface: #ffffff;
-  --primary: #e8b4b8;
-  --secondary: #b8d4e8;
-  --accent: #d4c4e8;
-  --text: #4a4a4a;
-  --text-secondary: #7a7a7a;
-  --border: #e8d4d4;
+  --bg: theme('colors.light.bg');
+  --surface: theme('colors.light.surface');
+  --primary: theme('colors.light.primary');
+  --secondary: theme('colors.light.secondary');
+  --accent: theme('colors.light.accent');
+  --text: theme('colors.light.text');
+  --text-secondary: theme('colors.light.text-secondary');
+  --border: theme('colors.light.border');
 }
 
 .dark {
-  --bg: #1a1625;
-  --surface: #251e35;
-  --primary: #c78a8e;
-  --secondary: #8aa4ba;
-  --accent: #a48eba;
-  --text: #e8e8e8;
-  --text-secondary: #b8b8b8;
-  --border: #3a2e4a;
+  --bg: theme('colors.dark.bg');
+  --surface: theme('colors.dark.surface');
+  --primary: theme('colors.dark.primary');
+  --secondary: theme('colors.dark.secondary');
+  --accent: theme('colors.dark.accent');
+  --text: theme('colors.dark.text');
+  --text-secondary: theme('colors.dark.text-secondary');
+  --border: theme('colors.dark.border');
 }
 
 body {
