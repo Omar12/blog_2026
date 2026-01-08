@@ -108,7 +108,7 @@ export default async function BlogPost({
         </article>
 
         {toc.length > 0 && (
-          <aside className="w-64 flex-shrink-0">
+          <aside className="w-64 flex-shrink-0 max-md:hidden">
             <TableOfContents items={toc} />
           </aside>
         )}

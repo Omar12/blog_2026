@@ -58,7 +58,7 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
   };
 
   return (
-    <nav className="sticky top-24 hidden lg:block">
+    <nav className="sticky top-24 hidden md:block">
       <div className="p-4 rounded-lg border border-[var(--border)] bg-[var(--surface)]">
         <h2 className="text-sm font-bold text-[var(--text)] uppercase tracking-wider mb-3">
           Table of Contents
