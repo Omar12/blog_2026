@@ -1,6 +1,6 @@
 ---
-title: "Criticism"
-excerpt: "Effective criticism, whether given or received, can significantly enhance personal and professional growth when approached with openness, specificity, and a constructive mindset."
+title: "Manager README"
+excerpt: "My professional principles as an engineering manager."
 date: "2026-01-08"
 author: "Omar"
 tags: ["work",]
