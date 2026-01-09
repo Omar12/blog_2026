@@ -17,11 +17,11 @@ export default function AboutPage() {
         <div className="space-y-6 text-[var(--text)]">
           <section className="p-6 rounded-lg border border-[var(--border)] bg-[var(--surface)]">
             <h2 className="text-2xl font-bold mb-4 text-[var(--text)]">
-              Hello, I'm [Your Name]
+              Hello, I'm Omar
             </h2>
             <p className="text-[var(--text)] leading-relaxed">
-              Welcome to my corner of the internet! I'm a [your profession/role]
-              passionate about [your interests]. This blog is where I share my
+              Welcome to my corner of the internet! I'm a Engineering Manager
+              passionate about technology and music. This blog is where I share my
               thoughts, experiences, and things I'm learning along the way.
             </p>
           </section>
@@ -31,7 +31,7 @@ export default function AboutPage() {
               What I Do
             </h2>
             <p className="text-[var(--text)] leading-relaxed mb-4">
-              I spend most of my time [describe what you do]. My work involves:
+              I spend most of my time delivering work. My work involves:
             </p>
             <ul className="list-disc list-inside space-y-2 text-[var(--text)]">
               <li>Building things with modern web technologies</li>
@@ -58,8 +58,8 @@ export default function AboutPage() {
               Beyond The Screen
             </h2>
             <p className="text-[var(--text)] leading-relaxed">
-              When I'm not coding or writing, you'll find me [your hobbies and
-              interests]. I believe in maintaining a healthy balance between
+              When I'm not coding or writing, you'll find me DJing and making music playlists. 
+              I believe in maintaining a healthy balance between
               work and life, and these activities help me stay creative and
               energized.
             </p>
@@ -74,15 +74,7 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-wrap gap-4">
               <a
-                href="https://twitter.com/yourusername"
-                className="px-4 py-2 rounded-lg bg-[var(--primary)] bg-opacity-20 text-[var(--text)] border border-[var(--border)] hover:bg-opacity-30 transition-all"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Twitter
-              </a>
-              <a
-                href="https://github.com/yourusername"
+                href="https://github.com/omar12"
                 className="px-4 py-2 rounded-lg bg-[var(--secondary)] bg-opacity-20 text-[var(--text)] border border-[var(--border)] hover:bg-opacity-30 transition-all"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -90,18 +82,12 @@ export default function AboutPage() {
                 GitHub
               </a>
               <a
-                href="https://linkedin.com/in/yourusername"
+                href="https://linkedin.com/in/omartinez12"
                 className="px-4 py-2 rounded-lg bg-[var(--accent)] bg-opacity-20 text-[var(--text)] border border-[var(--border)] hover:bg-opacity-30 transition-all"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 LinkedIn
-              </a>
-              <a
-                href="mailto:your.email@example.com"
-                className="px-4 py-2 rounded-lg bg-[var(--primary)] bg-opacity-20 text-[var(--text)] border border-[var(--border)] hover:bg-opacity-30 transition-all"
-              >
-                Email
               </a>
             </div>
           </section>
