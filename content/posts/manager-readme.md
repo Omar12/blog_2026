@@ -138,7 +138,7 @@ If you’re not sure what to bring, use this template:
 
 - Tell me quickly and clearly-especially if something I did created confusion or friction.
 - If it’s sensitive, I prefer synchronous (so we don’t misread tone).
-- I love honest feedback, especially critical feedback. I want to keep growing and improve. Help me by providing clarity so I can better help you.
+- **I love honest feedback, especially critical feedback**. I want to keep growing and improve. If I'm falling short as your manager, help me by providing clarity so I can better help you.
 
 ---
 
@@ -147,6 +147,8 @@ If you’re not sure what to bring, use this template:
 - I value debate-**not debate-as-performance**.
 - Disagree openly; align fully once we decide.
 - If we’re stuck: we’ll timebox, define what we need to learn, and pick a reversible path when possible.
+- I will agree by default, as I'm trusting your knowledge and expertise. I will push for facts and clarity
+- I will tell you if I need more time to make a decision. I will let you know if I have follow-up questions and discuss my decision.
 
 A phrase I use a lot:
 - **"What can we do with this information?"**  
@@ -173,13 +175,15 @@ I’m proactive about growth. Expect me to ask:
 
 I’ll help you translate your work into:
 - outcomes, metrics, narratives, and promotion-ready artifacts.
+- Align your growth with the goals of the team and product
 
 ---
 
 ## My quirks & pet peeves (so you don’t have to guess)
-- I don’t love vague updates like "working on it." Tell me **what**, **what’s left**, and **what’s blocked**.
+- I don’t love vague updates like "working on it". Tell me **what**, **what’s left**, and **what’s blocked**.
+- Don't start your conversation with with just "Hi". Other than "Hi", paint me a picture, give me details upfront.
 - I dislike surprise deadlines. If timelines are at risk, I want to know early.
-- I’d rather you ask "dumb" questions than silently guess wrong for a week.
+- I’d rather you ask "dumb" questions than silently guess wrong for a week. I love dumb questions, I have lots of those. "Dumb" questions 99% of the time end up having insightful answers and uncovering blind spots for everyone.
 - I’m allergic to performative busyness. Outcomes > activity.
 
 ---
@@ -204,6 +208,9 @@ If you want fast help, send:
 ## About me (human stuff)
 
 - Born and raised in Puerto Rico
+- My career spans for over 20 years
+- My Major is on Interactive Media Design
+- I'm a visual person. I need to see it, I struggle with abstracts.
 - I’m a Jack of all Trades - I've done many skill areas in my career, where my curiosity drives me to learn many topics, at the sacrifice at becoming an expert at one.
 - I'm not a serious person. I inject humor in my day-to-day. I'm making jokes at meetings and find opportunities to break any tension in discussions.
 - I like structured learning, productivity hacks, consistent habits, game theory, and continuous improvement.
