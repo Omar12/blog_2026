@@ -8,29 +8,31 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <article className="prose prose-lg max-w-none">
-        <h1 className="text-4xl sm:text-5xl font-bold mb-6 bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] bg-clip-text text-transparent">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <article>
+        <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight mb-10 text-[var(--text)]">
           About Me
         </h1>
 
-        <div className="space-y-6 text-[var(--text)]">
-          <section className="p-6 rounded-lg border border-[var(--border)] bg-[var(--surface)]">
+        <div className="space-y-10 text-[var(--text)] text-lg leading-relaxed">
+          <section>
             <h2 className="text-2xl font-bold mb-4 text-[var(--text)]">
               Hello, I'm Omar
             </h2>
-            <p className="text-[var(--text)] leading-relaxed">
-              Welcome to my corner of the internet! I'm a Engineering Manager
+            <p>
+              Welcome to my corner of the internet! I'm an Engineering Manager
               passionate about technology and music. This blog is where I share my
               thoughts, experiences, and things I'm learning along the way.
             </p>
           </section>
 
-          <section className="p-6 rounded-lg border border-[var(--border)] bg-[var(--surface)]">
+          <hr className="border-[var(--border)]" />
+
+          <section>
             <h2 className="text-2xl font-bold mb-4 text-[var(--text)]">
               What I Do
             </h2>
-            <p className="text-[var(--text)] leading-relaxed mb-4">
+            <p className="mb-4">
               I spend most of my time delivering work. My work involves:
             </p>
             <ul className="list-disc list-inside space-y-2 text-[var(--text)]">
@@ -41,11 +43,13 @@ export default function AboutPage() {
             </ul>
           </section>
 
-          <section className="p-6 rounded-lg border border-[var(--border)] bg-[var(--surface)]">
+          <hr className="border-[var(--border)]" />
+
+          <section>
             <h2 className="text-2xl font-bold mb-4 text-[var(--text)]">
               Why This Blog?
             </h2>
-            <p className="text-[var(--text)] leading-relaxed">
+            <p>
               I started this blog to document my journey and share insights that
               might help others. Writing helps me clarify my thinking, and I
               hope my experiences can provide value to readers who are on
@@ -53,29 +57,33 @@ export default function AboutPage() {
             </p>
           </section>
 
-          <section className="p-6 rounded-lg border border-[var(--border)] bg-[var(--surface)]">
+          <hr className="border-[var(--border)]" />
+
+          <section>
             <h2 className="text-2xl font-bold mb-4 text-[var(--text)]">
               Beyond The Screen
             </h2>
-            <p className="text-[var(--text)] leading-relaxed">
-              When I'm not coding or writing, you'll find me DJing and making music playlists. 
+            <p>
+              When I'm not coding or writing, you'll find me DJing and making music playlists.
               I believe in maintaining a healthy balance between
               work and life, and these activities help me stay creative and
               energized.
             </p>
           </section>
 
-          <section className="p-6 rounded-lg border border-[var(--border)] bg-[var(--surface)]">
+          <hr className="border-[var(--border)]" />
+
+          <section>
             <h2 className="text-2xl font-bold mb-4 text-[var(--text)]">
               Let's Connect
             </h2>
-            <p className="text-[var(--text)] leading-relaxed mb-4">
+            <p className="mb-6">
               I'd love to hear from you! Feel free to reach out through:
             </p>
             <div className="flex flex-wrap gap-4">
               <a
                 href="https://github.com/omar12"
-                className="px-4 py-2 rounded-lg bg-[var(--secondary)] bg-opacity-20 text-[var(--text)] border border-[var(--border)] hover:bg-opacity-30 transition-all"
+                className="px-5 py-2.5 text-sm font-medium rounded border border-[var(--border)] text-[var(--text)] hover:border-[var(--primary)] hover:text-[var(--primary)] transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -83,7 +91,7 @@ export default function AboutPage() {
               </a>
               <a
                 href="https://linkedin.com/in/omartinez12"
-                className="px-4 py-2 rounded-lg bg-[var(--accent)] bg-opacity-20 text-[var(--text)] border border-[var(--border)] hover:bg-opacity-30 transition-all"
+                className="px-5 py-2.5 text-sm font-medium rounded border border-[var(--border)] text-[var(--text)] hover:border-[var(--primary)] hover:text-[var(--primary)] transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
               >

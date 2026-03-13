@@ -18,6 +18,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Zalando+Sans:ital,wght@0,200..900;1,200..900&display=swap"
           rel="stylesheet"
@@ -29,7 +35,7 @@ export default function RootLayout({
           href="/feed.xml"
         />
       </head>
-      <body style={{ fontFamily: "'Zalando Sans', sans-serif" }}>
+      <body className="font-[Zalando_Sans,sans-serif]">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="min-h-screen flex flex-col">
             <Header />

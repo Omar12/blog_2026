@@ -79,8 +79,8 @@ export default async function BlogPost({
 
       <div className="flex gap-8">
         <article className="flex-1 max-w-4xl">
-          <header className="mb-8 pb-8 border-b border-[var(--border)]">
-            <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-[var(--text)]">
+          <header className="mb-10 pb-10 border-b border-[var(--border)]">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-[var(--text)]">
               {post.title}
             </h1>
             <div className="flex flex-wrap items-center gap-4 text-[var(--text-secondary)] mb-4">
@@ -95,7 +95,7 @@ export default async function BlogPost({
                 {post.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 text-sm rounded-full bg-[var(--primary)] bg-opacity-20 text-[var(--text)] border border-[var(--border)]"
+                    className="px-2.5 py-0.5 text-xs font-medium text-[var(--text-secondary)] border border-[var(--border)] rounded"
                   >
                     {tag}
                   </span>

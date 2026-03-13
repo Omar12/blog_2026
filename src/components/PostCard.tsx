@@ -5,38 +5,50 @@ import { formatReadingTime } from '@/lib/reading-time';
 
 interface PostCardProps {
   post: PostMetadata;
+  featured?: boolean;
 }
 
-export default function PostCard({ post }: PostCardProps) {
+export default function PostCard({ post, featured }: PostCardProps) {
   return (
-    <Link href={`/blog/${post.slug}`}>
-      <article className="group h-full p-6 rounded-lg border border-[var(--border)] bg-[var(--surface)] hover:shadow-lg hover:border-[var(--primary)] transition-all duration-300">
-        <h2 className="text-2xl font-bold mb-2 group-hover:text-[var(--primary)] transition-colors">
+    <article className="group relative h-full p-6 sm:p-8 border-b border-[var(--border)] hover:bg-[var(--surface)] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--primary)] transition-colors duration-200">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--text-secondary)] mb-3">
+        <DateFormatter dateString={post.date} />
+        <span aria-hidden="true">&middot;</span>
+        <span>{post.author}</span>
+        <span aria-hidden="true">&middot;</span>
+        <span>{formatReadingTime(post.readingTime)}</span>
+      </div>
+      <h2
+        className={`font-bold mb-3 group-hover:text-[var(--primary)] transition-colors ${
+          featured ? 'text-3xl sm:text-4xl tracking-tight' : 'text-2xl'
+        }`}
+      >
+        <Link
+          href={`/blog/${post.slug}`}
+          className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none"
+        >
           {post.title}
-        </h2>
-        <div className="flex items-center gap-4 text-sm text-[var(--text-secondary)] mb-3">
-          <DateFormatter dateString={post.date} />
-          <span>•</span>
-          <span>{post.author}</span>
-          <span>•</span>
-          <span>{formatReadingTime(post.readingTime)}</span>
+        </Link>
+      </h2>
+      <p
+        className={`text-[var(--text-secondary)] mb-4 ${
+          featured ? 'text-lg max-w-2xl' : 'line-clamp-3'
+        }`}
+      >
+        {post.excerpt}
+      </p>
+      {post.tags && post.tags.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {post.tags.map((tag) => (
+            <span
+              key={tag}
+              className="px-2.5 py-0.5 text-xs font-medium text-[var(--text-secondary)] border border-[var(--border)] rounded"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
-        <p className="text-[var(--text-secondary)] mb-4 line-clamp-3">
-          {post.excerpt}
-        </p>
-        {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-3 py-1 text-xs rounded-full bg-[var(--primary)] bg-opacity-20 text-[var(--text)] border border-[var(--border)]"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-      </article>
-    </Link>
+      )}
+    </article>
   );
 }

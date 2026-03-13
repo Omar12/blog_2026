@@ -37,9 +37,9 @@ export default function Header() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] bg-clip-text text-transparent">
+            <span className="text-xl font-extrabold tracking-tight text-[var(--text)]">
               {SITE_CONFIG.name}
-            </h1>
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -67,9 +67,10 @@ export default function Header() {
             <ThemeToggle />
             <button
               onClick={toggleMobileMenu}
-              className="p-2 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text)] hover:bg-[var(--primary)] hover:bg-opacity-10 transition-all"
-              aria-label="Toggle menu"
+              className="p-2.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text)] hover:bg-[var(--primary)] hover:bg-opacity-10 transition-all"
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-nav"
             >
               {isMobileMenuOpen ? (
                 <svg
@@ -102,7 +103,7 @@ export default function Header() {
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden mt-4 pb-4 space-y-2">
+          <nav id="mobile-nav" className="md:hidden mt-4 pb-4 space-y-2">
             {navLinks.map((link) => (
               <Link
                 key={link.href}

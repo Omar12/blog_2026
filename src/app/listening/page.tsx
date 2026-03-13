@@ -142,6 +142,7 @@ function SoundCloudEmbed({ embedUrl }: { embedUrl: string }) {
         height="166"
         allow="autoplay"
         src={embedUrl}
+        loading="lazy"
         className="rounded-lg border-0 overflow-hidden"
       ></iframe>
     </div>
@@ -193,11 +194,11 @@ function ListeningCard({ item }: { item: ListeningItem }) {
 export default function ListeningPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-12 text-center">
-        <h1 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] bg-clip-text text-transparent">
+      <div className="mb-16">
+        <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight mb-4 text-[var(--text)]">
           What I'm Listening To
         </h1>
-        <p className="text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
+        <p className="text-lg text-[var(--text-secondary)] max-w-xl">
           Music, podcasts, and audiobooks currently in my rotation
         </p>
       </div>
@@ -213,8 +214,8 @@ export default function ListeningPage() {
             </span>
           </div>
           <div className="grid gap-6 md:grid-cols-2">
-            {currentlyListening.map((item, index) => (
-              <ListeningCard key={index} item={item} />
+            {currentlyListening.map((item) => (
+              <ListeningCard key={item.title} item={item} />
             ))}
           </div>
         </section>
@@ -224,8 +225,8 @@ export default function ListeningPage() {
             Recently Finished
           </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {recentlyFinished.map((item, index) => (
-              <ListeningCard key={index} item={item} />
+            {recentlyFinished.map((item) => (
+              <ListeningCard key={item.title} item={item} />
             ))}
           </div>
         </section>
@@ -239,8 +240,8 @@ export default function ListeningPage() {
             No matter what mood I'm in, these always hit the spot.
           </p>
           <div className="grid gap-6 md:grid-cols-2">
-            {allTimeRotation.map((item, index) => (
-              <ListeningCard key={index} item={item} />
+            {allTimeRotation.map((item) => (
+              <ListeningCard key={item.title} item={item} />
             ))}
           </div>
         </section>

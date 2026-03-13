@@ -14,8 +14,9 @@ export default function ThemeToggle() {
   if (!mounted) {
     return (
       <button
-        className="p-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] transition-all"
+        className="p-2.5 rounded-lg border border-[var(--border)] bg-[var(--surface)] transition-all"
         aria-label="Toggle theme"
+        disabled
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -37,8 +38,8 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="p-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--primary)] hover:bg-opacity-20 transition-all"
-      aria-label="Toggle theme"
+      className="p-2.5 rounded-lg border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--primary)] hover:bg-opacity-20 transition-all"
+      aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
     >
       {theme === 'dark' ? (
         <svg
