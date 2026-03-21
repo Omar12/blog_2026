@@ -7,9 +7,9 @@ export const SITE_CONFIG = {
     email: 'o*******a@gmail.com',
   },
   social: {
-    twitter: 'https://twitter.com/yourusername',
+    twitter: 'https://twitter.com/Omar12',
     github: 'https://github.com/Omar12',
-    linkedin: 'https://linkedin.com/in/yourusername',
+    // linkedin: 'https://linkedin.com/in/',
   },
 } as const;
 
