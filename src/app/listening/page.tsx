@@ -196,7 +196,7 @@ export default function ListeningPage() {
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-16">
         <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight mb-4 text-[var(--text)]">
-          What I'm Listening To
+          What I&apos;m Listening To
         </h1>
         <p className="text-lg text-[var(--text-secondary)] max-w-xl">
           Music, podcasts, and audiobooks currently in my rotation
@@ -237,7 +237,7 @@ export default function ListeningPage() {
           </h2>
           <p className="text-[var(--text-secondary)] mb-6">
             These are the albums, playlists, and podcasts I keep coming back to.
-            No matter what mood I'm in, these always hit the spot.
+            No matter what mood I&apos;m in, these always hit the spot.
           </p>
           <div className="grid gap-6 md:grid-cols-2">
             {allTimeRotation.map((item) => (
@@ -253,12 +253,12 @@ export default function ListeningPage() {
         </h3>
         <p className="text-[var(--text-secondary)] mb-4">
           I love discovering new music and audio content. This page is a living
-          document of what I'm currently enjoying. I update it regularly as my
+          document of what I&apos;m currently enjoying. I update it regularly as my
           tastes evolve and I discover new favorites.
         </p>
         <p className="text-[var(--text-secondary)]">
-          Got recommendations? I'd love to hear them! Feel free to reach out and
-          share what you're listening to.
+          Got recommendations? I&apos;d love to hear them! Feel free to reach out and
+          share what you&apos;re listening to.
         </p>
       </div>
     </div>
