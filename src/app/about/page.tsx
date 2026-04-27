@@ -17,12 +17,12 @@ export default function AboutPage() {
         <div className="space-y-10 text-[var(--text)] text-lg leading-relaxed">
           <section>
             <h2 className="text-2xl font-bold mb-4 text-[var(--text)]">
-              Hello, I'm Omar
+              Hello, I&apos;m Omar
             </h2>
             <p>
-              Welcome to my corner of the internet! I'm an Engineering Manager
+              Welcome to my corner of the internet! I&apos;m an Engineering Manager
               passionate about technology and music. This blog is where I share my
-              thoughts, experiences, and things I'm learning along the way.
+              thoughts, experiences, and things I&apos;m learning along the way.
             </p>
           </section>
 
@@ -64,7 +64,7 @@ export default function AboutPage() {
               Beyond The Screen
             </h2>
             <p>
-              When I'm not coding or writing, you'll find me DJing and making music playlists.
+              When I&apos;m not coding or writing, you&apos;ll find me DJing and making music playlists.
               I believe in maintaining a healthy balance between
               work and life, and these activities help me stay creative and
               energized.
@@ -75,10 +75,10 @@ export default function AboutPage() {
 
           <section>
             <h2 className="text-2xl font-bold mb-4 text-[var(--text)]">
-              Let's Connect
+              Let&apos;s Connect
             </h2>
             <p className="mb-6">
-              I'd love to hear from you! Feel free to reach out through:
+              I&apos;d love to hear from you! Feel free to reach out through:
             </p>
             <div className="flex flex-wrap gap-4">
               <a
