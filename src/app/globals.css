@@ -12,6 +12,7 @@
   --accent: theme('colors.light.accent');
   --text: theme('colors.light.text');
   --text-secondary: theme('colors.light.text-secondary');
+  --text-tertiary: theme('colors.dark.text');
   --border: theme('colors.light.border');
 }
 
@@ -23,6 +24,7 @@
   --accent: theme('colors.dark.accent');
   --text: theme('colors.dark.text');
   --text-secondary: theme('colors.dark.text-secondary');
+  --text-tertiary: theme('colors.light.text');
   --border: theme('colors.dark.border');
 }
 

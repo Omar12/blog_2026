@@ -171,7 +171,7 @@ export default function FavoritesPage() {
                       {item.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-1 text-xs rounded-full bg-[var(--accent)] bg-opacity-20 text-[var(--text)] border border-[var(--border)]"
+                          className="px-2 py-1 text-xs rounded-full bg-[var(--accent)] bg-opacity-20 text-[var(--text-tertiary)] border border-[var(--border)]"
                         >
                           {tag}
                         </span>

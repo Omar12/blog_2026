@@ -10,7 +10,7 @@ interface PostCardProps {
 
 export default function PostCard({ post, featured }: PostCardProps) {
   return (
-    <article className="group relative h-full p-6 sm:p-8 border-b border-[var(--border)] hover:bg-[var(--surface)] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--primary)] transition-colors duration-200">
+    <article className={`group relative h-full p-6 sm:p-8 border-b border-[var(--border)] hover:bg-[var(--surface)] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--primary)] transition-colors duration-200 ${featured ? 'border-t-[3px] border-t-[var(--primary)]' : ''}`}>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--text-secondary)] mb-3">
         <DateFormatter dateString={post.date} />
         <span aria-hidden="true">&middot;</span>
@@ -42,7 +42,7 @@ export default function PostCard({ post, featured }: PostCardProps) {
           {post.tags.map((tag) => (
             <span
               key={tag}
-              className="px-2.5 py-0.5 text-xs font-medium text-[var(--text-secondary)] border border-[var(--border)] rounded"
+              className="px-2.5 py-0.5 text-xs font-medium text-[var(--text-tertiary)] bg-[var(--primary)] bg-opacity-10 border border-[var(--primary)] border-opacity-20 rounded"
             >
               {tag}
             </span>

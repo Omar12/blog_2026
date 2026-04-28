@@ -41,6 +41,13 @@
 /* Links - More emphasis */
 .prose a {
   @apply font-medium underline decoration-2 underline-offset-2 transition-colors;
+  color: var(--primary);
+  text-decoration-color: color-mix(in oklch, var(--primary) 40%, transparent);
+}
+
+.prose a:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
 }
 
 /* Lists - Better spacing and visual hierarchy */
@@ -84,6 +91,9 @@
 /* Blockquotes - More distinctive */
 .prose blockquote {
   @apply border-l-4 pl-6 pr-4 py-1 my-6 italic;
+  border-left-color: var(--primary);
+  background-color: color-mix(in oklch, var(--primary) 6%, transparent);
+  border-radius: 0 6px 6px 0;
   font-size: 1.0625rem;
   line-height: 1.75;
   quotes: '"' '"' ''' ''';

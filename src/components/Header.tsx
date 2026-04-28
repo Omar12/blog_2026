@@ -37,7 +37,7 @@ export default function Header() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-extrabold tracking-tight text-[var(--text)]">
+            <span className="text-xl font-extrabold tracking-tight text-[var(--primary)]">
               {SITE_CONFIG.name}
             </span>
           </Link>
@@ -50,8 +50,8 @@ export default function Header() {
                 href={link.href}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                   isActive(link.href)
-                    ? 'bg-[var(--primary)] bg-opacity-20 text-[var(--text)] border border-[var(--border)]'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text)] hover:bg-[var(--primary)] hover:bg-opacity-10'
+                    ? 'text-[var(--primary)] border-b-2 border-[var(--primary)] rounded-none pb-1.5'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text)]'
                 }`}
               >
                 {link.label}
@@ -67,7 +67,7 @@ export default function Header() {
             <ThemeToggle />
             <button
               onClick={toggleMobileMenu}
-              className="p-2.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text)] hover:bg-[var(--primary)] hover:bg-opacity-10 transition-all"
+              className="p-2.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text)] transition-all"
               aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-nav"
@@ -111,8 +111,8 @@ export default function Header() {
                 onClick={closeMobileMenu}
                 className={`block px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                   isActive(link.href)
-                    ? 'bg-[var(--primary)] bg-opacity-20 text-[var(--text)] border border-[var(--border)]'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text)] hover:bg-[var(--primary)] hover:bg-opacity-10'
+                    ? 'text-[var(--primary)] font-semibold'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text)]'
                 }`}
               >
                 {link.label}
