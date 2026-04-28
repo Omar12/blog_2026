@@ -19,73 +19,26 @@ interface ListeningItem {
 
 const currentlyListening: ListeningItem[] = [
   {
-    title: 'Random Access Memories',
-    artist: 'Daft Punk',
+    title: 'Spring 2026',
     description:
-      'Classic electronic album perfect for focus work. The production is incredible.',
-    type: 'album',
-    addedDate: '2025-12-15',
-  },
-  {
-    title: 'Deep Focus',
-    artist: 'Spotify',
-    description: 'Ambient and post-rock music for concentration.',
+      'Selection of tracks that I have liked for Spring so far.',
     type: 'playlist',
-    addedDate: '2025-12-10',
-  },
-  {
-    title: 'Syntax.fm',
-    description: 'Web development tips and best practices.',
-    type: 'podcast',
-    addedDate: '2025-12-01',
-  },
+    addedDate: '2026-04-20',
+    spotifyEmbed: 'https://open.spotify.com/embed/playlist/2eRiI8PggxyClclqvPY5md?utm_source=generator&theme=0'
+  }
 ];
 
-const recentlyFinished: ListeningItem[] = [
-  {
-    title: 'In Rainbows',
-    artist: 'Radiohead',
-    type: 'album',
-    addedDate: '2025-11-28',
-  },
-  {
-    title: 'The Creative Act: A Way of Being',
-    artist: 'Rick Rubin',
-    description: 'Insights on creativity from legendary music producer.',
-    type: 'audiobook',
-    addedDate: '2025-11-20',
-  },
-  {
-    title: 'Bon Iver',
-    artist: 'Bon Iver',
-    type: 'album',
-    addedDate: '2025-11-15',
-  },
-];
+const recentlyFinished: ListeningItem[] = [];
 
 const allTimeRotation: ListeningItem[] = [
   {
-    title: 'Midnight City',
-    artist: 'M83',
-    description: 'Never gets old. Perfect energy boost.',
-    type: 'album',
-  },
-  {
-    title: 'Lofi Hip Hop Radio',
-    description: 'For those long coding sessions.',
+    title: 'My Favorite Albums',
+    description:
+      'A playlist with my favorite albums.',
     type: 'playlist',
-  },
-  {
-    title: 'The Changelog',
-    description: 'Deep conversations about software and open source.',
-    type: 'podcast',
-  },
-  {
-    title: 'OK Computer',
-    artist: 'Radiohead',
-    description: 'A masterpiece that stands the test of time.',
-    type: 'album',
-  },
+    addedDate: '2026-04-20',
+    spotifyEmbed: 'https://open.spotify.com/embed/playlist/3Z6KOtZW1I6o6Kvm3nV8yZ?utm_source=generator&theme=0'
+  }
 ];
 
 function getTypeIcon(type: string): string {
@@ -167,7 +120,7 @@ function ListeningCard({ item }: { item: ListeningItem }) {
         <span
           className={`px-3 py-1 text-xs rounded-full ${getTypeColor(
             item.type
-          )} bg-opacity-20 text-[var(--text)] border border-[var(--border)] capitalize`}
+          )} bg-opacity-20 text-[var(--text-tertiary)] border border-[var(--border)] capitalize`}
         >
           {item.type}
         </span>
@@ -209,7 +162,7 @@ export default function ListeningPage() {
             <h2 className="text-3xl font-bold text-[var(--text)]">
               Currently Playing
             </h2>
-            <span className="px-3 py-1 text-sm rounded-full bg-[var(--primary)] bg-opacity-20 text-[var(--text)] border border-[var(--border)] animate-pulse">
+            <span className="px-3 py-1 text-sm rounded-full bg-[var(--accent)] bg-opacity-20 text-[var(--text-tertiary)] border border-[var(--border)] animate-pulse">
               Now
             </span>
           </div>
@@ -220,7 +173,7 @@ export default function ListeningPage() {
           </div>
         </section>
 
-        <section>
+        {recentlyFinished.length > 0 && <section>
           <h2 className="text-3xl font-bold mb-6 text-[var(--text)]">
             Recently Finished
           </h2>
@@ -229,9 +182,9 @@ export default function ListeningPage() {
               <ListeningCard key={item.title} item={item} />
             ))}
           </div>
-        </section>
+        </section>}
 
-        <section>
+        {allTimeRotation.length > 0 && <section>
           <h2 className="text-3xl font-bold mb-6 text-[var(--text)]">
             All-Time Rotation
           </h2>
@@ -244,7 +197,7 @@ export default function ListeningPage() {
               <ListeningCard key={item.title} item={item} />
             ))}
           </div>
-        </section>
+        </section>}
       </div>
 
       <div className="mt-12 p-6 rounded-lg border border-[var(--border)] bg-[var(--surface)]">

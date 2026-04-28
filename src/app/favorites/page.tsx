@@ -37,10 +37,10 @@ const favorites: FavoriteCategory[] = [
         tags: ['Programming', 'Career'],
       },
       {
-        title: 'Thinking, Fast and Slow by Daniel Kahneman',
+        title: 'Project Hail Mary by Andy Weir',
         description:
-          'Fascinating insights into how we think and make decisions.',
-        tags: ['Psychology', 'Decision-making'],
+          'A thrilling sci-fi adventure about survival, ingenuity, and the power of human connection.',
+        tags: ['Science Fiction'],
       },
     ],
   },
@@ -63,11 +63,11 @@ const favorites: FavoriteCategory[] = [
         tags: ['Productivity', 'Notes'],
       },
       {
-        title: 'Raycast',
+        title: 'Claude Code',
         description:
-          'Lightning-fast launcher that supercharges productivity on Mac.',
-        link: 'https://raycast.com',
-        tags: ['Productivity', 'macOS'],
+          'AI assistant that helps me create apps, write code, and brainstorm ideas.',
+        link: 'https://claude.ai',
+        tags: ['Productivity', 'Development', 'AI'],
       },
     ],
   },
@@ -76,25 +76,25 @@ const favorites: FavoriteCategory[] = [
     icon: '🌐',
     items: [
       {
-        title: 'Hacker News',
-        description: 'Great source for tech news and thoughtful discussions.',
-        link: 'https://news.ycombinator.com',
-        tags: ['Tech', 'News'],
+        title: 'Pinboard',
+        description: 'A minimalist bookmarking service that I use to save and organize links.',
+        link: 'https://pinboard.in',
+        tags: ['Productivity', 'Bookmarks'],
       },
       {
-        title: 'CSS-Tricks',
+        title: 'Every',
         description:
-          'Excellent tutorials and tips for web development and design.',
-        link: 'https://css-tricks.com',
-        tags: ['Web Dev', 'CSS'],
+          'Essays and insights on technology and AI',
+        link: 'https://every.to',
+        tags: ['Writing', 'AI'],
       },
       {
-        title: 'Wait But Why',
+        title: 'Midjourney',
         description:
-          'Long-form articles that explore interesting topics in depth.',
-        link: 'https://waitbutwhy.com',
-        tags: ['Writing', 'Ideas'],
-      },
+          'An AI-powered image generation tool that I use for creative projects and design inspiration.',
+        link: 'https://midjourney.com',
+        tags: ['AI', 'Design', 'Creativity'],
+      }
     ],
   },
   {
@@ -102,22 +102,34 @@ const favorites: FavoriteCategory[] = [
     icon: '🎙️',
     items: [
       {
-        title: 'Syntax.fm',
-        description: 'Web development podcast with practical tips and insights.',
-        link: 'https://syntax.fm',
-        tags: ['Web Dev', 'JavaScript'],
+        title: 'Darknet Diaries',
+        description: 'Stories about hackers, human psychology, and technology.',
+        link: 'https://darknetdiaries.com',
+        tags: ['Security', 'True Crime'],
       },
+    ],
+  },
+  {
+    category: 'Video Games',
+    icon: '🎮',
+    items: [
       {
-        title: 'The Changelog',
-        description: 'Conversations with open source developers and makers.',
-        link: 'https://changelog.com',
-        tags: ['Open Source', 'Tech'],
-      },
-      {
-        title: 'Huberman Lab',
+        title: 'The Legend of Zelda: Tears of the Kingdom',
         description:
-          'Science-based tools for everyday life, hosted by Andrew Huberman.',
-        tags: ['Science', 'Health'],
+          'A breathtaking open-world adventure that redefined what exploration in games could feel like.',
+        tags: ['Action-Adventure', 'Open World', 'Nintendo'],
+      },
+      {
+        title: 'Arc Raiders',
+        description:
+          'A casual extraction shooter with a unique blend of PVE and PVP enemies.',
+        tags: ['Shooter', 'Extraction'],
+      },
+      {
+        title: 'Death Stranding 2',
+        description:
+          'A surreal and emotional journey that pushes the boundaries of storytelling in games.',
+        tags: ['Open World', 'Story-Driven'],
       },
     ],
   },
