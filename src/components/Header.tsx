@@ -11,6 +11,7 @@ const navLinks = [
   { href: '/about' as const, label: 'About' },
   { href: '/favorites' as const, label: 'Favorites' },
   { href: '/listening' as const, label: 'Listening' },
+  { href: '/projects' as const, label: 'Projects' },
 ] as const;
 
 export default function Header() {

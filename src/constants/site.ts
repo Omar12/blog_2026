@@ -30,6 +30,10 @@ export const PAGE_METADATA = {
     title: `What I'm Listening To | ${SITE_CONFIG.name}`,
     description: 'Current music, my DJ sets, podcasts, and audio content in rotation',
   },
+  projects: {
+    title: `Vibe Coding Projects | ${SITE_CONFIG.name}`,
+    description: 'GitHub repositories built with vibe coding',
+  },
   blog: {
     title: `Blog | ${SITE_CONFIG.name}`,
     description: 'Read my latest thoughts',
