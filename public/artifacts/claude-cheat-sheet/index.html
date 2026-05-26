@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Cheat Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0c10;--surface:#111318;--surface2:#181b22;--border:#1e2230;--orange:#ff6b35;--orange-dim:rgba(255,107,53,0.12);--teal:#00d4b4;--teal-dim:rgba(0,212,180,0.1);--purple:#a78bfa;--purple-dim:rgba(167,139,250,0.1);--yellow:#fbbf24;--yellow-dim:rgba(251,191,36,0.1);--text:#e8eaf0;--text-muted:#6b7280;--text-dim:#9ca3af;--mono:'JetBrains Mono',monospace;--sans:'Syne',sans-serif}
+html{background:var(--bg)}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;padding:32px 24px}
+.header{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:24px;gap:16px;flex-wrap:wrap}
+.header-left{display:flex;align-items:center;gap:14px}
+.logo-box{width:44px;height:44px;background:var(--orange-dim);border:1px solid var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.title{font-size:26px;font-weight:800;letter-spacing:-0.5px}
+.title span{color:var(--orange)}
+.subtitle{font-size:11px;color:var(--text-muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:1.5px}
+.badge{font-family:var(--mono);font-size:10px;font-weight:700;background:var(--orange-dim);border:1px solid var(--orange);color:var(--orange);padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:1px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.grid{grid-template-columns:1fr}}
+.col-span-2{grid-column:span 2}
+.col-span-3{grid-column:span 3}
+@media(max-width:900px){.col-span-3,.col-span-2{grid-column:span 2}}
+@media(max-width:580px){.col-span-3,.col-span-2{grid-column:span 1}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent-color,var(--orange));opacity:0.7}
+.card.teal{--accent-color:var(--teal)}
+.card.purple{--accent-color:var(--purple)}
+.card.yellow{--accent-color:var(--yellow)}
+.card.orange{--accent-color:var(--orange)}
+.card-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;margin-bottom:12px;color:var(--accent-color,var(--orange));display:flex;align-items:center;gap:7px}
+.card-title::after{content:'';flex:1;height:1px;background:var(--accent-color,var(--orange));opacity:0.2}
+.cmd-row{display:flex;align-items:baseline;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12.5px}
+.cmd-row:last-child{border-bottom:none;padding-bottom:0}
+.cmd{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--teal);white-space:nowrap;flex-shrink:0;background:var(--teal-dim);padding:2px 7px;border-radius:4px}
+.cmd.o{color:var(--orange);background:var(--orange-dim)}
+.cmd.p{color:var(--purple);background:var(--purple-dim)}
+.cmd.y{color:var(--yellow);background:var(--yellow-dim)}
+.cmd-desc{color:var(--text-dim);font-size:11.5px;line-height:1.4}
+.shortcut-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);gap:10px}
+.shortcut-row:last-child{border-bottom:none}
+.keys{display:flex;gap:4px;flex-shrink:0}
+kbd{font-family:var(--mono);font-size:10px;font-weight:600;background:var(--surface2);border:1px solid #2a2f3d;border-bottom:2px solid #2a2f3d;border-radius:4px;padding:2px 6px;color:var(--text);white-space:nowrap}
+.shortcut-desc{color:var(--text-dim);font-size:11.5px}
+.tips-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.tip{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:10px 12px;font-size:11.5px;line-height:1.5;color:var(--text-dim);position:relative}
+.tip strong{color:var(--text);font-weight:600;display:block;margin-bottom:2px}
+.tip-num{position:absolute;top:8px;right:10px;font-family:var(--mono);font-size:9px;color:var(--text-muted);font-weight:700}
+.fblock{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:10px 12px;font-family:var(--mono);font-size:11px;color:var(--text-dim);line-height:1.75}
+.fblock .cm{color:var(--text-muted)}
+.fblock .k{color:var(--purple)}
+.fblock .v{color:var(--teal)}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.citem{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:11.5px;display:flex;gap:8px;align-items:flex-start}
+.cdot{width:6px;height:6px;border-radius:50%;background:var(--orange);flex-shrink:0;margin-top:4px}
+.cdot.t{background:var(--teal)}
+.cdot.p{background:var(--purple)}
+.cdot.y{background:var(--yellow)}
+.ctxt{color:var(--text-dim);line-height:1.5}
+.ctxt strong{color:var(--text)}
+.footer{margin-top:18px;display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text-muted);border-top:1px solid var(--border);padding-top:12px;flex-wrap:wrap;gap:8px}
+.pill{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:0.8px;margin-right:4px;vertical-align:middle}
+.pt{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,212,180,0.25)}
+.po{background:var(--orange-dim);color:var(--orange);border:1px solid rgba(255,107,53,0.25)}
+.pp{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(167,139,250,0.25)}
+.ic{font-family:var(--mono);font-size:10.5px;background:var(--surface2);border:1px solid var(--border);border-radius:3px;padding:1px 5px;color:var(--teal)}
+.note{font-size:11px;color:var(--text-muted);line-height:1.5;background:var(--surface2);border-radius:6px;padding:7px 9px;border:1px solid var(--border);margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo-box">⌘</div>
+    <div>
+      <div class="title">Claude <span>Code</span> Cheat Sheet</div>
+      <div class="subtitle">CLI · Slash Commands · Shortcuts · Pro Tips</div>
+    </div>
+  </div>
+  <div class="badge">v2.1.150 · May 2026</div>
+</div>
+
+<div class="grid">
+
+  <div class="card teal">
+    <div class="card-title">CLI Launch Commands</div>
+    <div class="cmd-row"><span class="cmd">claude</span><span class="cmd-desc">Start interactive session</span></div>
+    <div class="cmd-row"><span class="cmd">claude "prompt"</span><span class="cmd-desc">One-shot query, non-interactive</span></div>
+    <div class="cmd-row"><span class="cmd">claude -c</span><span class="cmd-desc">Resume last conversation</span></div>
+    <div class="cmd-row"><span class="cmd">claude -r &lt;id&gt;</span><span class="cmd-desc">Resume a specific session by ID</span></div>
+    <div class="cmd-row"><span class="cmd">claude -p "prompt"</span><span class="cmd-desc">Print mode: pipe output to stdout</span></div>
+    <div class="cmd-row"><span class="cmd">claude --bg "task"</span><span class="cmd-desc">Start a background session (detached)</span></div>
+    <div class="cmd-row"><span class="cmd">claude agents</span><span class="cmd-desc">Dashboard: manage all running sessions</span></div>
+    <div class="cmd-row"><span class="cmd">claude agents --json</span><span class="cmd-desc">List live sessions as JSON (for scripting)</span></div>
+    <div class="cmd-row"><span class="cmd">claude project purge</span><span class="cmd-desc">Delete all CC state for a project (--dry-run safe)</span></div>
+    <div class="cmd-row"><span class="cmd">claude --model &lt;m&gt;</span><span class="cmd-desc">Specify model at launch</span></div>
+    <div class="cmd-row"><span class="cmd">claude --add-dir &lt;path&gt;</span><span class="cmd-desc">Add extra working directory</span></div>
+    <div class="cmd-row"><span class="cmd">claude --dangerously-skip-permissions</span><span class="cmd-desc">Auto-approve all (trusted CI only)</span></div>
+  </div>
+
+  <div class="card orange">
+    <div class="card-title">Core Slash Commands</div>
+    <div class="cmd-row"><span class="cmd o">/help</span><span class="cmd-desc">Show all available commands</span></div>
+    <div class="cmd-row"><span class="cmd o">/init</span><span class="cmd-desc">Scan project, create CLAUDE.md</span></div>
+    <div class="cmd-row"><span class="cmd o">/clear</span><span class="cmd-desc">Reset conversation history</span></div>
+    <div class="cmd-row"><span class="cmd o">/compact</span><span class="cmd-desc">Summarize history, free context window</span></div>
+    <div class="cmd-row"><span class="cmd o">/model</span><span class="cmd-desc">Switch model (session only; press d to set default)</span></div>
+    <div class="cmd-row"><span class="cmd o">/effort &lt;level&gt;</span><span class="cmd-desc">Set effort mid-session: low · medium · high · max</span></div>
+    <div class="cmd-row"><span class="cmd o">/fast</span><span class="cmd-desc">Enable Fast Mode (Opus at 2.5x speed)</span></div>
+    <div class="cmd-row"><span class="cmd o">/plan</span><span class="cmd-desc">Switch to planning / read-only mode</span></div>
+    <div class="cmd-row"><span class="cmd o">/code-review [high]</span><span class="cmd-desc">Review for correctness bugs; --comment posts inline to PR</span></div>
+    <div class="cmd-row"><span class="cmd o">/usage</span><span class="cmd-desc">Per-category limits breakdown: skills, subagents, plugins, MCP</span></div>
+  </div>
+
+  <div class="card purple">
+    <div class="card-title">More Slash Commands</div>
+    <div class="cmd-row"><span class="cmd p">/todos</span><span class="cmd-desc">List tracked TODO items</span></div>
+    <div class="cmd-row"><span class="cmd p">/add-dir &lt;path&gt;</span><span class="cmd-desc">Add working directory to session</span></div>
+    <div class="cmd-row"><span class="cmd p">/doctor</span><span class="cmd-desc">Health check installation</span></div>
+    <div class="cmd-row"><span class="cmd p">/rewind</span><span class="cmd-desc">Revert to previous code state (revert code only option)</span></div>
+    <div class="cmd-row"><span class="cmd p">/bg "task"</span><span class="cmd-desc">Fork session to background and continue working</span></div>
+    <div class="cmd-row"><span class="cmd p">/install-github-app</span><span class="cmd-desc">Enable auto PR review via GitHub</span></div>
+    <div class="cmd-row"><span class="cmd p">/keybindings</span><span class="cmd-desc">Edit custom keyboard bindings</span></div>
+    <div class="cmd-row"><span class="cmd p">/rc</span><span class="cmd-desc">Remote control (mobile access)</span></div>
+    <div class="cmd-row"><span class="cmd p">/usage-credits</span><span class="cmd-desc">Check extra usage credit balance</span></div>
+  </div>
+
+  <div class="card yellow">
+    <div class="card-title">Keyboard Shortcuts</div>
+    <div class="shortcut-row"><div class="keys"><kbd>Esc</kbd></div><span class="shortcut-desc">Stop Claude (do not use Ctrl+C!)</span></div>
+    <div class="shortcut-row"><div class="keys"><kbd>Esc</kbd><kbd>Esc</kbd></div><span class="shortcut-desc">Browse and jump to previous messages</span></div>
+    <div class="shortcut-row"><div class="keys"><kbd>↑</kbd></div><span class="shortcut-desc">Navigate past prompts and sessions</span></div>
+    <div class="shortcut-row"><div class="keys"><kbd>Shift</kbd><kbd>Tab</kbd></div><span class="shortcut-desc">Cycle: normal → auto-accept → plan</span></div>
+    <div class="shortcut-row"><div class="keys"><kbd>Ctrl</kbd><kbd>V</kbd></div><span class="shortcut-desc">Paste image from clipboard</span></div>
+    <div class="shortcut-row"><div class="keys"><kbd>Shift</kbd><span style="font-size:10px;color:var(--text-muted);align-self:center">+drag</span></div><span class="shortcut-desc">Reference a file in chat (not open it)</span></div>
+    <div class="shortcut-row"><div class="keys"><kbd>!</kbd></div><span class="shortcut-desc">Run shell command directly in session</span></div>
+    <div class="shortcut-row"><div class="keys"><kbd>@</kbd></div><span class="shortcut-desc">Reference file or directory inline</span></div>
+  </div>
+
+  <div class="card teal">
+    <div class="card-title">CLAUDE.md — Project Memory</div>
+    <p style="font-size:11.5px;color:var(--text-dim);margin-bottom:10px;line-height:1.5;">Run <span class="ic">/init</span> to auto-generate. Claude reads this on every session — add anything it must always know.</p>
+    <div class="fblock">
+      <span class="cm"># CLAUDE.md</span><br>
+      <span class="k">## Stack</span><br>
+      <span class="v">Next.js 15, TypeScript, Postgres</span><br><br>
+      <span class="k">## Commands</span><br>
+      <span class="v">Build: npm run build</span><br>
+      <span class="v">Test: npm test</span><br>
+      <span class="v">Lint: npm run lint</span><br><br>
+      <span class="k">## Conventions</span><br>
+      <span class="v">- Use pnpm, not npm</span><br>
+      <span class="v">- No default exports</span><br>
+      <span class="v">- Tests alongside source files</span>
+    </div>
+  </div>
+
+  <div class="card orange">
+    <div class="card-title">Model Selection Guide</div>
+    <div class="cmd-row"><span class="cmd o">Sonnet 4.5</span><span class="cmd-desc">Default. Best balance for everyday coding tasks</span></div>
+    <div class="cmd-row"><span class="cmd o">Haiku 4.5</span><span class="cmd-desc">Fastest and cheapest — use for simple or token-heavy tasks</span></div>
+    <div class="cmd-row"><span class="cmd o">Opus 4.6</span><span class="cmd-desc">Strong for complex planning, architecture, large files</span></div>
+    <div class="cmd-row" style="background:rgba(255,107,53,0.06);border-radius:4px"><span class="cmd o">Opus 4.7 ✨</span><span class="cmd-desc">Latest — stronger coding &amp; long-running tasks, better vision</span></div>
+    <div class="note"><strong style="color:var(--yellow)">Pro tip:</strong> Pro/Max5 defaults to Sonnet. Use <span class="ic" style="color:var(--orange);background:var(--orange-dim)">/fast</span> for Opus at 2.5x speed. <span class="ic" style="color:var(--orange);background:var(--orange-dim)">/model</span> now changes current session only — press <kbd style="font-family:var(--mono);font-size:9px;background:#181b22;border:1px solid #2a2f3d;border-radius:3px;padding:1px 4px">d</kbd> to set a new default.</div>
+  </div>
+
+  <div class="card purple col-span-2">
+    <div class="card-title">In-Session Syntax and References</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px">
+      <div class="cmd-row"><span class="cmd p">@src/app.ts</span><span class="cmd-desc">Reference a specific file</span></div>
+      <div class="cmd-row"><span class="cmd p">@src/</span><span class="cmd-desc">Reference an entire directory</span></div>
+      <div class="cmd-row"><span class="cmd p">!npm test</span><span class="cmd-desc">Run shell command (saves tokens)</span></div>
+      <div class="cmd-row"><span class="cmd p">!git diff HEAD</span><span class="cmd-desc">Run git commands inside session</span></div>
+      <div class="cmd-row"><span class="cmd p">"fix @auth/login.ts"</span><span class="cmd-desc">Natural language + file reference</span></div>
+      <div class="cmd-row"><span class="cmd p">/model opus</span><span class="cmd-desc">Switch models on the fly mid-task</span></div>
+    </div>
+  </div>
+
+  <div class="card teal">
+    <div class="card-title">Custom Commands and Skills</div>
+    <p style="font-size:11.5px;color:var(--text-dim);margin-bottom:9px;line-height:1.5;">Store prompts as Markdown files, invoke with <span class="ic">/name</span></p>
+    <div class="cmd-row"><span class="cmd">~/.claude/commands/</span><span class="cmd-desc">Global — all projects</span></div>
+    <div class="cmd-row"><span class="cmd">.claude/commands/</span><span class="cmd-desc">Project-scoped only</span></div>
+    <div class="cmd-row"><span class="cmd">.claude/skills/</span><span class="cmd-desc">New format — supports auto-invoke</span></div>
+    <div style="height:8px"></div>
+    <div class="fblock" style="font-size:10.5px">
+      <span class="cm"># .claude/commands/review.md</span><br>
+      <span class="v">Review this code for bugs,</span><br>
+      <span class="v">security issues, and edge cases.</span><br>
+      <span class="v">Be concise. Skip style nits.</span>
+    </div>
+  </div>
+
+  <div class="card yellow">
+    <div class="card-title">settings.json — Key Config</div>
+    <div class="fblock" style="font-size:10.5px;line-height:1.75">
+      <span class="cm">// .claude/settings.json</span><br>
+      <span class="k">"model"</span>: <span class="v">"claude-sonnet-4-20250514"</span>,<br>
+      <span class="k">"permissions"</span>: {<br>
+      &nbsp;&nbsp;<span class="k">"allowedTools"</span>: [<span class="v">"Read","Write","Bash(git *)"</span>],<br>
+      &nbsp;&nbsp;<span class="k">"deny"</span>: [<span class="v">"Read(./.env)"</span>]<br>
+      },<br>
+      <span class="k">"hooks"</span>: {<br>
+      &nbsp;&nbsp;<span class="k">"PostToolUse"</span>: [{<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"matcher"</span>: <span class="v">"Write(*.py)"</span>,<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"command"</span>: <span class="v">"black $file"</span><br>
+      &nbsp;&nbsp;}],<br>
+      &nbsp;&nbsp;<span class="k">"PostCompact"</span>: [{<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"command"</span>: <span class="v">"echo compacted"</span><br>
+      &nbsp;&nbsp;}]<br>
+      }
+    </div>
+  </div>
+
+  <div class="card orange">
+    <div class="card-title">GitHub and PR Integration</div>
+    <div class="cmd-row"><span class="cmd o">/install-github-app</span><span class="cmd-desc">Enable auto-review of all PRs</span></div>
+    <p style="font-size:11px;color:var(--text-dim);line-height:1.5;margin:8px 0">Customize the review prompt to keep it focused:</p>
+    <div class="fblock" style="font-size:10.5px">
+      <span class="cm"># claude-code-review.yml</span><br>
+      <span class="k">direct_prompt</span>: |<br>
+      &nbsp;&nbsp;<span class="v">Review for bugs and security</span><br>
+      &nbsp;&nbsp;<span class="v">issues only. Be concise.</span><br>
+      &nbsp;&nbsp;<span class="v">Skip style and nit comments.</span>
+    </div>
+  </div>
+
+  <div class="card teal">
+    <div class="card-title">MCP Servers and Extensions</div>
+    <div class="cmd-row"><span class="cmd">claude mcp add &lt;name&gt;</span><span class="cmd-desc">Add MCP server to config</span></div>
+    <div class="cmd-row"><span class="cmd">claude mcp list</span><span class="cmd-desc">Show all configured servers</span></div>
+    <div class="cmd-row"><span class="cmd">claude mcp remove &lt;n&gt;</span><span class="cmd-desc">Remove a server</span></div>
+    <div style="height:8px"></div>
+    <div class="cgrid">
+      <div class="citem"><div class="cdot t"></div><div class="ctxt"><strong>GitHub MCP</strong> — PRs, issues, repos</div></div>
+      <div class="citem"><div class="cdot"></div><div class="ctxt"><strong>Filesystem MCP</strong> — Extended access</div></div>
+      <div class="citem"><div class="cdot p"></div><div class="ctxt"><strong>Postgres MCP</strong> — Query DB directly</div></div>
+      <div class="citem"><div class="cdot y"></div><div class="ctxt"><strong>Browser MCP</strong> — Web automation</div></div>
+    </div>
+  </div>
+
+  <div class="card purple">
+    <div class="card-title">System Prompt Flags</div>
+    <div class="cmd-row"><span class="cmd p">--append-system-prompt</span><span class="cmd-desc">Add to default prompt (recommended)</span></div>
+    <div class="cmd-row"><span class="cmd p">--system-prompt</span><span class="cmd-desc">Replace default prompt entirely</span></div>
+    <div class="cmd-row"><span class="cmd p">--append-system-prompt-file</span><span class="cmd-desc">Append instructions from a file</span></div>
+    <div class="cmd-row"><span class="cmd p">--system-prompt-file</span><span class="cmd-desc">Replace prompt with file contents</span></div>
+    <div class="note">Use <span class="ic" style="color:var(--purple);background:var(--purple-dim)">--append</span> to preserve built-in CC capabilities. Use <span class="ic" style="color:var(--purple);background:var(--purple-dim)">--system-prompt</span> only when you need full control.</div>
+  </div>
+
+  <div class="card teal col-span-2">
+    <div class="card-title">More Useful CLI Flags</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 16px">
+      <div>
+        <div class="cmd-row"><span class="cmd">-n / --name &lt;name&gt;</span><span class="cmd-desc">Set a display name for the session</span></div>
+        <div class="cmd-row"><span class="cmd">--worktree / -w</span><span class="cmd-desc">Isolated git worktree; auto-cleaned if no changes</span></div>
+        <div class="cmd-row"><span class="cmd">--from-pr &lt;#&gt;</span><span class="cmd-desc">Resume or start a PR-linked session</span></div>
+      </div>
+      <div>
+        <div class="cmd-row"><span class="cmd">--effort &lt;level&gt;</span><span class="cmd-desc">Set effort: low · medium · high · max</span></div>
+        <div class="cmd-row"><span class="cmd">--bare</span><span class="cmd-desc">Skip hooks, LSP &amp; plugins — lean scripting mode</span></div>
+        <div class="cmd-row"><span class="cmd">--output-format</span><span class="cmd-desc">json · text · stream-json (use with -p)</span></div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:8px">💡 <strong>--worktree</strong> is great for risky refactors — work in isolation, then merge. <strong>--bare</strong> pairs with <strong>--dangerously-skip-permissions</strong> for fast, headless CI pipelines.</div>
+  </div>
+
+  <div class="card teal col-span-3">
+    <div class="card-title">🔌 Plugins &amp; Background Sessions — NEW (2026)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--teal);margin-bottom:8px">Plugin Commands</div>
+        <div class="cmd-row" style="border-color:rgba(0,212,180,0.1);padding:4px 0"><span class="cmd">claude plugin install &lt;name&gt;</span><span class="cmd-desc" style="font-size:10.5px">Install from marketplace</span></div>
+        <div class="cmd-row" style="border-color:rgba(0,212,180,0.1);padding:4px 0"><span class="cmd">claude plugin list</span><span class="cmd-desc" style="font-size:10.5px">Show installed plugins</span></div>
+        <div class="cmd-row" style="border-color:rgba(0,212,180,0.1);padding:4px 0"><span class="cmd">claude plugin details &lt;name&gt;</span><span class="cmd-desc" style="font-size:10.5px">Inventory + per-session token cost</span></div>
+        <div class="cmd-row" style="border-color:rgba(0,212,180,0.1);padding:4px 0"><span class="cmd">claude plugin validate</span><span class="cmd-desc" style="font-size:10.5px">Validate plugin manifest</span></div>
+        <div class="cmd-row" style="border:none;padding:4px 0"><span class="cmd">/plugin</span><span class="cmd-desc" style="font-size:10.5px">Browse &amp; manage in-session</span></div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--teal);margin-bottom:8px">Background Sessions</div>
+        <div class="cmd-row" style="border-color:rgba(0,212,180,0.1);padding:4px 0"><span class="cmd">claude --bg "task"</span><span class="cmd-desc" style="font-size:10.5px">Start detached background session</span></div>
+        <div class="cmd-row" style="border-color:rgba(0,212,180,0.1);padding:4px 0"><span class="cmd">claude agents</span><span class="cmd-desc" style="font-size:10.5px">Dashboard: all running sessions</span></div>
+        <div class="cmd-row" style="border-color:rgba(0,212,180,0.1);padding:4px 0"><span class="cmd">claude agents --json</span><span class="cmd-desc" style="font-size:10.5px">List sessions as JSON for scripting</span></div>
+        <div class="cmd-row" style="border-color:rgba(0,212,180,0.1);padding:4px 0"><span class="cmd">Ctrl+T</span><span class="cmd-desc" style="font-size:10.5px">Pin session (keeps alive when idle)</span></div>
+        <div class="cmd-row" style="border:none;padding:4px 0"><span class="cmd">/resume</span><span class="cmd-desc" style="font-size:10.5px">Resume background sessions (marked bg)</span></div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--teal);margin-bottom:8px">New Hooks (2026)</div>
+        <div class="fblock" style="font-size:10px;line-height:1.7">
+          <span class="k">PostToolUse</span> — after file write<br>
+          <span class="k">PreToolUse</span> &nbsp;— before any action<br>
+          <span class="k">PostCompact</span> — after /compact<br>
+          <span class="k">SessionStart</span> — on session open<br>
+          <span class="k">SubagentStop</span> — when agent ends<br>
+          <span class="k">Notification</span> — custom alerts
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card purple col-span-3">
+    <div class="card-title">✨ Auto Mode — NEW (Research Preview · Mar 2026)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--purple);margin-bottom:8px">What it is</div>
+        <div style="font-size:11.5px;color:var(--text-dim);line-height:1.6">A middle path between manual approval and <span class="ic" style="color:var(--purple);background:var(--purple-dim)">--dangerously-skip-permissions</span>. A classifier reviews every tool call before it runs, blocking destructive actions while letting safe ones proceed automatically.</div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--purple);margin-bottom:8px">What it blocks</div>
+        <div style="font-size:11.5px;color:var(--text-dim);line-height:1.6">Mass file deletion · sensitive data exfiltration · malicious code execution. If Claude keeps hitting blocks, it eventually prompts the user instead of looping.</div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--purple);margin-bottom:8px">How to enable</div>
+        <div class="cmd-row" style="border:none;padding:3px 0"><span class="cmd p">--enable-auto-mode</span><span class="cmd-desc" style="font-size:11px">Launch flag to turn it on</span></div>
+        <div class="cmd-row" style="border:none;padding:3px 0"><span class="cmd p">Shift+Tab</span><span class="cmd-desc" style="font-size:11px">Cycle to auto mode in-session</span></div>
+        <div style="margin-top:6px;font-size:11px;color:var(--text-muted)">VS Code / Desktop: Settings → Claude Code → toggle on, then select from the permission mode drop-down. Works with Sonnet 4.6 &amp; Opus 4.6. Available on Team plan now; Enterprise &amp; API coming soon.</div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:10px">⚠️ Auto mode reduces risk vs. <span class="ic" style="color:var(--purple);background:var(--purple-dim)">--dangerously-skip-permissions</span> but doesn't eliminate it — still recommended to use in isolated/sandboxed environments. The classifier may occasionally allow borderline actions or block benign ones.</div>
+  </div>
+
+  <div class="card orange col-span-3">
+    <div class="card-title">Pro Tips — Maximize Productivity</div>
+    <div class="tips-grid">
+      <div class="tip"><span class="tip-num">01</span><strong>Use /clear often</strong>Start each new task fresh. Old context wastes tokens and can confuse Claude with unrelated conversation history.</div>
+      <div class="tip"><span class="tip-num">02</span><strong>Prefer ! for shell commands</strong>Type <span class="ic">!npm test</span> directly — it bypasses conversational overhead and saves tokens compared to asking Claude to run it.</div>
+      <div class="tip"><span class="tip-num">03</span><strong>Auto-accept mode for safe ops</strong>Press <kbd style="font-family:var(--mono);font-size:9px;background:var(--surface);border:1px solid #2a2f3d;border-radius:3px;padding:1px 5px">Shift+Tab</kbd> twice to enable auto-accept. Only use for low-risk, well-understood operations.</div>
+      <div class="tip"><span class="tip-num">04</span><strong>Build your CLAUDE.md on day one</strong>Run <span class="ic">/init</span>, then edit it. Add build commands, stack details, lint rules, and coding conventions — Claude reads it every session.</div>
+      <div class="tip"><span class="tip-num">05</span><strong>Add hooks to enforce code quality</strong>Use <span class="ic">PostToolUse</span> hooks to auto-run formatters (Prettier, Black) and type-checkers after every file write.</div>
+      <div class="tip"><span class="tip-num">06</span><strong>Esc stops Claude, not Ctrl+C</strong>Press Esc to pause mid-task without exiting. Double-Esc lets you browse and jump to any previous message in the session.</div>
+      <div class="tip"><span class="tip-num">07</span><strong>Use /compact for long sessions</strong>When context grows large, <span class="ic">/compact</span> summarizes history and keeps Claude sharp — especially important for complex multi-file tasks.</div>
+      <div class="tip"><span class="tip-num">08</span><strong>Ctrl+V for image paste</strong>Command+V does not work for images. Use <kbd style="font-family:var(--mono);font-size:9px;background:var(--surface);border:1px solid #2a2f3d;border-radius:3px;padding:1px 5px">Ctrl+V</kbd> to paste screenshots directly into the session for visual debugging context.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span>docs.anthropic.com/en/docs/claude-code/overview</span>
+  <span><span class="pill pt">Sonnet 4.5</span><span class="pill po">Opus 4.6</span><span class="pill pp">Haiku 4.5</span></span>
+  <span>claude.ai &nbsp;·&nbsp; 2026</span>
+</div>
+
+</body>
+</html>

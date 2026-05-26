@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Artifact</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" data-presets="react">
+    // HOW TO ADAPT A CLAUDE JSX ARTIFACT:
+    //
+    // 1. DELETE all import lines at the top — React hooks are available as
+    //    React.useState, React.useEffect, etc. (CDN loads React as a global)
+    //    OR destructure at the top of this script:
+    //      const { useState, useEffect, useRef } = React;
+    //
+    // 2. DELETE "export default" from the component function — keep the name:
+    //      Before: export default function MyComponent() {
+    //      After:  function MyComponent() {
+    //
+    // 3. UPDATE the render call below to use your component's actual name.
+
+    // ─── PASTE YOUR CLAUDE JSX ARTIFACT BELOW ───────────────────────────────
+
+    const { useState, useEffect, useRef, useMemo, useCallback } = React;
+
+    function App() {
+      return <div>Replace this with your component</div>;
+    }
+
+    // ─── END OF ARTIFACT ─────────────────────────────────────────────────────
+
+    // Change "App" to your component's function name if different:
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

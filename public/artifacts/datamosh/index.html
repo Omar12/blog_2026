@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DATAMOSH.EXE</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&display=swap');
+
+  :root {
+    --acid: #00ff41;
+    --burn: #ff2d00;
+    --ice: #00cfff;
+    --void: #0a0a0a;
+    --glitch: #ff00ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--acid);
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 28px;
+    border-bottom: 1px solid rgba(0,255,65,0.25);
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.15em;
+    color: var(--acid);
+    text-shadow: 0 0 20px rgba(0,255,65,0.6), 2px 0 0 var(--glitch), -2px 0 0 var(--ice);
+    animation: logoGlitch 6s infinite;
+  }
+
+  @keyframes logoGlitch {
+    0%, 94%, 100% { text-shadow: 0 0 20px rgba(0,255,65,0.6), 2px 0 0 var(--glitch), -2px 0 0 var(--ice); }
+    95% { text-shadow: 4px 0 0 var(--burn), -4px 0 0 var(--ice), 0 0 30px var(--acid); clip-path: inset(10% 0 80% 0); }
+    96% { text-shadow: -4px 0 0 var(--glitch), 4px 0 0 var(--burn), 0 0 30px var(--acid); clip-path: inset(60% 0 10% 0); }
+    97% { clip-path: none; text-shadow: 0 0 20px rgba(0,255,65,0.6), 2px 0 0 var(--glitch), -2px 0 0 var(--ice); }
+  }
+
+  .status {
+    font-size: 0.7rem;
+    color: rgba(0,255,65,0.5);
+    letter-spacing: 0.1em;
+  }
+
+  .status span { color: var(--acid); animation: blink 1.2s step-end infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 0;
+    height: calc(100vh - 57px);
+  }
+
+  /* Canvas area */
+  .canvas-wrap {
+    position: relative;
+    background: #000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  video, canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  video { opacity: 0; pointer-events: none; }
+
+  #outputCanvas { z-index: 2; }
+
+  .corner-label {
+    position: absolute;
+    font-size: 0.6rem;
+    color: rgba(0,255,65,0.45);
+    letter-spacing: 0.1em;
+    z-index: 10;
+  }
+  .corner-label.tl { top: 10px; left: 12px; }
+  .corner-label.tr { top: 10px; right: 12px; }
+  .corner-label.bl { bottom: 10px; left: 12px; }
+  .corner-label.br { bottom: 10px; right: 12px; }
+
+  /* Glitch bars that randomly appear */
+  .glitch-bar {
+    position: absolute;
+    left: 0; right: 0;
+    height: 3px;
+    background: var(--acid);
+    opacity: 0;
+    z-index: 9;
+    pointer-events: none;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    background: rgba(0,0,0,0.95);
+    border-left: 1px solid rgba(0,255,65,0.2);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .section {
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(0,255,65,0.1);
+  }
+
+  .section-title {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: rgba(0,255,65,0.45);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+
+  /* Effect buttons */
+  .effects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .fx-btn {
+    background: transparent;
+    border: 1px solid rgba(0,255,65,0.3);
+    color: rgba(0,255,65,0.7);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    padding: 8px 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.1s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fx-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--acid);
+    transform: translateX(-100%);
+    transition: transform 0.15s;
+    z-index: -1;
+  }
+
+  .fx-btn:hover { color: #000; border-color: var(--acid); }
+  .fx-btn:hover::before { transform: translateX(0); }
+
+  .fx-btn.active {
+    background: var(--acid);
+    color: #000;
+    border-color: var(--acid);
+    box-shadow: 0 0 12px rgba(0,255,65,0.5);
+  }
+
+  .fx-btn.active::before { transform: translateX(0); }
+
+  /* Sliders */
+  .param-row {
+    margin-bottom: 14px;
+  }
+
+  .param-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: rgba(0,255,65,0.6);
+    margin-bottom: 6px;
+    letter-spacing: 0.06em;
+  }
+
+  .param-value { color: var(--acid); }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 2px;
+    background: rgba(0,255,65,0.2);
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--acid);
+    box-shadow: 0 0 8px rgba(0,255,65,0.8);
+    cursor: pointer;
+  }
+
+  input[type=range]::-webkit-slider-runnable-track {
+    background: linear-gradient(to right, rgba(0,255,65,0.6) 0%, rgba(0,255,65,0.6) var(--val, 50%), rgba(0,255,65,0.15) var(--val, 50%));
+    height: 2px;
+  }
+
+  /* Preset pills */
+  .preset-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .preset-btn {
+    background: transparent;
+    border: 1px solid rgba(0,207,255,0.35);
+    color: rgba(0,207,255,0.7);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    padding: 5px 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.1s;
+  }
+
+  .preset-btn:hover {
+    background: var(--ice);
+    color: #000;
+    border-color: var(--ice);
+  }
+
+  /* Camera selector */
+  .cam-select-row {
+    display: flex;
+    gap: 6px;
+    margin: 0 20px 12px;
+  }
+
+  .cam-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid rgba(0,255,65,0.3);
+    color: rgba(0,255,65,0.6);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    padding: 7px 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.12s;
+  }
+
+  .cam-btn:hover { border-color: var(--acid); color: var(--acid); }
+  .cam-btn.active {
+    background: rgba(0,255,65,0.15);
+    border-color: var(--acid);
+    color: var(--acid);
+    box-shadow: 0 0 8px rgba(0,255,65,0.25);
+  }
+  .cam-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .cam-select {
+    display: none;
+    margin: 0 20px 12px;
+    width: calc(100% - 40px);
+    background: rgba(0,255,65,0.05);
+    border: 1px solid rgba(0,255,65,0.3);
+    color: var(--acid);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    padding: 7px 8px;
+    cursor: pointer;
+    outline: none;
+    letter-spacing: 0.05em;
+  }
+
+  .cam-select option { background: #0a0a0a; }
+  .cam-select.visible { display: block; }
+
+  /* Mobile layout */
+  @media (max-width: 640px) {
+    header { padding: 10px 14px; }
+    .logo { font-size: 1.4rem; }
+    .status { font-size: 0.55rem; }
+
+    .main {
+      grid-template-columns: 1fr;
+      grid-template-rows: 50vw 1fr;
+      height: auto;
+      min-height: calc(100vh - 47px);
+    }
+
+    .canvas-wrap { height: 50vw; position: relative; }
+
+    .sidebar {
+      border-left: none;
+      border-top: 1px solid rgba(0,255,65,0.2);
+    }
+
+    .effects-grid { grid-template-columns: repeat(4, 1fr); }
+    .fx-btn { font-size: 0.55rem; padding: 7px 2px; }
+  }
+
+  /* Start button */
+  .start-btn {
+    display: block;
+    width: calc(100% - 40px);
+    margin: 16px 20px;
+    padding: 14px;
+    background: transparent;
+    border: 1px solid var(--acid);
+    color: var(--acid);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .start-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--acid);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s;
+    z-index: -1;
+  }
+
+  .start-btn:hover { color: #000; box-shadow: 0 0 20px rgba(0,255,65,0.4); }
+  .start-btn:hover::after { transform: scaleX(1); }
+
+  .start-btn.running {
+    border-color: var(--burn);
+    color: var(--burn);
+    box-shadow: 0 0 15px rgba(255,45,0,0.3);
+    animation: pulseRed 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulseRed {
+    0%,100% { box-shadow: 0 0 15px rgba(255,45,0,0.3); }
+    50% { box-shadow: 0 0 30px rgba(255,45,0,0.6); }
+  }
+
+  /* Record button */
+  .record-btn {
+    display: block;
+    width: calc(100% - 40px);
+    margin: 0 20px 16px;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid rgba(255,45,0,0.4);
+    color: rgba(255,45,0,0.7);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+
+  .record-btn:hover { background: var(--burn); color: #fff; border-color: var(--burn); }
+  .record-btn.recording { background: var(--burn); color: #fff; border-color: var(--burn); animation: pulseRed 0.8s ease-in-out infinite; }
+
+  /* VU meter style visualizer */
+  .vu {
+    display: flex;
+    gap: 2px;
+    height: 20px;
+    align-items: flex-end;
+    margin-top: 8px;
+  }
+
+  .vu-bar {
+    flex: 1;
+    background: var(--acid);
+    min-height: 2px;
+    transition: height 0.1s;
+    opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">DATAMOSH.EXE</div>
+  <div class="status">SYS: <span>READY</span> // VER 2.0.1</div>
+</header>
+
+<div class="main">
+  <div class="canvas-wrap" id="canvasWrap">
+    <video id="video" autoplay playsinline muted></video>
+    <canvas id="outputCanvas"></canvas>
+    <div class="corner-label tl" id="labelTL">CAM:OFF // 0fps</div>
+    <div class="corner-label tr" id="labelTR">FX:NONE</div>
+    <div class="corner-label bl" id="labelBL">W:--- H:---</div>
+    <div class="corner-label br" id="labelBR">FRAME:0</div>
+    <div class="glitch-bar" id="glitchBar"></div>
+  </div>
+
+  <div class="sidebar">
+    <button class="start-btn" id="startBtn">INIT WEBCAM</button>
+    <button class="record-btn" id="recordBtn" disabled>⏺ RECORD</button>
+
+    <div class="cam-select-row" id="camFacingRow" style="display:none">
+      <button class="cam-btn active" id="btnFront" disabled>◉ FRONT</button>
+      <button class="cam-btn" id="btnRear" disabled>◎ REAR</button>
+    </div>
+    <select class="cam-select" id="camSelect"></select>
+
+    <div class="section">
+      <div class="section-title">// EFFECTS</div>
+      <div class="effects-grid">
+        <button class="fx-btn" data-fx="pixelDrift">PIXEL DRIFT</button>
+        <button class="fx-btn" data-fx="blockDisplace">BLOCK DISP</button>
+        <button class="fx-btn active" data-fx="frameBlend">FRAME BLEND</button>
+        <button class="fx-btn" data-fx="channelShift">CHAN SHIFT</button>
+        <button class="fx-btn" data-fx="echo">ECHO</button>
+        <button class="fx-btn" data-fx="feedbackLoop">FEEDBACK</button>
+        <button class="fx-btn" data-fx="macroblocks">MACROBLOCKS</button>
+        <button class="fx-btn" data-fx="scanlines">SCANLINES</button>
+        <button class="fx-btn" data-fx="colorBurn">COLOR BURN</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">// PARAMETERS</div>
+
+      <div class="param-row">
+        <div class="param-label">BLEND AMOUNT <span class="param-value" id="blendVal">0.85</span></div>
+        <input type="range" id="blendSlider" min="0" max="99" value="85">
+      </div>
+
+      <div class="param-row">
+        <div class="param-label">DRIFT SPEED <span class="param-value" id="driftVal">3</span></div>
+        <input type="range" id="driftSlider" min="1" max="30" value="3">
+      </div>
+
+      <div class="param-row">
+        <div class="param-label">BLOCK SIZE <span class="param-value" id="blockVal">16</span></div>
+        <input type="range" id="blockSlider" min="4" max="64" value="16">
+      </div>
+
+      <div class="param-row">
+        <div class="param-label">CHAOS <span class="param-value" id="chaosVal">0.3</span></div>
+        <input type="range" id="chaosSlider" min="0" max="100" value="30">
+      </div>
+
+      <div class="param-row">
+        <div class="param-label">FEEDBACK <span class="param-value" id="feedbackVal">0.5</span></div>
+        <input type="range" id="feedbackSlider" min="0" max="95" value="50">
+      </div>
+
+      <div class="param-row">
+        <div class="param-label">ECHO DELAY <span class="param-value" id="echoDelayVal">8</span></div>
+        <input type="range" id="echoDelaySlider" min="1" max="30" value="8">
+      </div>
+
+      <div class="param-row">
+        <div class="param-label">ECHO DECAY <span class="param-value" id="echoDecayVal">0.88</span></div>
+        <input type="range" id="echoDecaySlider" min="50" max="98" value="88">
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">// PRESETS</div>
+      <div class="preset-row">
+        <button class="preset-btn" data-preset="glitch">GLITCH</button>
+        <button class="preset-btn" data-preset="melt">MELT</button>
+        <button class="preset-btn" data-preset="echo">ECHO</button>
+        <button class="preset-btn" data-preset="corrupt">CORRUPT</button>
+        <button class="preset-btn" data-preset="vhs">VHS</button>
+        <button class="preset-btn" data-preset="acid">ACID</button>
+        <button class="preset-btn" data-preset="reset">RESET</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">// SIGNAL METER</div>
+      <div class="vu" id="vuMeter">
+        <div class="vu-bar"></div><div class="vu-bar"></div><div class="vu-bar"></div>
+        <div class="vu-bar"></div><div class="vu-bar"></div><div class="vu-bar"></div>
+        <div class="vu-bar"></div><div class="vu-bar"></div><div class="vu-bar"></div>
+        <div class="vu-bar"></div><div class="vu-bar"></div><div class="vu-bar"></div>
+        <div class="vu-bar"></div><div class="vu-bar"></div><div class="vu-bar"></div>
+        <div class="vu-bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const video = document.getElementById('video');
+const canvas = document.getElementById('outputCanvas');
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+const startBtn = document.getElementById('startBtn');
+const recordBtn = document.getElementById('recordBtn');
+const labelTL = document.getElementById('labelTL');
+const labelTR = document.getElementById('labelTR');
+const labelBL = document.getElementById('labelBL');
+const labelBR = document.getElementById('labelBR');
+const glitchBar = document.getElementById('glitchBar');
+const btnFront = document.getElementById('btnFront');
+const btnRear = document.getElementById('btnRear');
+const camFacingRow = document.getElementById('camFacingRow');
+const camSelect = document.getElementById('camSelect');
+
+let stream = null;
+let running = false;
+let currentFacing = 'user'; // 'user' = front, 'environment' = rear
+let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+let deviceList = [];
+let frameCount = 0;
+let lastTime = 0;
+let fps = 0;
+let mediaRecorder = null;
+let recording = false;
+let chunks = [];
+
+// Effect state
+let prevFrame = null;
+let feedbackFrame = null;
+let driftX = 0, driftY = 0;
+let driftVX = 1, driftVY = 0.5;
+
+const activeEffects = new Set(['frameBlend']);
+
+// Params
+let blendAmt = 0.85;
+let driftSpeed = 3;
+let blockSize = 16;
+let chaos = 0.3;
+let feedbackAmt = 0.5;
+let echoDelay = 8;       // how many frames behind the echo lags
+let echoDecay = 0.88;    // how fast the echo trail fades (0-1)
+
+// Echo state
+const frameBuffer = [];   // ring buffer of past frames
+const MAX_BUFFER = 40;
+let echoAccum = null;     // accumulating echo canvas data
+
+// Sliders
+function setupSlider(id, valId, min, max, onChange) {
+  const slider = document.getElementById(id);
+  const label = document.getElementById(valId);
+  slider.addEventListener('input', () => {
+    const pct = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+    slider.style.setProperty('--val', pct + '%');
+    onChange(slider.value);
+    label.textContent = parseFloat(slider.value / (max > 10 ? max : 100)).toFixed(max > 10 ? 0 : 2);
+  });
+  // init
+  const pct = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+  slider.style.setProperty('--val', pct + '%');
+}
+
+setupSlider('blendSlider', 'blendVal', 0, 99, v => { blendAmt = v / 100; document.getElementById('blendVal').textContent = (v/100).toFixed(2); });
+setupSlider('driftSlider', 'driftVal', 1, 30, v => { driftSpeed = parseInt(v); document.getElementById('driftVal').textContent = v; });
+setupSlider('blockSlider', 'blockVal', 4, 64, v => { blockSize = parseInt(v); document.getElementById('blockVal').textContent = v; });
+setupSlider('chaosSlider', 'chaosVal', 0, 100, v => { chaos = v / 100; document.getElementById('chaosVal').textContent = (v/100).toFixed(2); });
+setupSlider('feedbackSlider', 'feedbackVal', 0, 95, v => { feedbackAmt = v / 100; document.getElementById('feedbackVal').textContent = (v/100).toFixed(2); });
+setupSlider('echoDelaySlider', 'echoDelayVal', 1, 30, v => { echoDelay = parseInt(v); document.getElementById('echoDelayVal').textContent = v; });
+setupSlider('echoDecaySlider', 'echoDecayVal', 50, 98, v => { echoDecay = v / 100; document.getElementById('echoDecayVal').textContent = (v/100).toFixed(2); });
+
+// Effect buttons
+document.querySelectorAll('.fx-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const fx = btn.dataset.fx;
+    if (activeEffects.has(fx)) {
+      activeEffects.delete(fx);
+      btn.classList.remove('active');
+    } else {
+      activeEffects.add(fx);
+      btn.classList.add('active');
+    }
+    updateFXLabel();
+  });
+});
+
+function updateFXLabel() {
+  const list = [...activeEffects].join('+').toUpperCase().slice(0, 20);
+  // Only update if not showing source label
+  if (!running) labelTR.textContent = 'FX:' + (list || 'NONE');
+}
+
+// Presets
+const presets = {
+  glitch: { blend: 88, drift: 8, block: 12, chaos: 70, feedback: 60, echoDelay: 8, echoDecay: 88, fx: ['frameBlend','channelShift','blockDisplace'] },
+  melt:   { blend: 92, drift: 1, block: 32, chaos: 20, feedback: 80, echoDelay: 8, echoDecay: 88, fx: ['frameBlend','feedbackLoop','pixelDrift'] },
+  echo:   { blend: 30, drift: 1, block: 16, chaos: 20, feedback: 50, echoDelay: 12, echoDecay: 94, fx: ['echo','channelShift'] },
+  corrupt:{ blend: 75, drift: 15, block: 8, chaos: 90, feedback: 40, echoDelay: 8, echoDecay: 88, fx: ['blockDisplace','macroblocks','channelShift'] },
+  vhs:    { blend: 80, drift: 2, block: 16, chaos: 30, feedback: 50, echoDelay: 5, echoDecay: 82, fx: ['frameBlend','scanlines','channelShift','echo'] },
+  acid:   { blend: 70, drift: 5, block: 24, chaos: 60, feedback: 70, echoDelay: 15, echoDecay: 92, fx: ['frameBlend','feedbackLoop','colorBurn','channelShift','echo'] },
+  reset:  { blend: 85, drift: 3, block: 16, chaos: 30, feedback: 50, echoDelay: 8, echoDecay: 88, fx: ['frameBlend'] },
+};
+
+document.querySelectorAll('.preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const p = presets[btn.dataset.preset];
+    if (!p) return;
+    // Apply values
+    setSlider('blendSlider', 'blendVal', p.blend, v => { blendAmt = v/100; }, true);
+    setSlider('driftSlider', 'driftVal', p.drift, v => { driftSpeed = parseInt(v); }, false);
+    setSlider('blockSlider', 'blockVal', p.block, v => { blockSize = parseInt(v); }, false);
+    setSlider('chaosSlider', 'chaosVal', p.chaos, v => { chaos = v/100; }, true);
+    setSlider('feedbackSlider', 'feedbackVal', p.feedback, v => { feedbackAmt = v/100; }, true);
+    setSlider('echoDelaySlider', 'echoDelayVal', p.echoDelay, v => { echoDelay = parseInt(v); }, false);
+    setSlider('echoDecaySlider', 'echoDecayVal', p.echoDecay, v => { echoDecay = v/100; }, true);
+    // Reset effects
+    activeEffects.clear();
+    document.querySelectorAll('.fx-btn').forEach(b => b.classList.remove('active'));
+    p.fx.forEach(fx => {
+      activeEffects.add(fx);
+      document.querySelector(`[data-fx="${fx}"]`)?.classList.add('active');
+    });
+    updateFXLabel();
+  });
+});
+
+function setSlider(id, valId, value, onChange, isFloat) {
+  const el = document.getElementById(id);
+  el.value = value;
+  const pct = (value - el.min) / (el.max - el.min) * 100;
+  el.style.setProperty('--val', pct + '%');
+  onChange(value);
+  document.getElementById(valId).textContent = isFloat ? (value/100).toFixed(2) : value;
+}
+
+// Enumerate cameras and populate selector
+async function enumCameras() {
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    deviceList = devices.filter(d => d.kind === 'videoinput');
+    if (deviceList.length > 1) {
+      camSelect.innerHTML = deviceList.map((d, i) =>
+        `<option value="${d.deviceId}">${d.label || 'Camera ' + (i+1)}</option>`
+      ).join('');
+      if (isMobile) {
+        // Show front/rear toggle on mobile
+        camFacingRow.style.display = 'flex';
+        btnFront.disabled = false;
+        btnRear.disabled = false;
+      } else {
+        // Show dropdown on desktop with multiple cameras
+        camSelect.classList.add('visible');
+        camSelect.onchange = () => { if (running) switchCamera(); };
+      }
+    }
+  } catch(e) {}
+}
+
+async function startCamera(constraints) {
+  stream?.getTracks().forEach(t => t.stop());
+  stream = await navigator.mediaDevices.getUserMedia(constraints);
+  video.srcObject = stream;
+  await new Promise(r => { video.onloadedmetadata = r; });
+  await video.play();
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  labelBL.textContent = `W:${canvas.width} H:${canvas.height}`;
+  // Update active track label
+  const track = stream.getVideoTracks()[0];
+  const settings = track.getSettings();
+  const fLabel = settings.facingMode === 'environment' ? 'REAR' :
+                 settings.facingMode === 'user' ? 'FRONT' : 'CAM';
+  labelTR.textContent = `SRC:${fLabel}`;
+  updateFXLabel();
+}
+
+async function switchCamera() {
+  if (!running) return;
+  prevFrame = null; feedbackFrame = null;
+  frameBuffer.length = 0;
+  echoAccum = null;
+  try {
+    let constraints;
+    if (isMobile) {
+      constraints = { video: { facingMode: { exact: currentFacing } }, audio: false };
+    } else {
+      const deviceId = camSelect.value;
+      constraints = { video: { deviceId: { exact: deviceId } }, audio: false };
+    }
+    await startCamera(constraints);
+  } catch(e) {
+    // Fallback without exact constraint
+    try {
+      await startCamera({ video: isMobile ? { facingMode: currentFacing } : true, audio: false });
+    } catch(e2) { console.warn('Camera switch failed', e2); }
+  }
+}
+
+// Front/rear buttons
+btnFront.addEventListener('click', () => {
+  currentFacing = 'user';
+  btnFront.classList.add('active');
+  btnRear.classList.remove('active');
+  switchCamera();
+});
+
+btnRear.addEventListener('click', () => {
+  currentFacing = 'environment';
+  btnRear.classList.add('active');
+  btnFront.classList.remove('active');
+  switchCamera();
+});
+
+// Start webcam
+startBtn.addEventListener('click', async () => {
+  if (running) {
+    running = false;
+    stream?.getTracks().forEach(t => t.stop());
+    stream = null;
+    startBtn.textContent = 'INIT WEBCAM';
+    startBtn.classList.remove('running');
+    labelTL.textContent = 'CAM:OFF // 0fps';
+    labelTR.textContent = 'FX:NONE';
+    recordBtn.disabled = true;
+    btnFront.disabled = true;
+    btnRear.disabled = true;
+    prevFrame = null;
+    feedbackFrame = null;
+    frameBuffer.length = 0;
+    echoAccum = null;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    return;
+  }
+  try {
+    // On mobile default to front; on desktop just any camera
+    const constraints = isMobile
+      ? { video: { facingMode: 'user' }, audio: false }
+      : { video: { width: 1280, height: 720 }, audio: false };
+    await startCamera(constraints);
+    // After first access we can enumerate with labels
+    await enumCameras();
+    running = true;
+    startBtn.textContent = 'TERMINATE';
+    startBtn.classList.add('running');
+    recordBtn.disabled = false;
+    requestAnimationFrame(render);
+  } catch(e) {
+    alert('Camera access denied or unavailable.\n\n' + e.message);
+  }
+});
+
+// Record
+recordBtn.addEventListener('click', () => {
+  if (!recording) {
+    chunks = [];
+    const outStream = canvas.captureStream(30);
+    mediaRecorder = new MediaRecorder(outStream, { mimeType: 'video/webm;codecs=vp9' });
+    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(chunks, { type: 'video/webm' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `datamosh_${Date.now()}.webm`; a.click();
+    };
+    mediaRecorder.start();
+    recording = true;
+    recordBtn.textContent = '⏹ STOP REC';
+    recordBtn.classList.add('recording');
+  } else {
+    mediaRecorder.stop();
+    recording = false;
+    recordBtn.textContent = '⏺ RECORD';
+    recordBtn.classList.remove('recording');
+  }
+});
+
+// --- RENDERING ---
+const offscreen = document.createElement('canvas');
+const offCtx = offscreen.getContext('2d', { willReadFrequently: true });
+
+function render(time) {
+  if (!running) return;
+
+  // FPS
+  const dt = time - lastTime;
+  if (dt > 0) fps = Math.round(1000 / dt);
+  lastTime = time;
+  frameCount++;
+
+  offscreen.width = canvas.width;
+  offscreen.height = canvas.height;
+
+  // Draw current frame
+  offCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  let imageData = offCtx.getImageData(0, 0, canvas.width, canvas.height);
+  let data = imageData.data;
+  const W = canvas.width, H = canvas.height;
+
+  // Frame blend (core datamosh)
+  if (activeEffects.has('frameBlend') && prevFrame) {
+    const prev = prevFrame.data;
+    for (let i = 0; i < data.length; i += 4) {
+      data[i]   = data[i]   * (1 - blendAmt) + prev[i]   * blendAmt;
+      data[i+1] = data[i+1] * (1 - blendAmt) + prev[i+1] * blendAmt;
+      data[i+2] = data[i+2] * (1 - blendAmt) + prev[i+2] * blendAmt;
+    }
+  }
+
+  // ECHO: delayed motion trails. We keep a ring buffer of past frames and
+  // composite a delayed frame onto a fading accumulator. Where the delayed
+  // pixel differs from current (motion), we deposit that color into the
+  // accumulator. The accumulator decays each frame so trails fade out.
+  if (activeEffects.has('echo')) {
+    // Push current pristine frame into buffer
+    // (We snapshot raw video, not the already-processed data, so echo
+    // doesn't compound with other effects in a runaway way.)
+    const pristine = new Uint8ClampedArray(data.length);
+    // Read raw video again into pristine
+    offCtx.drawImage(video, 0, 0, W, H);
+    const rawImg = offCtx.getImageData(0, 0, W, H);
+    pristine.set(rawImg.data);
+    frameBuffer.push(pristine);
+    if (frameBuffer.length > MAX_BUFFER) frameBuffer.shift();
+
+    // Initialize accumulator
+    if (!echoAccum || echoAccum.length !== data.length) {
+      echoAccum = new Float32Array(data.length);
+    }
+
+    // Decay existing trails
+    for (let i = 0; i < echoAccum.length; i += 4) {
+      echoAccum[i]   *= echoDecay;
+      echoAccum[i+1] *= echoDecay;
+      echoAccum[i+2] *= echoDecay;
+      echoAccum[i+3] *= echoDecay;  // alpha-channel intensity
+    }
+
+    // Pick the delayed frame
+    const delayIdx = Math.max(0, frameBuffer.length - 1 - echoDelay);
+    const delayed = frameBuffer[delayIdx];
+    const current = pristine;
+
+    // Motion detection threshold
+    const motionThreshold = 18;
+    for (let i = 0; i < data.length; i += 4) {
+      // Luminance diff between current and delayed
+      const dr = Math.abs(current[i]   - delayed[i]);
+      const dg = Math.abs(current[i+1] - delayed[i+1]);
+      const db = Math.abs(current[i+2] - delayed[i+2]);
+      const diff = dr + dg + db;
+      if (diff > motionThreshold) {
+        // Deposit delayed pixel into accumulator (this is the "echo")
+        const strength = Math.min(1, diff / 200);
+        echoAccum[i]   = Math.max(echoAccum[i],   delayed[i]   * strength);
+        echoAccum[i+1] = Math.max(echoAccum[i+1], delayed[i+1] * strength);
+        echoAccum[i+2] = Math.max(echoAccum[i+2], delayed[i+2] * strength);
+        echoAccum[i+3] = Math.max(echoAccum[i+3], 255 * strength);
+      }
+    }
+
+    // Composite accumulator onto output using screen blend (additive-ish)
+    for (let i = 0; i < data.length; i += 4) {
+      const a = echoAccum[i+3] / 255;
+      if (a > 0.01) {
+        // Screen blend: 1 - (1-base)*(1-echo*alpha)
+        data[i]   = 255 - (255 - data[i])   * (1 - (echoAccum[i]  /255) * a);
+        data[i+1] = 255 - (255 - data[i+1]) * (1 - (echoAccum[i+1]/255) * a);
+        data[i+2] = 255 - (255 - data[i+2]) * (1 - (echoAccum[i+2]/255) * a);
+      }
+    }
+  }
+
+  // Pixel drift
+  if (activeEffects.has('pixelDrift')) {
+    driftX += driftVX * driftSpeed * 0.1;
+    driftY += driftVY * driftSpeed * 0.1;
+    if (Math.abs(driftX) > W * 0.1) driftVX *= -1;
+    if (Math.abs(driftY) > H * 0.05) driftVY *= -1;
+
+    const copy = new Uint8ClampedArray(data);
+    const dx = Math.round(driftX), dy = Math.round(driftY);
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const srcX = ((x - dx) % W + W) % W;
+        const srcY = ((y - dy) % H + H) % H;
+        const si = (srcY * W + srcX) * 4;
+        const di = (y * W + x) * 4;
+        if (Math.random() < chaos * 0.3) {
+          data[di]   = copy[si];
+          data[di+1] = copy[si+1];
+          data[di+2] = copy[si+2];
+        }
+      }
+    }
+  }
+
+  // Block displacement
+  if (activeEffects.has('blockDisplace')) {
+    const bs = blockSize;
+    const copy = new Uint8ClampedArray(data);
+    for (let by = 0; by < H; by += bs) {
+      for (let bx = 0; bx < W; bx += bs) {
+        if (Math.random() < chaos * 0.5) {
+          const ox = Math.round((Math.random() - 0.5) * bs * 4);
+          const oy = Math.round((Math.random() - 0.5) * bs * 2);
+          for (let dy2 = 0; dy2 < bs; dy2++) {
+            for (let dx2 = 0; dx2 < bs; dx2++) {
+              const sx = Math.min(W - 1, Math.max(0, bx + dx2 + ox));
+              const sy = Math.min(H - 1, Math.max(0, by + dy2 + oy));
+              const si = (sy * W + sx) * 4;
+              const di = ((by + dy2) * W + (bx + dx2)) * 4;
+              data[di]   = copy[si];
+              data[di+1] = copy[si+1];
+              data[di+2] = copy[si+2];
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Channel shift
+  if (activeEffects.has('channelShift')) {
+    const shift = Math.round(chaos * 30 + 2);
+    const copy = new Uint8ClampedArray(data);
+    for (let i = 0; i < data.length; i += 4) {
+      const ri = Math.min(data.length - 4, i + shift * 4);
+      const bi = Math.max(0, i - shift * 4);
+      data[i]   = copy[ri];
+      data[i+2] = copy[bi + 2];
+    }
+  }
+
+  // Feedback loop
+  if (activeEffects.has('feedbackLoop') && feedbackFrame) {
+    const fb = feedbackFrame.data;
+    const scale = 1.02 + chaos * 0.03;
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const sx = Math.min(W - 1, Math.max(0, Math.round((x - W/2) / scale + W/2)));
+        const sy = Math.min(H - 1, Math.max(0, Math.round((y - H/2) / scale + H/2)));
+        const si = (sy * W + sx) * 4;
+        const di = (y * W + x) * 4;
+        data[di]   = data[di]   * (1 - feedbackAmt) + fb[si]   * feedbackAmt;
+        data[di+1] = data[di+1] * (1 - feedbackAmt) + fb[si+1] * feedbackAmt;
+        data[di+2] = data[di+2] * (1 - feedbackAmt) + fb[si+2] * feedbackAmt;
+      }
+    }
+  }
+
+  // Macroblocks
+  if (activeEffects.has('macroblocks')) {
+    const bs = blockSize * 2;
+    for (let by = 0; by < H; by += bs) {
+      for (let bx = 0; bx < W; bx += bs) {
+        if (Math.random() < chaos * 0.4) {
+          const pi = (by * W + bx) * 4;
+          const pr = data[pi], pg = data[pi+1], pb2 = data[pi+2];
+          for (let dy2 = 0; dy2 < bs && by+dy2 < H; dy2++) {
+            for (let dx2 = 0; dx2 < bs && bx+dx2 < W; dx2++) {
+              const di = ((by+dy2)*W+(bx+dx2))*4;
+              data[di] = pr; data[di+1] = pg; data[di+2] = pb2;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Scanlines
+  if (activeEffects.has('scanlines')) {
+    const t = frameCount;
+    for (let y = 0; y < H; y++) {
+      const wave = Math.sin(y * 0.05 + t * 0.1) * chaos * 10;
+      if ((y + Math.round(t * 0.5)) % 3 === 0) {
+        for (let x = 0; x < W; x++) {
+          const i = (y * W + x) * 4;
+          const sx = Math.min(W-1, Math.max(0, x + Math.round(wave)));
+          const si = (y * W + sx) * 4;
+          data[i] = data[si] * 0.5;
+          data[i+1] = data[si+1] * 0.5;
+          data[i+2] = data[si+2] * 0.5;
+        }
+      }
+    }
+  }
+
+  // Color burn
+  if (activeEffects.has('colorBurn')) {
+    const t = frameCount;
+    for (let i = 0; i < data.length; i += 4) {
+      const hue = (t * 0.5 + i * 0.001) % 360;
+      const [r, g, b2] = hslToRgb(hue / 360, chaos * 0.6, 0.5);
+      data[i]   = Math.min(255, data[i]   * (1 + r/255 * chaos));
+      data[i+1] = Math.min(255, data[i+1] * (1 + g/255 * chaos));
+      data[i+2] = Math.min(255, data[i+2] * (1 + b2/255 * chaos));
+    }
+  }
+
+  // Write output
+  ctx.putImageData(imageData, 0, 0);
+
+  // Store frames
+  prevFrame = imageData;
+  if (activeEffects.has('feedbackLoop')) feedbackFrame = imageData;
+
+  // UI updates
+  labelTL.textContent = `CAM:ON // ${fps}fps`;
+  labelBR.textContent = `FRAME:${frameCount}`;
+
+  // VU meter animation
+  updateVU(data, W, H);
+
+  // Random glitch bar
+  if (Math.random() < 0.02) {
+    glitchBar.style.top = Math.random() * 100 + '%';
+    glitchBar.style.opacity = '0.8';
+    glitchBar.style.background = Math.random() > 0.5 ? 'var(--acid)' : 'var(--burn)';
+    setTimeout(() => glitchBar.style.opacity = '0', 50);
+  }
+
+  requestAnimationFrame(render);
+}
+
+function updateVU(data, W, H) {
+  const bars = document.querySelectorAll('.vu-bar');
+  const n = bars.length;
+  const step = Math.floor(data.length / n / 4);
+  bars.forEach((bar, i) => {
+    const idx = i * step * 4;
+    const brightness = (data[idx] + data[idx+1] + data[idx+2]) / 3;
+    const h = Math.round(brightness / 255 * 20);
+    bar.style.height = Math.max(2, h) + 'px';
+    bar.style.background = brightness > 200 ? 'var(--burn)' : brightness > 120 ? 'var(--ice)' : 'var(--acid)';
+  });
+}
+
+function hslToRgb(h, s, l) {
+  let r, g, b2;
+  if (s === 0) { r = g = b2 = l; } else {
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1; if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1/3); g = hue2rgb(p, q, h); b2 = hue2rgb(p, q, h - 1/3);
+  }
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b2 * 255)];
+}
+</script>
+</body>
+</html>

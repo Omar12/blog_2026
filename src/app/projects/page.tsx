@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { PAGE_METADATA, SITE_CONFIG } from '@/constants/site';
+import { CLAUDE_ARTIFACTS } from '@/data/artifacts';
 
 export const metadata: Metadata = {
   title: PAGE_METADATA.projects.title,
@@ -184,6 +185,70 @@ export default async function ProjectsPage() {
               </div>
             </article>
           ))}
+        </div>
+      )}
+
+      {CLAUDE_ARTIFACTS.length > 0 && (
+        <div className="mt-20">
+          <div className="mb-10">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3 text-[var(--text)]">
+              Claude Artifacts
+            </h2>
+            <p className="text-lg text-[var(--text-secondary)] max-w-xl">
+              Runnable apps and tools generated with Claude — saved from the artifact panel.
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {CLAUDE_ARTIFACTS.map((artifact) => (
+              <article
+                key={artifact.slug}
+                className="p-6 rounded-lg border border-[var(--border)] bg-[var(--surface)] hover:shadow-lg hover:border-[var(--primary)] transition-all duration-300 flex flex-col"
+              >
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold mb-2 text-[var(--text)]">
+                    {artifact.title}
+                  </h3>
+                  <p className="text-sm text-[var(--text-secondary)] mb-4 line-clamp-3">
+                    {artifact.description}
+                  </p>
+                </div>
+                <div className="mt-4 space-y-3">
+                  {artifact.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {artifact.tags.slice(0, 4).map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2 py-0.5 text-xs rounded-full bg-[var(--accent)] bg-opacity-20 text-[var(--text-tertiary)] border border-[var(--border)]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between text-xs text-[var(--text-secondary)]">
+                    <time dateTime={artifact.date}>
+                      {new Date(artifact.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </time>
+                    <a
+                      href={`/artifacts/${artifact.slug}/index.html`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 hover:text-[var(--primary)] transition-colors font-medium"
+                    >
+                      Open artifact
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       )}
 
