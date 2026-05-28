@@ -42,7 +42,7 @@ export default function PostCard({ post, featured }: PostCardProps) {
           {post.tags.map((tag) => (
             <span
               key={tag}
-              className="px-2.5 py-0.5 text-xs font-medium text-[var(--text-tertiary)] bg-[var(--primary)] bg-opacity-10 border border-[var(--primary)] border-opacity-20 rounded"
+              className="px-2.5 py-0.5 text-xs font-medium text-[var(--primary)] border border-[var(--primary)] rounded tracking-wide"
             >
               {tag}
             </span>
