@@ -3,611 +3,836 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Artifact</title>
+  <title>DJ Transitions Cheat Sheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, sans-serif; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    button { font-family: inherit; }
+
+    /* Waveform animation */
+    @keyframes waveBar {
+      0%, 100% { transform: scaleY(0.15); }
+      50%       { transform: scaleY(1); }
+    }
+    .wave-bar {
+      width: 3px;
+      height: 28px;
+      background: #00d4aa;
+      border-radius: 2px;
+      transform-origin: bottom;
+      opacity: 0.45;
+      animation: waveBar var(--dur, 1s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+
+    /* Spring expand via grid-template-rows */
+    .expand-grid {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.48s cubic-bezier(0.34, 1.36, 0.64, 1);
+    }
+    .expand-grid.open {
+      grid-template-rows: 1fr;
+    }
+    .expand-inner { overflow: hidden; }
+
+    /* Expand arrow */
+    .expand-arrow {
+      display: inline-block;
+      transition: transform 0.35s cubic-bezier(0.34, 1.36, 0.64, 1);
+      font-size: 16px;
+      line-height: 1;
+    }
+    .expand-arrow.open { transform: rotate(90deg); }
+
+    /* Detail entrance */
+    @keyframes detailIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .detail-content {
+      animation: detailIn 0.28s ease-out 0.06s both;
+    }
+
+    /* Step entrance */
+    @keyframes stepIn {
+      from { opacity: 0; transform: translateX(-8px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .step-item {
+      animation: stepIn 0.28s ease-out both;
+    }
+
+    /* Card */
+    .t-card {
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease-out, box-shadow 0.22s ease-out, border-color 0.18s ease-out, background 0.18s ease-out;
+      outline: none;
+    }
+    .t-card:focus-visible {
+      box-shadow: 0 0 0 2px #00d4aa !important;
+    }
+    .t-card:hover { transform: translateY(-3px); }
+    .t-card.selected { transform: none; }
+
+    /* Pill filter button */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.14s, color 0.14s, border-color 0.14s, box-shadow 0.14s;
+      white-space: nowrap;
+      letter-spacing: 0.025em;
+      border: 1px solid oklch(22% 0.02 265);
+      background: oklch(17% 0.015 265);
+      color: oklch(52% 0.03 265);
+    }
+    .pill:hover {
+      border-color: oklch(30% 0.03 265);
+      color: oklch(68% 0.03 265);
+    }
+
+    /* View toggle */
+    .view-btn {
+      background: none;
+      border: 1px solid oklch(20% 0.02 265);
+      border-radius: 6px;
+      color: oklch(50% 0.03 265);
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .view-btn.active {
+      background: oklch(20% 0.025 265);
+      border-color: oklch(30% 0.03 265);
+      color: oklch(88% 0.02 265);
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: oklch(10% 0.012 265); }
+    ::-webkit-scrollbar-thumb { background: oklch(24% 0.025 265); border-radius: 3px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .expand-grid      { transition: none; }
+      .t-card           { transition: none; }
+      .t-card:hover     { transform: none; }
+      .pill             { transition: none; }
+      .expand-arrow     { transition: none; }
+      .detail-content,
+      .step-item        { animation: none; }
+      .wave-bar         { animation: none; transform: scaleY(0.5); }
+    }
   </style>
 </head>
 <body>
   <div id="root"></div>
 
   <script type="text/babel" data-presets="react">
-    const { useState } = React;
+    const { useState, useEffect, useRef } = React;
 
-const transitions = [
-  {
-    id: "classic-blend",
-    name: "Classic Long Blend",
-    category: "Blend",
-    bpmDiff: "small",
-    energyDir: ["up", "flat"],
-    genres: ["same", "close"],
-    description: "Overlap intros/outros over 16–64 bars. Gradually swap EQ — bass out of track A, bass in on track B — on a phrase boundary.",
-    when: "House, techno, trance, D&B. Any genre where flow continuity matters more than impact.",
-    avoid: "Very different genres, large BPM gaps, when the crowd needs a jolt.",
-    steps: [
-      "Cue incoming track to its intro (first phrase)",
-      "Bring incoming track in at low volume, no bass",
-      "Match tempo and phrasing — wait for the 1 of a 32-bar phrase",
-      "Gradually raise incoming track's mids and highs",
-      "On a strong phrase boundary, swap the bass (cut A's bass, bring B's bass in)",
-      "Fade out track A's remaining mids/highs over next 16–32 bars"
-    ],
-    example: "Going from a 124 BPM deep house track into a 126 BPM tech house track. Both have 4-on-the-floor kicks. You blend for 32 bars, execute the bass swap on bar 33, and track A is fully out by bar 64.",
-    risk: "Bass clash if both tracks' lows play simultaneously. Off-phrase entry sounds wrong even to non-musicians.",
-    color: "#00d4aa"
-  },
-  {
-    id: "drop-swap",
-    name: "Drop Swap",
-    category: "Impact",
-    bpmDiff: "small",
-    energyDir: ["up"],
-    genres: ["same", "close"],
-    description: "Outgoing track enters its breakdown (drums drop out). Incoming track's drop hits exactly when the breakdown's build resolves.",
-    when: "Bass music, dubstep, trance, big-room EDM. Any genre with defined build/drop structures.",
-    avoid: "Tracks without clear breakdown/drop architecture. Never improvise this — plan and practice.",
-    steps: [
-      "Identify the breakdown point in track A (where drums drop out)",
-      "Load track B — know exactly where its drop is",
-      "Beatmatch track B during track A's breakdown",
-      "Bring track B in under track A's build (low in the mix)",
-      "Hit track B's drop exactly as track A's build resolves",
-      "Cut or fade track A immediately — don't let both drops coexist"
-    ],
-    example: "Track A is a trance track in a 32-bar breakdown. You bring track B's intro in quietly. As track A's filter sweep peaks and the drop hits, track B's drop hits simultaneously. Track A is killed immediately.",
-    risk: "Harmonic clash if keys don't match. Timing off by even half a bar sounds wrong. Always test in practice first.",
-    color: "#ff6b35"
-  },
-  {
-    id: "double-drop",
-    name: "Double Drop",
-    category: "Impact",
-    bpmDiff: "none",
-    energyDir: ["up"],
-    genres: ["same"],
-    description: "Both tracks' drops hit simultaneously. Maximum impact when it works. Requires both tracks to be in compatible keys and similar energy weight.",
-    when: "Peak moments only. When you want the most dramatic possible impact. Planned — never improvised.",
-    avoid: "Key incompatibility (will sound terrible). If one drop is significantly harder than the other. Under-prepared.",
-    steps: [
-      "Select two tracks with compatible keys (Camelot adjacent or same)",
-      "Match tempo exactly",
-      "Find the drop point of both tracks",
-      "Mix them so both drops align on the same bar 1",
-      "Bring both tracks to full volume simultaneously at the drop",
-      "Decide in advance which track you'll phase out — usually within 32 bars"
-    ],
-    example: "Two tech house tracks in 8A and 9A (adjacent Camelot). Both at 128 BPM. You align their drops, both hits land on the same beat. The room feels it as one massive moment. After 16 bars you fade track A out.",
-    risk: "The highest-risk transition in this list. Harmonic clash or timing error in front of a crowd is very visible. Always rehearse specific track pairs.",
-    color: "#ff3366"
-  },
-  {
-    id: "hard-cut",
-    name: "Hard Cut",
-    category: "Cut",
-    bpmDiff: "any",
-    energyDir: ["up", "flat", "down"],
-    genres: ["any"],
-    description: "Drop the new track on the '1' of a phrase with no overlap. Fast, decisive, intentional.",
-    when: "Hip-hop, dancehall, baile funk, jersey club. Open-format sets. When the energy shift IS the point.",
-    avoid: "House/techno flow sets where continuity matters. When the crowd is in a groove you don't want to break.",
-    steps: [
-      "Identify the end of track A's current phrase (count to bar 32 or 64)",
-      "Have track B cued to its first beat",
-      "Simultaneously: kill track A's volume, release track B at full volume",
-      "Execute with confidence — hesitation sounds like a mistake"
-    ],
-    example: "You're playing hip-hop at 90 BPM and want to switch to an Afrobeats track at 100 BPM. At the end of a 32-bar phrase in track A, you slam track B in on its beat 1. The BPM change re-energizes the floor.",
-    risk: "Executed timidly it sounds like a mistake. Executed confidently it reads as intentional. The difference is fully committing.",
-    color: "#ffd700"
-  },
-  {
-    id: "spinback-cut",
-    name: "Spinback + Cut",
-    category: "Cut",
-    bpmDiff: "any",
-    energyDir: ["up"],
-    genres: ["any"],
-    description: "Pull the platter backward (rewind sound), then slam the new track in at full volume.",
-    when: "Peak energy moments, reggae/dancehall climaxes, hip-hop pivots, any moment you want the crowd to react visibly.",
-    avoid: "More than 1–2 times per set. Overuse makes it a crutch rather than a moment.",
-    steps: [
-      "Have track B cued and ready",
-      "On a strong beat in track A, grab the platter and pull backward",
-      "As the rewind fades, release track B on its beat 1",
-      "Hit it with confidence — sell the moment"
-    ],
-    example: "You're in a dancehall section. The MC calls for a rewind of a track that just went crazy. You spin back, crowd goes wild, then slam in the next track or the same track from the top.",
-    risk: "Timing the entry of track B is critical. Dropped early or late, it deflates the moment.",
-    color: "#ff9500"
-  },
-  {
-    id: "echo-out",
-    name: "Echo / Delay Out",
-    category: "FX",
-    bpmDiff: "any",
-    energyDir: ["down", "flat"],
-    genres: ["any"],
-    description: "Hit the echo/delay on track A and kill the dry signal. The delay tail carries over the gap while track B comes in underneath.",
-    when: "Rescuing a transition that isn't working cleanly. Punctuation between sections. Moments where a clear break is needed.",
-    avoid: "As your default transition. Every 2–3 tracks. It signals you're solving a problem rather than executing a plan.",
-    steps: [
-      "Apply a synced delay to track A (1/4 or 1/2 note)",
-      "Kill track A's dry volume — only the wet delay tail plays",
-      "Bring track B in under the fading delay tail",
-      "Delay tail naturally decays as track B establishes itself"
-    ],
-    example: "Your blend isn't quite working — the keys are slightly off and you're getting audible tension. You hit the delay on track A and kill it, the spacey tail covers the seam, and track B comes in clean underneath.",
-    risk: "The most overused technique in modern DJing. A set built on echo-outs sounds like you're constantly fixing problems rather than performing.",
-    color: "#8b5cf6"
-  },
-  {
-    id: "filter-sweep",
-    name: "Filter Sweep",
-    category: "FX",
-    bpmDiff: "small",
-    energyDir: ["up", "flat"],
-    genres: ["same", "close"],
-    description: "High-pass filter sweeps track A out (removing lows, then mids) while a low-pass filter sweeps track B in from the top end down.",
-    when: "Trance, progressive house, melodic techno. Long blends where you want extra texture during the transition.",
-    avoid: "Overuse — it dates your style quickly. Genres where unfiltered impact is the point.",
-    steps: [
-      "Begin a standard EQ blend",
-      "Apply high-pass filter to track A, slowly sweeping up (removing bass first, then mids)",
-      "Simultaneously apply a low-pass sweep to track B coming in from the highs down",
-      "Both tracks are filtered in the middle of the transition — creates a mid-blend texture",
-      "Remove filters as track B fully takes over"
-    ],
-    example: "Moving between two melodic trance tracks. As you approach the blend, you high-pass track A (it gets thin and airy) while bringing in track B from the top end. In the middle, both tracks are filtered — creates a swirling moment before track B opens up fully.",
-    risk: "Sounds dated if done routinely. High-pass filtering removes all the energy from track A — don't stay in this zone too long.",
-    color: "#06b6d4"
-  },
-  {
-    id: "loop-roll-out",
-    name: "Loop Roll Out",
-    category: "Performative",
-    bpmDiff: "any",
-    energyDir: ["up", "flat"],
-    genres: ["any"],
-    description: "Loop the last bar of track A, halve the loop repeatedly (1 bar → 1/2 → 1/4 → 1/8 → 1/16), then cut to track B.",
-    when: "Building tension before a transition. Creating a rhythmic stutter effect that signals a change is coming.",
-    avoid: "Overuse — once or twice per set maximum. If you don't have precise timing, the loop cuts won't line up.",
-    steps: [
-      "Set a 1-bar loop on a strong section of track A",
-      "Have track B cued and ready",
-      "Engage the loop — let it play once or twice",
-      "Halve the loop: 1 bar → 1/2 bar → 1/4 → 1/8",
-      "On the tightest loop (1/8 or 1/16), cut to track B's drop or beat 1"
-    ],
-    example: "You're in a tech house set. You set a 1-bar loop on the last bar before the outro, halve it three times until it's stuttering fast, then cut to the next track's opening kick. The stutter creates anticipation; the cut releases it.",
-    risk: "Timing the final cut precisely is hard under pressure. Practice this drill specifically before using it live.",
-    color: "#10b981"
-  },
-  {
-    id: "half-time-blend",
-    name: "Half-Time / Double-Time Blend",
-    category: "Tempo",
-    bpmDiff: "large",
-    energyDir: ["up", "flat", "down"],
-    genres: ["close", "different"],
-    description: "Exploit the 2:1 BPM relationship. A 140 BPM track and a 70 BPM track are rhythmically identical — every other kick aligns. Mix them as if they're the same tempo.",
-    when: "Transitioning between genres that are exactly (or near) double/half each other's tempo. Hip-hop ↔ D&B. House ↔ Dubstep.",
-    avoid: "BPM pairs that aren't close to a 2:1 ratio — this won't work and will sound broken.",
-    steps: [
-      "Identify your 2:1 BPM pair (e.g., 90 BPM hip-hop → 180 BPM D&B)",
-      "Set track B's tempo to exactly double (or half) track A's BPM",
-      "Beatmatch — every other kick of track B should land on track A's kick",
-      "Blend using standard EQ technique — the rhythms lock together",
-      "The floor doesn't experience a tempo change, just a feel change"
-    ],
-    example: "Playing hip-hop at 90 BPM. Next track is drum & bass at 180 BPM. You pitch the D&B track to 180 (or adjust the hip-hop to 90 exactly). Every other D&B kick lands on the hip-hop kick. You blend for 16 bars — the crowd feels the shift in energy, not the tempo change.",
-    risk: "The relationship has to be accurate — even a 1 BPM offset creates drift. Be exact.",
-    color: "#f59e0b"
-  },
-  {
-    id: "tempo-bridge",
-    name: "Tempo Bridge Track",
-    category: "Tempo",
-    bpmDiff: "large",
-    energyDir: ["up", "flat"],
-    genres: ["any"],
-    description: "Use an intermediate-BPM track between two tempo zones. Two clean blends instead of one impossible one.",
-    when: "Any large BPM jump where a 2:1 relationship doesn't apply. Going from 100 to 140, use a 120 BPM bridge.",
-    avoid: "When you have a 2:1 ratio available — the half-time blend is more elegant. Don't use a bridge just to avoid learning the technique.",
-    steps: [
-      "Identify the BPM midpoint between your two zones",
-      "Select a bridge track at or near that midpoint",
-      "Execute a standard blend from track A into the bridge",
-      "Execute a second standard blend from the bridge into track C",
-      "Choose the bridge track carefully — it should make musical sense, not just fill the BPM gap"
-    ],
-    example: "Moving from a 100 BPM hip-hop section to a 128 BPM house section. You drop a 114 BPM afrobeats or dancehall track in between. Two smooth blends instead of one jarring jump. The crowd experiences a journey, not a collision.",
-    risk: "If the bridge track is just 'filler,' the crowd notices. The bridge must make musical sense, not just functional sense.",
-    color: "#ec4899"
-  },
-  {
-    id: "breakdown-handoff",
-    name: "Breakdown Handoff",
-    category: "Genre Switch",
-    bpmDiff: "small",
-    energyDir: ["flat", "up"],
-    genres: ["close", "different"],
-    description: "Wait for track A's breakdown (drums dropped out). Bring track B's intro in underneath. When track A's build resolves, you've already swapped to track B driving.",
-    when: "Invisible genre switches. When you have time to wait for the right moment. Moving between genres that share similar energy but different vocabularies.",
-    avoid: "When the crowd needs a quicker transition. Tracks without a clear breakdown structure.",
-    steps: [
-      "Identify the breakdown in track A — where the drums drop out",
-      "Begin beatmatching track B during the bars before the breakdown",
-      "As track A enters its breakdown, bring track B's intro in low in the mix",
-      "Gradually increase track B under track A's atmospheric breakdown",
-      "As track A's build peaks and would drop — instead, let track B take over",
-      "Track A is faded or killed as track B's energy establishes"
-    ],
-    example: "You're playing melodic house and want to shift to techno. Track A's breakdown starts. You bring the techno track's driving intro in underneath — quiet at first. Over 32 bars, you raise the techno track while track A's melody fades. The genre has changed but the crowd felt a continuous journey.",
-    risk: "Requires patience — you can't rush to the breakdown. If track A doesn't have a breakdown, this doesn't work.",
-    color: "#14b8a6"
-  },
-  {
-    id: "acapella-reset",
-    name: "A Cappella / Vocal Reset",
-    category: "Tempo",
-    bpmDiff: "any",
-    energyDir: ["down", "flat"],
-    genres: ["any"],
-    description: "Strip to a vocal-only moment (no kick drum). Without a kick to reference, the room's tempo perception resets. New track can enter at any BPM.",
-    when: "Large tempo jumps where no 2:1 relationship exists. Emotional peaks. When you want to completely change the mood.",
-    avoid: "When the crowd is in peak physical energy — stopping the rhythm kills momentum. Needs the right vocal moment.",
-    steps: [
-      "Find or prepare an a cappella of a track the crowd knows",
-      "Drop the a cappella over the outro of track A (both playing, then kill track A's music under the vocal)",
-      "Let the vocal play for 4–16 bars with no beat",
-      "Bring track B's intro in — the new tempo establishes itself fresh",
-      "The vocal can continue over track B's intro for continuity"
-    ],
-    example: "You're ending a 128 BPM tech house section and want to move to a 95 BPM hip-hop moment. You play an a cappella of a known track — the room sings along, no kick is playing. You bring the hip-hop track in at 95 BPM. The new tempo feels like an arrival, not a collision.",
-    risk: "The vocal choice is critical. A weak or unknown vocal kills this technique. The moment without a kick must be musically justified.",
-    color: "#a78bfa"
-  }
-];
+    const transitions = [
+      {
+        id: "classic-blend",
+        name: "Classic Long Blend",
+        category: "Blend",
+        bpmDiff: "small",
+        energyDir: ["up", "flat"],
+        genres: ["same", "close"],
+        description: "Overlap intros/outros over 16-64 bars. Gradually swap EQ -- bass out of track A, bass in on track B -- on a phrase boundary.",
+        when: "House, techno, trance, D&B. Any genre where flow continuity matters more than impact.",
+        avoid: "Very different genres, large BPM gaps, when the crowd needs a jolt.",
+        steps: [
+          "Cue incoming track to its intro (first phrase)",
+          "Bring incoming track in at low volume, no bass",
+          "Match tempo and phrasing -- wait for the 1 of a 32-bar phrase",
+          "Gradually raise incoming track's mids and highs",
+          "On a strong phrase boundary, swap the bass (cut A's bass, bring B's bass in)",
+          "Fade out track A's remaining mids/highs over next 16-32 bars"
+        ],
+        example: "Going from a 124 BPM deep house track into a 126 BPM tech house track. Both have 4-on-the-floor kicks. You blend for 32 bars, execute the bass swap on bar 33, and track A is fully out by bar 64.",
+        risk: "Bass clash if both tracks' lows play simultaneously. Off-phrase entry sounds wrong even to non-musicians.",
+        color: "#00d4aa"
+      },
+      {
+        id: "drop-swap",
+        name: "Drop Swap",
+        category: "Impact",
+        bpmDiff: "small",
+        energyDir: ["up"],
+        genres: ["same", "close"],
+        description: "Outgoing track enters its breakdown (drums drop out). Incoming track's drop hits exactly when the breakdown's build resolves.",
+        when: "Bass music, dubstep, trance, big-room EDM. Any genre with defined build/drop structures.",
+        avoid: "Tracks without clear breakdown/drop architecture. Never improvise this -- plan and practice.",
+        steps: [
+          "Identify the breakdown point in track A (where drums drop out)",
+          "Load track B -- know exactly where its drop is",
+          "Beatmatch track B during track A's breakdown",
+          "Bring track B in under track A's build (low in the mix)",
+          "Hit track B's drop exactly as track A's build resolves",
+          "Cut or fade track A immediately -- don't let both drops coexist"
+        ],
+        example: "Track A is a trance track in a 32-bar breakdown. You bring track B's intro in quietly. As track A's filter sweep peaks and the drop hits, track B's drop hits simultaneously. Track A is killed immediately.",
+        risk: "Harmonic clash if keys don't match. Timing off by even half a bar sounds wrong. Always test in practice first.",
+        color: "#ff6b35"
+      },
+      {
+        id: "double-drop",
+        name: "Double Drop",
+        category: "Impact",
+        bpmDiff: "none",
+        energyDir: ["up"],
+        genres: ["same"],
+        description: "Both tracks' drops hit simultaneously. Maximum impact when it works. Requires both tracks to be in compatible keys and similar energy weight.",
+        when: "Peak moments only. When you want the most dramatic possible impact. Planned, never improvised.",
+        avoid: "Key incompatibility (will sound terrible). If one drop is significantly harder than the other. Under-prepared.",
+        steps: [
+          "Select two tracks with compatible keys (Camelot adjacent or same)",
+          "Match tempo exactly",
+          "Find the drop point of both tracks",
+          "Mix them so both drops align on the same bar 1",
+          "Bring both tracks to full volume simultaneously at the drop",
+          "Decide in advance which track you'll phase out -- usually within 32 bars"
+        ],
+        example: "Two tech house tracks in 8A and 9A (adjacent Camelot). Both at 128 BPM. You align their drops, both hits land on the same beat. The room feels it as one massive moment. After 16 bars you fade track A out.",
+        risk: "The highest-risk transition in this list. Harmonic clash or timing error in front of a crowd is very visible. Always rehearse specific track pairs.",
+        color: "#ff3366"
+      },
+      {
+        id: "hard-cut",
+        name: "Hard Cut",
+        category: "Cut",
+        bpmDiff: "any",
+        energyDir: ["up", "flat", "down"],
+        genres: ["any"],
+        description: "Drop the new track on the '1' of a phrase with no overlap. Fast, decisive, intentional.",
+        when: "Hip-hop, dancehall, baile funk, jersey club. Open-format sets. When the energy shift IS the point.",
+        avoid: "House/techno flow sets where continuity matters. When the crowd is in a groove you don't want to break.",
+        steps: [
+          "Identify the end of track A's current phrase (count to bar 32 or 64)",
+          "Have track B cued to its first beat",
+          "Simultaneously: kill track A's volume, release track B at full volume",
+          "Execute with confidence -- hesitation sounds like a mistake"
+        ],
+        example: "You're playing hip-hop at 90 BPM and want to switch to an Afrobeats track at 100 BPM. At the end of a 32-bar phrase in track A, you slam track B in on its beat 1. The BPM change re-energizes the floor.",
+        risk: "Executed timidly it sounds like a mistake. Executed confidently it reads as intentional. The difference is fully committing.",
+        color: "#ffd700"
+      },
+      {
+        id: "spinback-cut",
+        name: "Spinback + Cut",
+        category: "Cut",
+        bpmDiff: "any",
+        energyDir: ["up"],
+        genres: ["any"],
+        description: "Pull the platter backward (rewind sound), then slam the new track in at full volume.",
+        when: "Peak energy moments, reggae/dancehall climaxes, hip-hop pivots, any moment you want the crowd to react visibly.",
+        avoid: "More than 1-2 times per set. Overuse makes it a crutch rather than a moment.",
+        steps: [
+          "Have track B cued and ready",
+          "On a strong beat in track A, grab the platter and pull backward",
+          "As the rewind fades, release track B on its beat 1",
+          "Hit it with confidence -- sell the moment"
+        ],
+        example: "You're in a dancehall section. The MC calls for a rewind of a track that just went crazy. You spin back, crowd goes wild, then slam in the next track or the same track from the top.",
+        risk: "Timing the entry of track B is critical. Dropped early or late, it deflates the moment.",
+        color: "#ff9500"
+      },
+      {
+        id: "echo-out",
+        name: "Echo / Delay Out",
+        category: "FX",
+        bpmDiff: "any",
+        energyDir: ["down", "flat"],
+        genres: ["any"],
+        description: "Hit the echo/delay on track A and kill the dry signal. The delay tail carries over the gap while track B comes in underneath.",
+        when: "Rescuing a transition that isn't working cleanly. Punctuation between sections. Moments where a clear break is needed.",
+        avoid: "As your default transition. Every 2-3 tracks. It signals you're solving a problem rather than executing a plan.",
+        steps: [
+          "Apply a synced delay to track A (1/4 or 1/2 note)",
+          "Kill track A's dry volume -- only the wet delay tail plays",
+          "Bring track B in under the fading delay tail",
+          "Delay tail naturally decays as track B establishes itself"
+        ],
+        example: "Your blend isn't quite working -- the keys are slightly off and you're getting audible tension. You hit the delay on track A and kill it, the spacey tail covers the seam, and track B comes in clean underneath.",
+        risk: "The most overused technique in modern DJing. A set built on echo-outs sounds like you're constantly fixing problems rather than performing.",
+        color: "#8b5cf6"
+      },
+      {
+        id: "filter-sweep",
+        name: "Filter Sweep",
+        category: "FX",
+        bpmDiff: "small",
+        energyDir: ["up", "flat"],
+        genres: ["same", "close"],
+        description: "High-pass filter sweeps track A out (removing lows, then mids) while a low-pass filter sweeps track B in from the top end down.",
+        when: "Trance, progressive house, melodic techno. Long blends where you want extra texture during the transition.",
+        avoid: "Overuse -- it dates your style quickly. Genres where unfiltered impact is the point.",
+        steps: [
+          "Begin a standard EQ blend",
+          "Apply high-pass filter to track A, slowly sweeping up (removing bass first, then mids)",
+          "Simultaneously apply a low-pass sweep to track B coming in from the highs down",
+          "Both tracks are filtered in the middle of the transition -- creates a mid-blend texture",
+          "Remove filters as track B fully takes over"
+        ],
+        example: "Moving between two melodic trance tracks. As you approach the blend, you high-pass track A (it gets thin and airy) while bringing in track B from the top end. In the middle, both tracks are filtered -- creates a swirling moment before track B opens up fully.",
+        risk: "Sounds dated if done routinely. High-pass filtering removes all the energy from track A -- don't stay in this zone too long.",
+        color: "#06b6d4"
+      },
+      {
+        id: "loop-roll-out",
+        name: "Loop Roll Out",
+        category: "Performative",
+        bpmDiff: "any",
+        energyDir: ["up", "flat"],
+        genres: ["any"],
+        description: "Loop the last bar of track A, halve the loop repeatedly (1 bar to 1/2 to 1/4 to 1/8 to 1/16), then cut to track B.",
+        when: "Building tension before a transition. Creating a rhythmic stutter effect that signals a change is coming.",
+        avoid: "Overuse -- once or twice per set maximum. If you don't have precise timing, the loop cuts won't line up.",
+        steps: [
+          "Set a 1-bar loop on a strong section of track A",
+          "Have track B cued and ready",
+          "Engage the loop -- let it play once or twice",
+          "Halve the loop: 1 bar to 1/2 bar to 1/4 to 1/8",
+          "On the tightest loop (1/8 or 1/16), cut to track B's drop or beat 1"
+        ],
+        example: "You're in a tech house set. You set a 1-bar loop on the last bar before the outro, halve it three times until it's stuttering fast, then cut to the next track's opening kick. The stutter creates anticipation; the cut releases it.",
+        risk: "Timing the final cut precisely is hard under pressure. Practice this drill specifically before using it live.",
+        color: "#10b981"
+      },
+      {
+        id: "half-time-blend",
+        name: "Half-Time / Double-Time Blend",
+        category: "Tempo",
+        bpmDiff: "large",
+        energyDir: ["up", "flat", "down"],
+        genres: ["close", "different"],
+        description: "Exploit the 2:1 BPM relationship. A 140 BPM track and a 70 BPM track are rhythmically identical -- every other kick aligns. Mix them as if they're the same tempo.",
+        when: "Transitioning between genres that are exactly (or near) double/half each other's tempo. Hip-hop to D&B. House to Dubstep.",
+        avoid: "BPM pairs that aren't close to a 2:1 ratio -- this won't work and will sound broken.",
+        steps: [
+          "Identify your 2:1 BPM pair (e.g., 90 BPM hip-hop to 180 BPM D&B)",
+          "Set track B's tempo to exactly double (or half) track A's BPM",
+          "Beatmatch -- every other kick of track B should land on track A's kick",
+          "Blend using standard EQ technique -- the rhythms lock together",
+          "The floor doesn't experience a tempo change, just a feel change"
+        ],
+        example: "Playing hip-hop at 90 BPM. Next track is drum & bass at 180 BPM. You pitch the D&B track to 180 (or adjust the hip-hop to 90 exactly). Every other D&B kick lands on the hip-hop kick. You blend for 16 bars -- the crowd feels the shift in energy, not the tempo change.",
+        risk: "The relationship has to be accurate -- even a 1 BPM offset creates drift. Be exact.",
+        color: "#f59e0b"
+      },
+      {
+        id: "tempo-bridge",
+        name: "Tempo Bridge Track",
+        category: "Tempo",
+        bpmDiff: "large",
+        energyDir: ["up", "flat"],
+        genres: ["any"],
+        description: "Use an intermediate-BPM track between two tempo zones. Two clean blends instead of one impossible one.",
+        when: "Any large BPM jump where a 2:1 relationship doesn't apply. Going from 100 to 140, use a 120 BPM bridge.",
+        avoid: "When you have a 2:1 ratio available -- the half-time blend is more elegant. Don't use a bridge just to avoid learning the technique.",
+        steps: [
+          "Identify the BPM midpoint between your two zones",
+          "Select a bridge track at or near that midpoint",
+          "Execute a standard blend from track A into the bridge",
+          "Execute a second standard blend from the bridge into track C",
+          "Choose the bridge track carefully -- it should make musical sense, not just fill the BPM gap"
+        ],
+        example: "Moving from a 100 BPM hip-hop section to a 128 BPM house section. You drop a 114 BPM afrobeats or dancehall track in between. Two smooth blends instead of one jarring jump. The crowd experiences a journey, not a collision.",
+        risk: "If the bridge track is just 'filler,' the crowd notices. The bridge must make musical sense, not just functional sense.",
+        color: "#ec4899"
+      },
+      {
+        id: "breakdown-handoff",
+        name: "Breakdown Handoff",
+        category: "Genre Switch",
+        bpmDiff: "small",
+        energyDir: ["flat", "up"],
+        genres: ["close", "different"],
+        description: "Wait for track A's breakdown (drums dropped out). Bring track B's intro in underneath. When track A's build resolves, you've already swapped to track B driving.",
+        when: "Invisible genre switches. When you have time to wait for the right moment. Moving between genres that share similar energy but different vocabularies.",
+        avoid: "When the crowd needs a quicker transition. Tracks without a clear breakdown structure.",
+        steps: [
+          "Identify the breakdown in track A -- where the drums drop out",
+          "Begin beatmatching track B during the bars before the breakdown",
+          "As track A enters its breakdown, bring track B's intro in low in the mix",
+          "Gradually increase track B under track A's atmospheric breakdown",
+          "As track A's build peaks and would drop -- instead, let track B take over",
+          "Track A is faded or killed as track B's energy establishes"
+        ],
+        example: "You're playing melodic house and want to shift to techno. Track A's breakdown starts. You bring the techno track's driving intro in underneath -- quiet at first. Over 32 bars, you raise the techno track while track A's melody fades. The genre has changed but the crowd felt a continuous journey.",
+        risk: "Requires patience -- you can't rush to the breakdown. If track A doesn't have a breakdown, this doesn't work.",
+        color: "#14b8a6"
+      },
+      {
+        id: "acapella-reset",
+        name: "A Cappella / Vocal Reset",
+        category: "Tempo",
+        bpmDiff: "any",
+        energyDir: ["down", "flat"],
+        genres: ["any"],
+        description: "Strip to a vocal-only moment (no kick drum). Without a kick to reference, the room's tempo perception resets. New track can enter at any BPM.",
+        when: "Large tempo jumps where no 2:1 relationship exists. Emotional peaks. When you want to completely change the mood.",
+        avoid: "When the crowd is in peak physical energy -- stopping the rhythm kills momentum. Needs the right vocal moment.",
+        steps: [
+          "Find or prepare an a cappella of a track the crowd knows",
+          "Drop the a cappella over the outro of track A (both playing, then kill track A's music under the vocal)",
+          "Let the vocal play for 4-16 bars with no beat",
+          "Bring track B's intro in -- the new tempo establishes itself fresh",
+          "The vocal can continue over track B's intro for continuity"
+        ],
+        example: "You're ending a 128 BPM tech house section and want to move to a 95 BPM hip-hop moment. You play an a cappella of a known track -- the room sings along, no kick is playing. You bring the hip-hop track in at 95 BPM. The new tempo feels like an arrival, not a collision.",
+        risk: "The vocal choice is critical. A weak or unknown vocal kills this technique. The moment without a kick must be musically justified.",
+        color: "#a78bfa"
+      }
+    ];
 
-const categoryColors = {
-  "Blend": "#00d4aa",
-  "Impact": "#ff6b35",
-  "Cut": "#ffd700",
-  "FX": "#8b5cf6",
-  "Performative": "#10b981",
-  "Tempo": "#f59e0b",
-  "Genre Switch": "#14b8a6"
-};
+    const categoryColors = {
+      "Blend":        "#00d4aa",
+      "Impact":       "#ff6b35",
+      "Cut":          "#ffd700",
+      "FX":           "#8b5cf6",
+      "Performative": "#10b981",
+      "Tempo":        "#f59e0b",
+      "Genre Switch": "#14b8a6"
+    };
 
-const bpmLabels = { none: "Same BPM", small: "±1–6 BPM", large: "Large gap (7+)", any: "Any" };
-const energyLabels = { up: "↑ Up", flat: "→ Flat", down: "↓ Down" };
-const genreLabels = { same: "Same genre", close: "Similar genres", different: "Different genres", any: "Any" };
+    const bpmLabels   = { none: "Same BPM", small: "±1-6 BPM", large: "7+ BPM", any: "Any BPM" };
+    const energyLabels = { up: "↑ Up", flat: "→ Flat", down: "↓ Down" };
+    const genreLabels  = { same: "Same genre", close: "Similar genres", different: "Different genres", any: "Any" };
 
-function App() {
-  const [selected, setSelected] = useState(null);
-  const [filters, setFilters] = useState({ bpm: "any", energy: "any", genre: "any", category: "any" });
-  const [view, setView] = useState("grid");
+    /* ─── WaveBar ─────────────────────────────────────── */
+    function WaveBar({ dur, delay }) {
+      return <div className="wave-bar" style={{ '--dur': `${dur}s`, '--delay': `${delay}s` }} />;
+    }
 
-  const categories = [...new Set(transitions.map(t => t.category))];
-
-  const filtered = transitions.filter(t => {
-    if (filters.bpm !== "any" && t.bpmDiff !== "any" && t.bpmDiff !== filters.bpm) return false;
-    if (filters.energy !== "any" && !t.energyDir.includes(filters.energy)) return false;
-    if (filters.genre !== "any" && t.genres !== "any" && !t.genres.includes(filters.genre)) return false;
-    if (filters.category !== "any" && t.category !== filters.category) return false;
-    return true;
-  });
-
-  const resetFilters = () => setFilters({ bpm: "any", energy: "any", genre: "any", category: "any" });
-  const hasFilters = Object.values(filters).some(v => v !== "any");
-
-  return (
-    <div style={{
-      minHeight: "100vh",
-      background: "#0a0a0f",
-      color: "#e8e8f0",
-      fontFamily: "'Courier New', 'Menlo', monospace",
-      padding: "0"
-    }}>
-      {/* Header */}
-      <div style={{
-        background: "linear-gradient(135deg, #0d0d18 0%, #0a0a0f 100%)",
-        borderBottom: "1px solid #1a1a2e",
-        padding: "32px 24px 24px",
-        position: "relative",
-        overflow: "hidden"
-      }}>
-        <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 39px, #1a1a2e 39px, #1a1a2e 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, #1a1a2e 39px, #1a1a2e 40px)",
-          opacity: 0.3
-        }} />
-        <div style={{ position: "relative", maxWidth: 900, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-            <div style={{
-              width: 8, height: 8, borderRadius: "50%", background: "#00d4aa",
-              boxShadow: "0 0 12px #00d4aa"
-            }} />
-            <span style={{ fontSize: 11, letterSpacing: 4, color: "#00d4aa", textTransform: "uppercase" }}>
-              DJ Transitions Reference
-            </span>
-          </div>
-          <h1 style={{
-            fontSize: "clamp(24px, 5vw, 42px)",
-            fontWeight: 900,
-            margin: "0 0 8px",
-            letterSpacing: -1,
-            lineHeight: 1.1,
-            color: "#ffffff"
-          }}>
-            TRANSITION<br />
-            <span style={{ color: "#00d4aa" }}>CHEAT SHEET</span>
-          </h1>
-          <p style={{ color: "#666680", fontSize: 13, margin: 0, maxWidth: 500 }}>
-            {transitions.length} transitions. Filter by situation, read the technique, see the example.
-          </p>
-        </div>
-      </div>
-
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 16px" }}>
-
-        {/* Filters */}
-        <div style={{
-          background: "#0f0f1a",
-          border: "1px solid #1a1a2e",
-          borderRadius: 8,
-          padding: "16px 20px",
-          marginBottom: 24
-        }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-            <span style={{ fontSize: 11, letterSpacing: 3, color: "#555570", textTransform: "uppercase" }}>
-              Filter by situation
-            </span>
-            {hasFilters && (
-              <button onClick={resetFilters} style={{
-                background: "none", border: "1px solid #333350", borderRadius: 4,
-                color: "#888890", fontSize: 11, padding: "3px 10px", cursor: "pointer",
-                letterSpacing: 1
-              }}>
-                CLEAR
-              </button>
-            )}
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 12 }}>
-            {[
-              { key: "bpm", label: "BPM Difference", options: [["any","Any"], ["none","Same"], ["small","±1–6"], ["large","7+ BPM"]] },
-              { key: "energy", label: "Energy Direction", options: [["any","Any"], ["up","↑ Up"], ["flat","→ Flat"], ["down","↓ Down"]] },
-              { key: "genre", label: "Genre Relationship", options: [["any","Any"], ["same","Same"], ["close","Similar"], ["different","Different"]] },
-              { key: "category", label: "Technique Type", options: [["any","Any"], ...categories.map(c => [c, c])] }
-            ].map(({ key, label, options }) => (
-              <div key={key}>
-                <div style={{ fontSize: 10, color: "#444460", letterSpacing: 2, marginBottom: 6, textTransform: "uppercase" }}>
-                  {label}
-                </div>
-                <select
-                  value={filters[key]}
-                  onChange={e => setFilters(f => ({ ...f, [key]: e.target.value }))}
-                  style={{
-                    width: "100%", background: "#070710", border: "1px solid #1e1e30",
-                    color: filters[key] !== "any" ? "#00d4aa" : "#888890",
-                    padding: "8px 10px", borderRadius: 4, fontSize: 12,
-                    fontFamily: "inherit", cursor: "pointer", outline: "none"
-                  }}
-                >
-                  {options.map(([val, lbl]) => (
-                    <option key={val} value={val}>{lbl}</option>
-                  ))}
-                </select>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Results count */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-          <span style={{ fontSize: 12, color: "#444460" }}>
-            <span style={{ color: "#00d4aa", fontWeight: 700 }}>{filtered.length}</span>
-            {" "}transition{filtered.length !== 1 ? "s" : ""} match
-          </span>
-          <div style={{ display: "flex", gap: 8 }}>
-            {["grid", "list"].map(v => (
-              <button key={v} onClick={() => setView(v)} style={{
-                background: view === v ? "#1a1a2e" : "none",
-                border: "1px solid " + (view === v ? "#2a2a40" : "#1a1a2e"),
-                color: view === v ? "#e8e8f0" : "#444460",
-                padding: "5px 12px", borderRadius: 4, fontSize: 11,
-                fontFamily: "inherit", cursor: "pointer", letterSpacing: 1,
-                textTransform: "uppercase"
-              }}>
-                {v}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Cards */}
-        {filtered.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "60px 20px", color: "#333350" }}>
-            <div style={{ fontSize: 32, marginBottom: 12 }}>∅</div>
-            <div style={{ fontSize: 13 }}>No transitions match these filters</div>
-            <button onClick={resetFilters} style={{
-              marginTop: 16, background: "none", border: "1px solid #333350",
-              color: "#888890", padding: "8px 16px", borderRadius: 4,
-              fontFamily: "inherit", fontSize: 12, cursor: "pointer"
-            }}>Clear filters</button>
-          </div>
-        ) : (
+    /* ─── FilterGroup ─────────────────────────────────── */
+    function FilterGroup({ label, options, value, onChange, getColor }) {
+      return (
+        <div style={{ marginBottom: 16 }}>
           <div style={{
-            display: view === "grid" ? "grid" : "flex",
-            gridTemplateColumns: view === "grid" ? "repeat(auto-fill, minmax(260px, 1fr))" : undefined,
-            flexDirection: view === "list" ? "column" : undefined,
-            gap: 12
+            fontSize: 10, fontWeight: 700, letterSpacing: '0.2em',
+            color: 'oklch(45% 0.03 265)', textTransform: 'uppercase', marginBottom: 8,
           }}>
-            {filtered.map(t => (
+            {label}
+          </div>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {options.map(([val, lbl]) => {
+              const isActive = value === val;
+              const color = getColor(val);
+              return (
+                <button
+                  key={val}
+                  onClick={() => onChange(val)}
+                  className="pill"
+                  style={isActive ? {
+                    color: color,
+                    borderColor: color + '88',
+                    background: color + '1a',
+                    boxShadow: `0 0 14px ${color}28`,
+                  } : {}}
+                >
+                  {lbl}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    /* ─── TransitionCard ──────────────────────────────── */
+    function TransitionCard({ t, selected, setSelected, view }) {
+      const isSelected = selected?.id === t.id;
+      const [detailKey, setDetailKey] = useState(0);
+      const prevRef = useRef(false);
+
+      useEffect(() => {
+        if (isSelected && !prevRef.current) setDetailKey(k => k + 1);
+        prevRef.current = isSelected;
+      }, [isSelected]);
+
+      const color = t.color;
+      const handleClick = () => setSelected(isSelected ? null : t);
+
+      return (
+        <div
+          className={`t-card${isSelected ? ' selected' : ''}`}
+          onClick={handleClick}
+          tabIndex={0}
+          onKeyDown={e => e.key === 'Enter' && handleClick()}
+          style={{
+            background: isSelected ? 'oklch(15.5% 0.018 265)' : 'oklch(13% 0.015 265)',
+            border: `1px solid ${color}${isSelected ? '55' : '28'}`,
+            boxShadow: isSelected ? `0 8px 36px ${color}22, 0 1px 0 ${color}30 inset` : 'none',
+            padding: view === 'grid' ? '18px 20px' : '16px 22px',
+          }}
+          onMouseEnter={e => { if (!isSelected) e.currentTarget.style.boxShadow = `0 6px 24px ${color}1c`; }}
+          onMouseLeave={e => { if (!isSelected) e.currentTarget.style.boxShadow = 'none'; }}
+        >
+          {/* Card header row */}
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10, gap: 8 }}>
+            <span style={{
+              fontSize: 11, fontWeight: 700, letterSpacing: '0.07em',
+              textTransform: 'uppercase', color: color,
+              padding: '3px 10px', borderRadius: 100,
+              background: color + '1c', border: `1px solid ${color}35`,
+              flexShrink: 0,
+            }}>
+              {t.category}
+            </span>
+            <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+              {t.energyDir.map(e => (
+                <span key={e} style={{
+                  fontSize: 10, fontWeight: 600, padding: '3px 8px', borderRadius: 100,
+                  background: 'oklch(18% 0.018 265)', border: '1px solid oklch(25% 0.025 265)',
+                  color: 'oklch(62% 0.03 265)',
+                }}>
+                  {energyLabels[e]}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Name */}
+          <div style={{
+            fontSize: view === 'grid' ? 17 : 16, fontWeight: 800,
+            color: 'oklch(93% 0.015 265)', marginBottom: view === 'grid' ? 8 : 0,
+            letterSpacing: '-0.02em', lineHeight: 1.2,
+          }}>
+            {t.name}
+          </div>
+
+          {view === 'grid' && (
+            <p style={{ fontSize: 13, color: 'oklch(66% 0.028 265)', margin: '0 0 12px', lineHeight: 1.62 }}>
+              {t.description.length > 110 ? t.description.slice(0, 110) + '...' : t.description}
+            </p>
+          )}
+
+          {/* Tags */}
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: view === 'list' ? 8 : 0 }}>
+            <span style={{
+              fontSize: 11, fontWeight: 500, padding: '3px 10px', borderRadius: 100,
+              background: 'oklch(16% 0.016 265)', border: '1px solid oklch(22% 0.022 265)',
+              color: 'oklch(58% 0.03 265)',
+            }}>
+              {bpmLabels[t.bpmDiff]}
+            </span>
+            {t.genres !== "any" && t.genres.map(g => (
+              <span key={g} style={{
+                fontSize: 11, fontWeight: 500, padding: '3px 10px', borderRadius: 100,
+                background: 'oklch(16% 0.016 265)', border: '1px solid oklch(22% 0.022 265)',
+                color: 'oklch(58% 0.03 265)',
+              }}>
+                {genreLabels[g]}
+              </span>
+            ))}
+          </div>
+
+          {/* Expand indicator */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 5, marginTop: 12,
+            color: isSelected ? color : 'oklch(44% 0.03 265)',
+            fontSize: 11, fontWeight: 700, letterSpacing: '0.07em', transition: 'color 0.2s',
+          }}>
+            <span className={`expand-arrow${isSelected ? ' open' : ''}`}>›</span>
+            <span>{isSelected ? 'CLOSE' : 'TECHNIQUE'}</span>
+          </div>
+
+          {/* Expanded detail */}
+          <div className={`expand-grid${isSelected ? ' open' : ''}`}>
+            <div className="expand-inner">
               <div
-                key={t.id}
-                onClick={() => setSelected(selected?.id === t.id ? null : t)}
+                key={detailKey}
+                className="detail-content"
                 style={{
-                  background: selected?.id === t.id ? "#0f0f1a" : "#080810",
-                  border: "1px solid " + (selected?.id === t.id ? t.color : "#1a1a2e"),
-                  borderRadius: 8,
-                  padding: view === "grid" ? "16px" : "14px 20px",
-                  cursor: "pointer",
-                  transition: "all 0.15s ease",
-                  position: "relative",
-                  overflow: "hidden"
+                  paddingTop: 20, marginTop: 18,
+                  borderTop: '1px solid oklch(21% 0.022 265)',
                 }}
               >
-                {/* Color accent */}
-                <div style={{
-                  position: "absolute", top: 0, left: 0, width: 3, height: "100%",
-                  background: t.color, opacity: selected?.id === t.id ? 1 : 0.4
-                }} />
+                <p style={{ fontSize: 14, color: 'oklch(74% 0.026 265)', lineHeight: 1.68, marginBottom: 24 }}>
+                  {t.description}
+                </p>
 
-                <div style={{ paddingLeft: view === "grid" ? 8 : 12 }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-                    <span style={{
-                      fontSize: 10, letterSpacing: 2, textTransform: "uppercase",
-                      color: t.color, opacity: 0.8
-                    }}>
-                      {t.category}
-                    </span>
-                    <div style={{ display: "flex", gap: 4 }}>
-                      {t.energyDir.map(e => (
-                        <span key={e} style={{
-                          fontSize: 9, padding: "2px 6px", borderRadius: 3,
-                          background: "#1a1a2e", color: "#666680", letterSpacing: 1
-                        }}>
-                          {energyLabels[e]}
-                        </span>
-                      ))}
+                {/* Steps */}
+                <div style={{ marginBottom: 24 }}>
+                  <div style={{
+                    fontSize: 10, fontWeight: 800, letterSpacing: '0.22em',
+                    color: color, textTransform: 'uppercase', marginBottom: 18,
+                  }}>
+                    Step by Step
+                  </div>
+                  {t.steps.map((step, i) => (
+                    <div
+                      key={i}
+                      className="step-item"
+                      style={{ display: 'flex', gap: 16, marginBottom: 14, alignItems: 'flex-start', animationDelay: `${0.06 + i * 0.055}s` }}
+                    >
+                      <span style={{
+                        fontSize: 38, fontWeight: 900, color: color,
+                        lineHeight: 1, minWidth: 46, flexShrink: 0,
+                        opacity: 0.35, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.04em',
+                      }}>
+                        {i + 1}
+                      </span>
+                      <span style={{ fontSize: 14, color: 'oklch(78% 0.025 265)', lineHeight: 1.6, paddingTop: 7 }}>
+                        {step}
+                      </span>
                     </div>
-                  </div>
+                  ))}
+                </div>
 
-                  <div style={{ fontSize: view === "grid" ? 15 : 14, fontWeight: 700, color: "#ffffff", marginBottom: 6, letterSpacing: -0.3 }}>
-                    {t.name}
+                {/* Example -- turntable screen */}
+                <div style={{
+                  background: 'oklch(7.5% 0.01 265)', border: '1px solid oklch(19% 0.02 265)',
+                  borderRadius: 8, padding: '16px 18px', marginBottom: 12, position: 'relative', overflow: 'hidden',
+                }}>
+                  <div style={{
+                    position: 'absolute', inset: 0, pointerEvents: 'none',
+                    backgroundImage: 'repeating-linear-gradient(0deg, oklch(100% 0 0 / 0.018) 0px, oklch(100% 0 0 / 0.018) 1px, transparent 1px, transparent 5px)',
+                  }} />
+                  <div style={{
+                    fontSize: 9, fontWeight: 800, letterSpacing: '0.24em', color: '#00d4aa80',
+                    textTransform: 'uppercase', marginBottom: 10, fontFamily: "'Courier New', monospace",
+                    position: 'relative',
+                  }}>
+                    Real Example
                   </div>
+                  <p style={{
+                    fontSize: 13, color: 'oklch(72% 0.055 155)', margin: 0, lineHeight: 1.68,
+                    fontStyle: 'italic', fontFamily: "'Courier New', monospace", position: 'relative',
+                  }}>
+                    {t.example}
+                  </p>
+                </div>
 
-                  {view === "grid" && (
-                    <p style={{ fontSize: 12, color: "#666680", margin: "0 0 10px", lineHeight: 1.5 }}>
-                      {t.description.length > 100 ? t.description.slice(0, 100) + "…" : t.description}
+                {/* Use When / Avoid When */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
+                  <div style={{
+                    background: 'oklch(12% 0.022 152)', border: '1px solid oklch(22% 0.044 152)',
+                    borderRadius: 8, padding: '14px 16px',
+                  }}>
+                    <div style={{
+                      fontSize: 9, fontWeight: 800, letterSpacing: '0.2em',
+                      color: 'oklch(72% 0.13 145)', textTransform: 'uppercase', marginBottom: 9,
+                    }}>
+                      Use When
+                    </div>
+                    <p style={{ fontSize: 13, color: 'oklch(74% 0.09 145)', margin: 0, lineHeight: 1.58 }}>
+                      {t.when}
                     </p>
-                  )}
-
-                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                    <span style={{
-                      fontSize: 10, padding: "2px 8px", borderRadius: 3,
-                      background: "#0d0d18", border: "1px solid #1e1e30", color: "#555570"
+                  </div>
+                  <div style={{
+                    background: 'oklch(12% 0.022 28)', border: '1px solid oklch(22% 0.044 28)',
+                    borderRadius: 8, padding: '14px 16px',
+                  }}>
+                    <div style={{
+                      fontSize: 9, fontWeight: 800, letterSpacing: '0.2em',
+                      color: 'oklch(72% 0.13 28)', textTransform: 'uppercase', marginBottom: 9,
                     }}>
-                      BPM: {bpmLabels[t.bpmDiff]}
-                    </span>
-                    <span style={{
-                      fontSize: 10, padding: "2px 8px", borderRadius: 3,
-                      background: "#0d0d18", border: "1px solid #1e1e30", color: "#555570"
-                    }}>
-                      {t.genres.map(g => genreLabels[g]).join(" / ")}
-                    </span>
+                      Avoid When
+                    </div>
+                    <p style={{ fontSize: 13, color: 'oklch(74% 0.09 28)', margin: 0, lineHeight: 1.58 }}>
+                      {t.avoid}
+                    </p>
                   </div>
                 </div>
 
-                {/* Expanded detail */}
-                {selected?.id === t.id && (
-                  <div style={{ marginTop: 20, paddingLeft: 12, borderTop: "1px solid #1a1a2e", paddingTop: 20 }}>
-
-                    <p style={{ fontSize: 13, color: "#a0a0b8", lineHeight: 1.6, marginTop: 0 }}>
-                      {t.description}
-                    </p>
-
-                    <div style={{ marginBottom: 16 }}>
-                      <div style={{ fontSize: 10, letterSpacing: 3, color: t.color, textTransform: "uppercase", marginBottom: 8 }}>
-                        Step by Step
-                      </div>
-                      {t.steps.map((step, i) => (
-                        <div key={i} style={{ display: "flex", gap: 12, marginBottom: 8 }}>
-                          <span style={{
-                            fontSize: 10, color: t.color, fontWeight: 700,
-                            minWidth: 18, marginTop: 1
-                          }}>
-                            {String(i + 1).padStart(2, "0")}
-                          </span>
-                          <span style={{ fontSize: 12, color: "#888898", lineHeight: 1.5 }}>{step}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div style={{
-                      background: "#070710", border: "1px solid #1a1a2e",
-                      borderRadius: 6, padding: "14px 16px", marginBottom: 12
-                    }}>
-                      <div style={{ fontSize: 10, letterSpacing: 3, color: "#00d4aa", textTransform: "uppercase", marginBottom: 8 }}>
-                        Real Example
-                      </div>
-                      <p style={{ fontSize: 12, color: "#888898", margin: 0, lineHeight: 1.6, fontStyle: "italic" }}>
-                        {t.example}
-                      </p>
-                    </div>
-
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                      <div style={{
-                        background: "#070710", border: "1px solid #1a2e1a",
-                        borderRadius: 6, padding: "12px 14px"
-                      }}>
-                        <div style={{ fontSize: 10, letterSpacing: 2, color: "#00d4aa", textTransform: "uppercase", marginBottom: 6 }}>
-                          Use When
-                        </div>
-                        <p style={{ fontSize: 11, color: "#668866", margin: 0, lineHeight: 1.5 }}>{t.when}</p>
-                      </div>
-                      <div style={{
-                        background: "#070710", border: "1px solid #2e1a1a",
-                        borderRadius: 6, padding: "12px 14px"
-                      }}>
-                        <div style={{ fontSize: 10, letterSpacing: 2, color: "#ff6b6b", textTransform: "uppercase", marginBottom: 6 }}>
-                          Avoid When
-                        </div>
-                        <p style={{ fontSize: 11, color: "#886666", margin: 0, lineHeight: 1.5 }}>{t.avoid}</p>
-                      </div>
-                    </div>
-
-                    <div style={{
-                      marginTop: 10, background: "#0a080a",
-                      border: "1px solid #2a1a2a", borderRadius: 6, padding: "10px 14px"
-                    }}>
-                      <div style={{ fontSize: 10, letterSpacing: 2, color: "#ff9500", textTransform: "uppercase", marginBottom: 4 }}>
-                        ⚠ Risk
-                      </div>
-                      <p style={{ fontSize: 11, color: "#886640", margin: 0, lineHeight: 1.5 }}>{t.risk}</p>
-                    </div>
-
+                {/* Risk */}
+                <div style={{
+                  background: 'oklch(12% 0.02 58)', border: '1px solid oklch(22% 0.042 58)',
+                  borderRadius: 8, padding: '12px 16px',
+                }}>
+                  <div style={{
+                    fontSize: 9, fontWeight: 800, letterSpacing: '0.2em',
+                    color: 'oklch(75% 0.13 62)', textTransform: 'uppercase', marginBottom: 8,
+                  }}>
+                    Risk
                   </div>
+                  <p style={{ fontSize: 13, color: 'oklch(74% 0.09 58)', margin: 0, lineHeight: 1.58 }}>
+                    {t.risk}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* ─── App ─────────────────────────────────────────── */
+    function App() {
+      const [selected, setSelected]   = useState(null);
+      const [filters,  setFilters]    = useState({ bpm: "any", energy: "any", genre: "any", category: "any" });
+      const [view,     setView]       = useState("grid");
+
+      const categories  = [...new Set(transitions.map(t => t.category))];
+      const resetFilters = () => setFilters({ bpm: "any", energy: "any", genre: "any", category: "any" });
+      const hasFilters   = Object.values(filters).some(v => v !== "any");
+
+      const filtered = transitions.filter(t => {
+        if (filters.bpm      !== "any" && t.bpmDiff !== "any" && t.bpmDiff !== filters.bpm)                return false;
+        if (filters.energy   !== "any" && !t.energyDir.includes(filters.energy))                           return false;
+        if (filters.genre    !== "any" && t.genres   !== "any" && !t.genres.includes(filters.genre))       return false;
+        if (filters.category !== "any" && t.category !== filters.category)                                 return false;
+        return true;
+      });
+
+      const filterGroups = [
+        { key: "bpm",      label: "BPM Difference",   options: [["any","Any"],["none","Same BPM"],["small","±1-6"],["large","7+"]], getColor: () => '#00d4aa' },
+        { key: "energy",   label: "Energy",            options: [["any","Any"],["up","↑ Up"],["flat","→ Flat"],["down","↓ Down"]],  getColor: () => '#00d4aa' },
+        { key: "genre",    label: "Genre Relationship",options: [["any","Any"],["same","Same"],["close","Similar"],["different","Different"]], getColor: () => '#00d4aa' },
+        { key: "category", label: "Technique Type",    options: [["any","Any"],...categories.map(c=>[c,c])], getColor: v => v !== 'any' ? categoryColors[v] : '#00d4aa' },
+      ];
+
+      const waveDurs   = [0.58, 0.92, 0.71, 1.14, 0.82, 1.28, 0.66, 1.05, 0.77, 0.94, 1.18, 0.63, 0.88, 1.02];
+      const waveDelays = waveDurs.map((_, i) => +(i * 0.068).toFixed(3));
+
+      return (
+        <div style={{
+          minHeight: '100vh',
+          background: 'oklch(10% 0.012 265)',
+          color: 'oklch(84% 0.022 265)',
+          fontFamily: "'Inter', system-ui, sans-serif",
+        }}>
+          {/* Header */}
+          <header style={{ borderBottom: '1px solid oklch(18% 0.02 265)', padding: '40px 24px 32px' }}>
+            <div style={{ maxWidth: 960, margin: '0 auto' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 14 }}>
+                    <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#00d4aa', boxShadow: '0 0 10px #00d4aaaa' }} />
+                    <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.22em', color: '#00d4aa', textTransform: 'uppercase' }}>
+                      DJ Transitions Reference
+                    </span>
+                  </div>
+                  <h1 style={{
+                    fontSize: 'clamp(30px, 5.5vw, 52px)', fontWeight: 900,
+                    letterSpacing: '-0.03em', lineHeight: 1.0,
+                    color: 'oklch(95% 0.01 265)', marginBottom: 12,
+                  }}>
+                    TRANSITION<br />
+                    <span style={{ color: '#00d4aa' }}>CHEAT SHEET</span>
+                  </h1>
+                  <p style={{ color: 'oklch(60% 0.03 265)', fontSize: 15, maxWidth: 480, lineHeight: 1.55 }}>
+                    {transitions.length} transitions. Filter by situation, click any card for the full technique.
+                  </p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 36, paddingBottom: 2 }}>
+                  {waveDurs.map((dur, i) => <WaveBar key={i} dur={dur} delay={waveDelays[i]} />)}
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <main style={{ maxWidth: 960, margin: '0 auto', padding: '28px 16px 64px' }}>
+
+            {/* Filter panel */}
+            <div style={{
+              background: 'oklch(13% 0.015 265)', border: '1px solid oklch(20% 0.02 265)',
+              borderRadius: 12, padding: '20px 22px', marginBottom: 24,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
+                <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', color: 'oklch(44% 0.03 265)', textTransform: 'uppercase' }}>
+                  Filter by situation
+                </span>
+                {hasFilters && (
+                  <button onClick={resetFilters} style={{
+                    background: 'none', border: '1px solid oklch(28% 0.03 265)', borderRadius: 100,
+                    color: 'oklch(64% 0.03 265)', fontSize: 11, fontWeight: 600,
+                    padding: '4px 12px', cursor: 'pointer', letterSpacing: '0.05em',
+                    transition: 'all 0.15s',
+                  }}>
+                    Clear all
+                  </button>
                 )}
               </div>
-            ))}
-          </div>
-        )}
-
-        {/* Footer meta */}
-        <div style={{
-          marginTop: 40, paddingTop: 20, borderTop: "1px solid #1a1a2e",
-          display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12
-        }}>
-          {categories.map(cat => (
-            <div key={cat} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: categoryColors[cat] }} />
-              <span style={{ fontSize: 11, color: "#333350", letterSpacing: 1 }}>{cat.toUpperCase()}</span>
+              {filterGroups.map(({ key, label, options, getColor }) => (
+                <FilterGroup
+                  key={key}
+                  label={label}
+                  options={options}
+                  value={filters[key]}
+                  onChange={val => setFilters(f => ({ ...f, [key]: val }))}
+                  getColor={getColor}
+                />
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
 
-    // ─── END OF ARTIFACT ─────────────────────────────────────────────────────
+            {/* Meta row */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <span style={{ fontSize: 14, color: 'oklch(55% 0.03 265)' }}>
+                <span style={{ color: '#00d4aa', fontWeight: 800, fontSize: 17 }}>{filtered.length}</span>
+                {' '}transition{filtered.length !== 1 ? 's' : ''} match
+              </span>
+              <div style={{ display: 'flex', gap: 6 }}>
+                {['grid', 'list'].map(v => (
+                  <button key={v} onClick={() => setView(v)} className={`view-btn${view === v ? ' active' : ''}`}>{v}</button>
+                ))}
+              </div>
+            </div>
+
+            {/* Cards */}
+            {filtered.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '60px 20px', color: 'oklch(40% 0.025 265)' }}>
+                <div style={{ fontSize: 40, marginBottom: 14, opacity: 0.4 }}>∅</div>
+                <div style={{ fontSize: 16 }}>No transitions match these filters</div>
+                <button onClick={resetFilters} style={{
+                  marginTop: 18, background: 'none', border: '1px solid oklch(28% 0.03 265)',
+                  borderRadius: 100, color: 'oklch(66% 0.03 265)', padding: '9px 20px',
+                  fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                }}>
+                  Clear filters
+                </button>
+              </div>
+            ) : (
+              <div style={{
+                display: view === 'grid' ? 'grid' : 'flex',
+                gridTemplateColumns: view === 'grid' ? 'repeat(auto-fill, minmax(280px, 1fr))' : undefined,
+                flexDirection: view === 'list' ? 'column' : undefined,
+                gap: 12,
+              }}>
+                {filtered.map(t => (
+                  <TransitionCard key={t.id} t={t} selected={selected} setSelected={setSelected} view={view} />
+                ))}
+              </div>
+            )}
+
+            {/* Footer legend */}
+            <div style={{
+              marginTop: 52, paddingTop: 20, borderTop: '1px solid oklch(17% 0.018 265)',
+              display: 'flex', flexWrap: 'wrap', gap: 18,
+            }}>
+              {Object.entries(categoryColors).map(([cat, color]) => (
+                <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                  <div style={{ width: 7, height: 7, borderRadius: '50%', background: color, boxShadow: `0 0 7px ${color}99` }} />
+                  <span style={{ fontSize: 12, fontWeight: 500, color: 'oklch(50% 0.028 265)', letterSpacing: '0.04em' }}>
+                    {cat}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </main>
+        </div>
+      );
+    }
 
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
