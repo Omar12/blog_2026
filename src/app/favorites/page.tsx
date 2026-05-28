@@ -94,7 +94,19 @@ const favorites: FavoriteCategory[] = [
           'An AI-powered image generation tool that I use for creative projects and design inspiration.',
         link: 'https://midjourney.com',
         tags: ['AI', 'Design', 'Creativity'],
-      }
+      },
+      {
+        title: '1001Tracklists',
+        description: 'Go-to place to learn what tracks DJs are playing in their sets.',
+        link: 'https://1001tracklists.com',
+        tags: ['Music', 'DJing'],
+      },
+      {
+        title: 'Kottke.org',
+        description: 'One of the best personal blogs on the internet. Every week I learn something new. I\'m a paying member.',
+        link: 'https://kottke.org',
+        tags: ['Blog', 'Learning'],
+      },
     ],
   },
   {
