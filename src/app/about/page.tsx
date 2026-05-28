@@ -10,7 +10,7 @@ export default function AboutPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <article>
-        <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight mb-10 text-[var(--text)]">
+        <h1 className="text-display font-extrabold mb-10 text-[var(--text)]">
           About Me
         </h1>
 
