@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-16">
-        <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight mb-4 text-[var(--text)]">
+        <h1 className="text-display font-extrabold mb-4 text-[var(--text)]">
           Welcome
         </h1>
         <p className="text-lg text-[var(--text-secondary)] max-w-xl">
