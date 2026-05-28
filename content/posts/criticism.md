@@ -19,7 +19,7 @@ In code-related projects, Pull Requests serve as a critical channel for feedback
 
 You've invested time and effort into your work, putting in significant energy to meet deadlines. You might already be aware that your results could be improved.
 
-Be receptive: Criticism can sting, and some people might be harsh in their feedback. As mentioned earlier, giving constructive criticism is no easy task, so remember that it's not your fault. The person critiquing your work likely has a set of expectations and goals that weren't met—this is common, especially if no clear guidance was provided from the start. To improve the conversation, be open, ask questions, and work collaboratively with them. If you find that their comments lack clear objectives, ask them how they would have approached the same challenge to gain insight into their perspective.
+Be receptive: Criticism can sting, and some people might be harsh in their feedback. As mentioned earlier, giving constructive criticism is no easy task, so remember that it's not your fault. The person critiquing your work likely has a set of expectations and goals that weren't met-this is common, especially if no clear guidance was provided from the start. To improve the conversation, be open, ask questions, and work collaboratively with them. If you find that their comments lack clear objectives, ask them how they would have approached the same challenge to gain insight into their perspective.
 
 ## Giving Criticism
 
@@ -29,4 +29,4 @@ When you're in a position to provide feedback, you've likely received your fair 
 
 When offering constructive criticism, avoid using words like "like" or "dislike." Instead, provide more specific feedback. For something you appreciate, consider saying: "This works well with X and Y," or "You're on the right track, but it's missing A, B and C." For aspects you find lacking, try: "I see room for improvement," or "This isn’t quite what I had in mind; could you explain your thought process?" The goal is to be constructive and analytical rather than emotional, as "like" and "dislike" can be perceived as personal judgments.
 
-Aim to be a mentor, leaving a lasting positive impression on the person receiving your feedback. Strive to create a work environment where you and your colleagues can feel proud of one another. Remember, you’re part of the same team—work together, help each other improve, and be open to dialogue. Thoughtful criticism benefits everyone involved.
+Aim to be a mentor, leaving a lasting positive impression on the person receiving your feedback. Strive to create a work environment where you and your colleagues can feel proud of one another. Remember, you’re part of the same team-work together, help each other improve, and be open to dialogue. Thoughtful criticism benefits everyone involved.

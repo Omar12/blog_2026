@@ -65,7 +65,7 @@ export default async function ProjectsPage() {
           Vibe Coding
         </h1>
         <p className="text-lg text-[var(--text-secondary)] max-w-xl">
-          Projects built with vibes — GitHub repositories tagged{' '}
+          Projects built with vibes - GitHub repositories tagged{' '}
           <code className="text-sm font-mono px-1.5 py-0.5 rounded bg-[var(--surface)] border border-[var(--border)] text-[var(--primary)]">
             #vibe-coding
           </code>
@@ -187,6 +187,23 @@ export default async function ProjectsPage() {
           ))}
         </div>
       )}
+      <div className="mt-12 p-6 rounded-lg border border-[var(--border)] bg-[var(--surface)] text-center">
+        <p className="text-[var(--text)] text-sm">
+          Pulled live from{' '}
+          <a
+            href={`${SITE_CONFIG.social.github}?tab=repositories`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[var(--primary)] hover:underline"
+          >
+            GitHub
+          </a>{' '}
+          · repos tagged{' '}
+          <code className="font-mono text-xs px-1.5 py-0.5 rounded bg-[var(--primary)] bg-opacity-20 border border-[var(--border)] text-[var(--surface)]">
+            vibe-coding
+          </code>
+        </p>
+      </div>
 
       {CLAUDE_ARTIFACTS.length > 0 && (
         <div className="mt-20">
@@ -195,7 +212,7 @@ export default async function ProjectsPage() {
               Claude Artifacts
             </h2>
             <p className="text-lg text-[var(--text-secondary)] max-w-xl">
-              Runnable apps and tools generated with Claude — saved from the artifact panel.
+              Runnable apps and tools generated with Claude - saved from the artifact panel.
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -252,23 +269,6 @@ export default async function ProjectsPage() {
         </div>
       )}
 
-      <div className="mt-12 p-6 rounded-lg border border-[var(--border)] bg-[var(--surface)] text-center">
-        <p className="text-[var(--text)] text-sm">
-          Pulled live from{' '}
-          <a
-            href={`${SITE_CONFIG.social.github}?tab=repositories`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[var(--primary)] hover:underline"
-          >
-            GitHub
-          </a>{' '}
-          · repos tagged{' '}
-          <code className="font-mono text-xs px-1.5 py-0.5 rounded bg-[var(--primary)] bg-opacity-20 border border-[var(--border)] text-[var(--surface)]">
-            vibe-coding
-          </code>
-        </p>
-      </div>
     </div>
   );
 }

@@ -5,12 +5,12 @@
 //      JSX artifact   → use the template at public/artifacts/_template-jsx.html;
 //                       paste your component code where indicated
 // 3. Add an entry to CLAUDE_ARTIFACTS below:
-//      slug    — must match the folder name in public/artifacts/
-//      title   — display name shown on /projects
-//      description — shown on the card (keep it short)
-//      date    — ISO format: 'YYYY-MM-DD'
-//      tags    — array of short strings
-//      type    — 'html' (default) or 'jsx'
+//      slug    - must match the folder name in public/artifacts/
+//      title   - display name shown on /projects
+//      description - shown on the card (keep it short)
+//      date    - ISO format: 'YYYY-MM-DD'
+//      tags    - array of short strings
+//      type    - 'html' (default) or 'jsx'
 // The section on /projects appears automatically once the array is non-empty.
 
 export interface ClaudeArtifact {
