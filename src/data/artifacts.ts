@@ -39,6 +39,12 @@ export const CLAUDE_ARTIFACTS: ClaudeArtifact[] = [
     tags: ['cheat-sheet', 'dj', 'transitions'],
     type: 'jsx',
   },
+  { slug: 'midjourney-guide',
+    title: 'Midjourney Guide',
+    description: 'A comprehensive guide to using Midjourney 8.1.',
+    date: '2026-06-06',
+    tags: ['guide', 'midjourney', 'ai-art']
+  },
   {
     slug: 'datamosh',
     title: 'Datamosh (Webcam Browser API Experiment)',
