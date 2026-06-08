@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Midjourney Power User Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Familjen+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -16,8 +17,8 @@
     --border: #242424;
     --border-subtle: #1c1c1c;
     --text: #e8e4dc;
-    --text-muted: #7a7470;
-    --text-dim: #4a4642;
+    --text-muted: #a09890;
+    --text-dim: #585250;
     --accent: #e8a050;
     --accent-dim: #7a4e1a;
     --accent-glow: rgba(232, 160, 80, 0.08);
@@ -32,7 +33,7 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Syne', sans-serif;
+    font-family: 'Familjen Grotesk', sans-serif;
     font-size: 15px;
     line-height: 1.7;
     min-height: 100vh;
@@ -54,7 +55,6 @@
     height: 100vh;
     overflow-y: auto;
     border-right: 1px solid var(--border);
-    padding: 0;
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
   }
@@ -69,20 +69,20 @@
   }
 
   .sidebar-logo {
-    font-family: 'Instrument Serif', serif;
-    font-size: 11px;
-    font-style: italic;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
     color: var(--accent);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
 
   .sidebar-title {
-    font-size: 13px;
-    font-weight: 700;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
     color: var(--text);
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
   }
 
@@ -95,7 +95,8 @@
   }
 
   .nav-group-label {
-    font-size: 10px;
+    font-family: 'Familjen Grotesk', sans-serif;
+    font-size: 9.5px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -105,103 +106,111 @@
 
   .nav-link {
     display: block;
-    padding: 7px 24px;
+    padding: 7px 24px 7px 20px;
     font-size: 12.5px;
     font-weight: 500;
     color: var(--text-muted);
     text-decoration: none;
-    border-left: 2px solid transparent;
-    transition: all 0.15s;
+    transition: color 0.15s, background 0.15s;
     letter-spacing: 0.01em;
+    position: relative;
   }
 
   .nav-link:hover {
     color: var(--text);
-    border-left-color: var(--border);
-    background: var(--accent-glow);
+    background: rgba(232, 160, 80, 0.04);
   }
 
   .nav-link.active {
     color: var(--accent);
-    border-left-color: var(--accent);
     background: var(--accent-glow);
   }
 
-  /* ── MAIN CONTENT ── */
-  .main {
-    overflow-x: hidden;
+  .nav-link.active::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
   }
+
+  /* ── MAIN CONTENT ── */
+  .main { overflow-x: hidden; }
 
   /* ── HERO ── */
   .hero {
-    padding: 72px 64px 56px;
+    padding: 80px 64px 64px;
     border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg, #141414 0%, var(--bg) 100%);
+    background:
+      radial-gradient(ellipse 60% 80% at 85% 40%, rgba(232,160,80,0.18) 0%, transparent 68%),
+      linear-gradient(180deg, #111111 0%, var(--bg) 100%);
     position: relative;
     overflow: hidden;
   }
 
-  .hero::before {
-    content: '';
+  .hero-bg-text {
     position: absolute;
-    top: -60px;
-    right: -60px;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(232,160,80,0.06) 0%, transparent 70%);
+    bottom: -40px;
+    right: -20px;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: clamp(160px, 22vw, 300px);
+    color: var(--text);
+    opacity: 0.035;
+    line-height: 1;
     pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.05em;
   }
 
   .hero-eyebrow {
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     color: var(--accent);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .hero-eyebrow::before {
-    content: '';
-    display: inline-block;
-    width: 24px;
-    height: 1px;
-    background: var(--accent);
+    margin-bottom: 20px;
+    opacity: 0.9;
   }
 
   .hero-heading {
-    font-family: 'Instrument Serif', serif;
-    font-size: clamp(44px, 5vw, 68px);
-    line-height: 1.05;
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(40px, 5.5vw, 80px);
+    line-height: 1.02;
     color: var(--text);
-    margin-bottom: 16px;
-    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    letter-spacing: -0.03em;
+    font-weight: 900;
+    text-wrap: balance;
   }
 
   .hero-heading em {
-    font-style: italic;
+    font-style: normal;
     color: var(--accent);
   }
 
   .hero-sub {
-    font-size: 16px;
+    font-size: 17px;
     color: var(--text-muted);
-    max-width: 540px;
-    line-height: 1.6;
+    max-width: 520px;
+    line-height: 1.65;
     font-weight: 400;
-    margin-bottom: 32px;
+    margin-bottom: 36px;
+    text-wrap: pretty;
   }
 
   .hero-meta {
     display: flex;
     align-items: center;
     gap: 24px;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
     color: var(--text-dim);
+    flex-wrap: wrap;
   }
 
   .hero-meta span {
@@ -216,6 +225,7 @@
     border-radius: 50%;
     background: var(--accent);
     display: inline-block;
+    flex-shrink: 0;
   }
 
   /* ── CONTENT SECTIONS ── */
@@ -224,9 +234,9 @@
   }
 
   .section {
-    padding-top: 64px;
+    padding-top: 72px;
     border-top: 1px solid var(--border-subtle);
-    margin-top: 64px;
+    margin-top: 72px;
   }
 
   .section:first-child {
@@ -234,26 +244,19 @@
     border-top: none;
   }
 
-  .section-number {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--text-dim);
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
-  }
-
   .section-heading {
-    font-family: 'Instrument Serif', serif;
-    font-size: 32px;
-    font-weight: 400;
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(20px, 2.6vw, 38px);
+    font-weight: 800;
     color: var(--text);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.025em;
     margin-bottom: 20px;
-    line-height: 1.2;
+    line-height: 1.15;
+    text-wrap: balance;
   }
 
   .section-heading em {
-    font-style: italic;
+    font-style: normal;
     color: var(--accent);
   }
 
@@ -264,10 +267,10 @@
   }
 
   .subsection-heading {
-    font-family: 'Syne', sans-serif;
-    font-size: 14px;
+    font-family: 'Familjen Grotesk', sans-serif;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
     color: var(--text);
     margin-bottom: 16px;
@@ -285,11 +288,12 @@
 
   /* ── TYPOGRAPHY ── */
   p {
-    color: #c8c2ba;
+    color: #c0bab2;
     font-size: 15px;
     line-height: 1.75;
     margin-bottom: 16px;
     font-weight: 400;
+    max-width: 68ch;
   }
 
   p:last-child { margin-bottom: 0; }
@@ -301,7 +305,7 @@
 
   /* ── CODE ── */
   code {
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 12.5px;
     background: var(--code-bg);
     color: var(--accent);
@@ -322,7 +326,7 @@
 
   pre::before {
     content: 'PROMPT';
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 9px;
     letter-spacing: 0.1em;
     color: var(--text-dim);
@@ -332,7 +336,7 @@
   }
 
   pre code {
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 13px;
     background: none;
     border: none;
@@ -357,50 +361,48 @@
     font-size: 13.5px;
   }
 
-  thead {
-    background: var(--surface2);
-  }
+  thead { background: var(--surface2); }
 
   th {
     text-align: left;
     padding: 12px 16px;
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-muted);
     border-bottom: 1px solid var(--border);
+    font-family: 'Familjen Grotesk', sans-serif;
   }
 
   td {
     padding: 11px 16px;
-    color: #b8b2a8;
+    color: #b0aaa2;
     border-bottom: 1px solid var(--border-subtle);
     vertical-align: top;
   }
 
   td:first-child {
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
     color: var(--accent);
     white-space: nowrap;
   }
 
   tr:last-child td { border-bottom: none; }
-
   tr:hover td { background: var(--accent-glow); }
 
   /* ── CALLOUTS ── */
   .callout {
-    border-left: 3px solid var(--accent);
+    border: 1px solid var(--accent-dim);
     background: var(--accent-glow);
     padding: 16px 20px;
-    border-radius: 0 6px 6px 0;
+    border-radius: 6px;
     margin: 20px 0;
   }
 
   .callout-label {
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -413,10 +415,11 @@
     font-size: 13.5px;
     margin: 0;
     color: #c8c2ba;
+    max-width: none;
   }
 
   .callout.green {
-    border-left-color: var(--green);
+    border-color: rgba(109, 186, 138, 0.3);
     background: rgba(109, 186, 138, 0.06);
   }
 
@@ -427,6 +430,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1px;
+    background: var(--border);
     border: 1px solid var(--border);
     border-radius: 6px;
     overflow: hidden;
@@ -442,7 +446,7 @@
   .card:hover { background: var(--surface2); }
 
   .card-label {
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -462,6 +466,7 @@
     color: var(--text-muted);
     margin: 0;
     line-height: 1.6;
+    max-width: none;
   }
 
   /* ── WORKFLOW STEPS ── */
@@ -485,7 +490,7 @@
   .step:hover { background: var(--surface2); }
 
   .step-num {
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     color: var(--accent);
     min-width: 28px;
@@ -504,6 +509,7 @@
     color: var(--text-muted);
     margin: 0;
     line-height: 1.5;
+    max-width: none;
   }
 
   /* ── PARAM BLOCKS ── */
@@ -516,7 +522,7 @@
   }
 
   .param-name {
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 18px;
     color: var(--accent);
     font-weight: 500;
@@ -533,7 +539,7 @@
   .tag {
     display: inline-flex;
     align-items: center;
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     padding: 3px 8px;
     border-radius: 3px;
@@ -567,7 +573,7 @@
   }
 
   .layer-key {
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -602,7 +608,7 @@
   }
 
   .stack-num {
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     color: var(--text-dim);
     padding-top: 3px;
@@ -635,7 +641,7 @@
   }
 
   .os-step-label {
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -654,6 +660,7 @@
     font-size: 12.5px;
     color: var(--text-muted);
     margin: 0;
+    max-width: none;
   }
 
   /* ── TROUBLESHOOT ── */
@@ -678,8 +685,9 @@
 
   .trouble-problem::before {
     content: '→';
-    font-family: 'DM Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     color: var(--red);
+    flex-shrink: 0;
   }
 
   .trouble-solution {
@@ -703,17 +711,42 @@
     .hero, .content { padding-left: 24px; padding-right: 24px; }
     .layers { grid-template-columns: 1fr; }
     .stack-grid { grid-template-columns: 1fr; }
+    .hero-bg-text { display: none; }
   }
 
   /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
+  @keyframes heroIn {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
-  .hero-heading { animation: fadeUp 0.5s ease both; }
-  .hero-sub { animation: fadeUp 0.5s ease 0.1s both; }
-  .hero-meta { animation: fadeUp 0.5s ease 0.2s both; }
+  @keyframes bgTextIn {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 0.035; transform: translateX(0); }
+  }
+
+  .hero-eyebrow { animation: heroIn 0.65s cubic-bezier(0.19, 1, 0.22, 1) both; }
+  .hero-heading { animation: heroIn 0.75s cubic-bezier(0.19, 1, 0.22, 1) 0.08s both; }
+  .hero-sub { animation: heroIn 0.75s cubic-bezier(0.19, 1, 0.22, 1) 0.18s both; }
+  .hero-meta { animation: heroIn 0.75s cubic-bezier(0.19, 1, 0.22, 1) 0.28s both; }
+  .hero-bg-text { animation: bgTextIn 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.1s both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-eyebrow,
+    .hero-heading,
+    .hero-sub,
+    .hero-meta,
+    .hero-bg-text {
+      animation: none;
+    }
+    .hero-bg-text { opacity: 0.035; }
+  }
 </style>
 </head>
 <body>
@@ -774,6 +807,7 @@
 
     <!-- HERO -->
     <header class="hero">
+      <div class="hero-bg-text" aria-hidden="true">MJ</div>
       <div class="hero-eyebrow">V8.1 — May 2026</div>
       <h1 class="hero-heading">The <em>Power User</em><br>Guide to Midjourney</h1>
       <p class="hero-sub">A practical workflow for getting consistent, intentional, production-quality images — from first prompt to final export.</p>
@@ -788,7 +822,6 @@
 
       <!-- MINDSET -->
       <section class="section" id="mindset">
-        <div class="section-number">01</div>
         <h2 class="section-heading">The <em>Power-User</em> Mindset</h2>
         <p>Most beginners prompt like this: <code>"cool cyberpunk samurai in the rain"</code>. Power users think in layers, making deliberate decisions across six axes before generating a single image.</p>
 
@@ -833,7 +866,6 @@
 
       <!-- MODELS -->
       <section class="section" id="models">
-        <div class="section-number">02</div>
         <h2 class="section-heading">Choose the Right <em>Model</em></h2>
         <p>The model version changes everything: prompt obedience, style, available parameters, and editing compatibility. Make this decision first.</p>
 
@@ -859,7 +891,6 @@
 
       <!-- ANATOMY -->
       <section class="section" id="anatomy">
-        <div class="section-number">03</div>
         <h2 class="section-heading">Anatomy of a Strong <em>Prompt</em></h2>
         <p>Use this structure as a mental checklist — you don't need every component, but knowing them makes every prompt intentional.</p>
         <pre><code>[subject] + [action/context] + [environment] + [composition/framing]
@@ -891,7 +922,6 @@ realistic textures, high contrast, shallow depth of field
 
       <!-- ASPECT RATIO -->
       <section class="section" id="ar">
-        <div class="section-number">04</div>
         <h2 class="section-heading">Aspect Ratio — <em><code>--ar</code></em></h2>
         <p>Choose your aspect ratio <strong>before</strong> thinking about composition. A "wide establishing shot" needs <code>16:9</code>; a character portrait needs <code>4:5</code> or <code>2:3</code>. Getting this wrong wastes your composition.</p>
 
@@ -912,7 +942,6 @@ realistic textures, high contrast, shallow depth of field
 
       <!-- STYLIZE -->
       <section class="section" id="stylize">
-        <div class="section-number">05</div>
         <h2 class="section-heading">Stylize — <em><code>--s</code></em></h2>
         <p>Controls how strongly Midjourney applies its own aesthetic taste over your literal instructions. Low values give you more control; high values give you more beauty.</p>
 
@@ -931,7 +960,6 @@ realistic textures, high contrast, shallow depth of field
 
       <!-- CHAOS -->
       <section class="section" id="chaos">
-        <div class="section-number">06</div>
         <h2 class="section-heading">Chaos — <em><code>--c</code></em></h2>
         <p>Increases variation across the grid of outputs. Use high chaos to explore, low chaos once you've found a direction.</p>
 
@@ -954,7 +982,6 @@ realistic textures, high contrast, shallow depth of field
 
       <!-- RAW -->
       <section class="section" id="raw">
-        <div class="section-number">07</div>
         <h2 class="section-heading">Raw Mode — <em><code>--raw</code></em></h2>
         <p>Reduces Midjourney's default aesthetic interpretation. Use it when Midjourney keeps "beautifying" things you want to look real.</p>
 
@@ -971,7 +998,6 @@ natural light, realistic street photography --raw --ar 3:2 --v 8.1</code></pre>
 
       <!-- SEED -->
       <section class="section" id="seed">
-        <div class="section-number">08</div>
         <h2 class="section-heading">Seed — <em><code>--seed</code></em></h2>
         <p>Seeds help you reproduce or systematically vary from a similar starting point. Essential for A/B testing prompt changes and building consistent visual series.</p>
 
@@ -985,7 +1011,6 @@ natural light, realistic street photography --raw --ar 3:2 --v 8.1</code></pre>
 
       <!-- NEGATIVE -->
       <section class="section" id="negative">
-        <div class="section-number">09</div>
         <h2 class="section-heading">Negative Prompting — <em><code>--no</code></em></h2>
         <p>Use <code>--no</code> to remove unwanted elements. Target categories, not exhaustive lists.</p>
 
@@ -1000,7 +1025,6 @@ soft morning light --no text, logo, watermark, hands --ar 4:5</code></pre>
 
       <!-- TILE + WEIRD -->
       <section class="section" id="other-params">
-        <div class="section-number">10</div>
         <h2 class="section-heading">Tile, Weird <em>+ More</em></h2>
 
         <div class="subsection">
@@ -1020,7 +1044,6 @@ iridescent glass, museum product photography --weird 500 --s 400 --ar 4:5</code>
 
       <!-- REFERENCES OVERVIEW -->
       <section class="section" id="references">
-        <div class="section-number">11</div>
         <h2 class="section-heading">Image References: <em>The Real Unlock</em></h2>
         <p>Midjourney has several distinct reference systems. They are not interchangeable — understanding which to use is a core power-user skill.</p>
 
@@ -1045,7 +1068,6 @@ iridescent glass, museum product photography --weird 500 --s 400 --ar 4:5</code>
 
       <!-- SREF -->
       <section class="section" id="sref">
-        <div class="section-number">12</div>
         <h2 class="section-heading">Style Reference — <em><code>--sref</code></em></h2>
         <p>One of the most important advanced features. Captures the visual vibe of an existing image — colors, medium, textures, and lighting — without copying the objects or people in it.</p>
 
@@ -1074,7 +1096,6 @@ iridescent glass, museum product photography --weird 500 --s 400 --ar 4:5</code>
 
       <!-- OREF -->
       <section class="section" id="oref">
-        <div class="section-number">13</div>
         <h2 class="section-heading">Omni Reference — <em><code>--oref</code></em></h2>
         <p>For subject consistency. Lets you put a character, object, vehicle, or creature from a reference image into new creations. Compatible with V7 — not V8.1.</p>
 
@@ -1099,7 +1120,6 @@ cinematic street photography
 
       <!-- MOODBOARDS -->
       <section class="section" id="moodboards">
-        <div class="section-number">14</div>
         <h2 class="section-heading">Moodboards</h2>
         <p>Broader than Style References. A Moodboard lets you select a collection of images to create a unique visual world for a project — when words alone aren't enough.</p>
 
@@ -1116,7 +1136,6 @@ cinematic street photography
 
       <!-- PERSONALIZATION -->
       <section class="section" id="personalization">
-        <div class="section-number">15</div>
         <h2 class="section-heading">Personalization — <em><code>--p</code></em></h2>
         <p>Acts like a style assistant. Learns from images you've liked and uses that information to tailor generations toward your taste. Useful for less generic outputs and building a consistent "house style."</p>
 
@@ -1126,7 +1145,6 @@ geometric shapes, elegant negative space --p --ar 2:3 --v 8.1</code></pre>
 
       <!-- EDITING -->
       <section class="section" id="editing">
-        <div class="section-number">16</div>
         <h2 class="section-heading">The <em>Editing</em> Workflow</h2>
         <p>The web Editor combines Remix, Vary Region, Pan, and Zoom Out — and works on both generated images and uploaded personal images.</p>
 
@@ -1165,7 +1183,6 @@ geometric shapes, elegant negative space --p --ar 2:3 --v 8.1</code></pre>
 
       <!-- HD -->
       <section class="section" id="hd">
-        <div class="section-number">17</div>
         <h2 class="section-heading">HD & Final <em>Quality</em></h2>
         <p>V8.1 supports HD generation. The key rule: <strong>don't burn HD generations during exploration</strong>. Use SD or draft mode to find the right image, then generate the final version in HD.</p>
 
@@ -1187,7 +1204,6 @@ geometric shapes, elegant negative space --p --ar 2:3 --v 8.1</code></pre>
 
       <!-- PROMPT FORMULAS -->
       <section class="section" id="formulas">
-        <div class="section-number">18</div>
         <h2 class="section-heading">Repeatable <em>Prompt Formulas</em></h2>
         <p>Copy-paste templates for common image types. Customize the bracketed variables.</p>
 
@@ -1238,7 +1254,6 @@ architectural visualization, realistic, clean composition
 
       <!-- USE CASES -->
       <section class="section" id="use-cases">
-        <div class="section-number">19</div>
         <h2 class="section-heading">Workflows by <em>Use Case</em></h2>
 
         <div class="subsection">
@@ -1276,7 +1291,6 @@ soft overcast light, natural textures, calm atmosphere
 
       <!-- TROUBLESHOOT -->
       <section class="section" id="troubleshoot">
-        <div class="section-number">20</div>
         <h2 class="section-heading"><em>Troubleshooting</em> Guide</h2>
 
         <div class="trouble-item">
@@ -1312,7 +1326,6 @@ soft overcast light, natural textures, calm atmosphere
 
       <!-- CHEAT SHEET -->
       <section class="section" id="cheatsheet">
-        <div class="section-number">21</div>
         <h2 class="section-heading">Parameter <em>Cheat Sheet</em></h2>
 
         <div class="table-wrap">
@@ -1339,7 +1352,6 @@ soft overcast light, natural textures, calm atmosphere
 
       <!-- 80/20 -->
       <section class="section" id="8020">
-        <div class="section-number">22</div>
         <h2 class="section-heading">The 80/20 <em>Power Stack</em></h2>
         <p>If you only master a few things, master these ten. They cover the vast majority of use cases.</p>
 
@@ -1359,7 +1371,6 @@ soft overcast light, natural textures, calm atmosphere
 
       <!-- OPERATING SYSTEM -->
       <section class="section" id="os">
-        <div class="section-number">23</div>
         <h2 class="section-heading">The Midjourney <em>Operating System</em></h2>
         <p>A repeatable 7-step framework for every job, from brief to final output.</p>
 
@@ -1397,7 +1408,6 @@ soft overcast light, natural textures, calm atmosphere
 
       <!-- PRO TIPS -->
       <section class="section" id="tips">
-        <div class="section-number">24</div>
         <h2 class="section-heading">Final <em>Pro Tips</em></h2>
 
         <div class="steps">
@@ -1416,7 +1426,6 @@ soft overcast light, natural textures, calm atmosphere
 </div>
 
 <script>
-  // Active nav link tracking
   const sections = document.querySelectorAll('.section[id]');
   const navLinks = document.querySelectorAll('.nav-link');
 
