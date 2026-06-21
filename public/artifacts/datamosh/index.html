@@ -11,17 +11,24 @@
     --acid: #00ff41;
     --burn: #ff2d00;
     --ice: #00cfff;
-    --void: #0a0a0a;
-    --glitch: #ff00ff;
+    --void: #060806;
+    --glitch: #ff1ad9;
+    --ink: #e9ffe9;       /* green-tinted near-white for headings */
+    --panel: #040604;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: var(--void);
+    background:
+      radial-gradient(120% 80% at 80% -10%, rgba(0,255,65,0.06), transparent 60%),
+      radial-gradient(120% 90% at -10% 110%, rgba(255,26,217,0.05), transparent 55%),
+      var(--void);
     color: var(--acid);
     font-family: 'Share Tech Mono', monospace;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     overflow-x: hidden;
   }
 
@@ -43,32 +50,64 @@
 
   header {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
-    padding: 16px 28px;
-    border-bottom: 1px solid rgba(0,255,65,0.25);
+    gap: 20px;
+    padding: 20px 28px 16px;
+    border-bottom: 1px solid rgba(0,255,65,0.22);
   }
+
+  .brand { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
 
   .logo {
+    position: relative;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 0.15em;
-    color: var(--acid);
-    text-shadow: 0 0 20px rgba(0,255,65,0.6), 2px 0 0 var(--glitch), -2px 0 0 var(--ice);
-    animation: logoGlitch 6s infinite;
+    font-weight: 400;
+    font-size: clamp(2.1rem, 5.5vw, 3.4rem);
+    line-height: 0.85;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    text-shadow: 0 0 28px rgba(0,255,65,0.35);
   }
 
-  @keyframes logoGlitch {
-    0%, 94%, 100% { text-shadow: 0 0 20px rgba(0,255,65,0.6), 2px 0 0 var(--glitch), -2px 0 0 var(--ice); }
-    95% { text-shadow: 4px 0 0 var(--burn), -4px 0 0 var(--ice), 0 0 30px var(--acid); clip-path: inset(10% 0 80% 0); }
-    96% { text-shadow: -4px 0 0 var(--glitch), 4px 0 0 var(--burn), 0 0 30px var(--acid); clip-path: inset(60% 0 10% 0); }
-    97% { clip-path: none; text-shadow: 0 0 20px rgba(0,255,65,0.6), 2px 0 0 var(--glitch), -2px 0 0 var(--ice); }
+  /* Permanent chromatic aberration: magenta + cyan ghosts behind the ink. */
+  .logo::before,
+  .logo::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+  .logo::before { color: var(--glitch); animation: splitMag 5.5s steps(1) infinite; }
+  .logo::after  { color: var(--ice);    animation: splitCyan 5.5s steps(1) infinite; }
+
+  @keyframes splitMag {
+    0%, 92%, 100% { transform: translate(-2px, 0); clip-path: none; }
+    93% { transform: translate(-7px, 1px); clip-path: inset(8% 0 62% 0); }
+    95% { transform: translate(5px, -1px); clip-path: inset(55% 0 12% 0); }
+    97% { transform: translate(-3px, 0); clip-path: none; }
+  }
+  @keyframes splitCyan {
+    0%, 92%, 100% { transform: translate(2px, 0); clip-path: none; }
+    93% { transform: translate(6px, -1px); clip-path: inset(20% 0 50% 0); }
+    95% { transform: translate(-5px, 1px); clip-path: inset(45% 0 20% 0); }
+    97% { transform: translate(3px, 0); clip-path: none; }
+  }
+
+  .tagline {
+    font-size: 0.58rem;
+    letter-spacing: 0.34em;
+    color: rgba(0,255,65,0.55);
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
   .status {
     font-size: 0.7rem;
     color: rgba(0,255,65,0.5);
     letter-spacing: 0.1em;
+    white-space: nowrap;
   }
 
   .status span { color: var(--acid); animation: blink 1.2s step-end infinite; }
@@ -76,9 +115,10 @@
 
   .main {
     display: grid;
-    grid-template-columns: 1fr 280px;
+    grid-template-columns: 1fr 300px;
     gap: 0;
-    height: calc(100vh - 57px);
+    flex: 1;
+    min-height: 0;
   }
 
   /* Canvas area */
@@ -105,14 +145,82 @@
   .corner-label {
     position: absolute;
     font-size: 0.6rem;
-    color: rgba(0,255,65,0.45);
-    letter-spacing: 0.1em;
+    color: var(--acid);
+    letter-spacing: 0.12em;
+    text-shadow: 0 0 8px rgba(0,255,65,0.5);
     z-index: 10;
   }
-  .corner-label.tl { top: 10px; left: 12px; }
-  .corner-label.tr { top: 10px; right: 12px; }
-  .corner-label.bl { bottom: 10px; left: 12px; }
-  .corner-label.br { bottom: 10px; right: 12px; }
+  .corner-label.tl { top: 18px; left: 20px; }
+  .corner-label.tr { top: 18px; right: 20px; text-align: right; }
+  .corner-label.bl { bottom: 18px; left: 20px; }
+  .corner-label.br { bottom: 18px; right: 20px; text-align: right; }
+
+  /* Viewfinder L-brackets: frame the live output like a camera HUD. */
+  .corner-label::before {
+    content: '';
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    pointer-events: none;
+    filter: drop-shadow(0 0 6px rgba(0,255,65,0.6));
+  }
+  .corner-label.tl::before { top: -12px; left: -14px; border-top: 2px solid var(--acid); border-left: 2px solid var(--acid); }
+  .corner-label.tr::before { top: -12px; right: -14px; border-top: 2px solid var(--acid); border-right: 2px solid var(--acid); }
+  .corner-label.bl::before { bottom: -12px; left: -14px; border-bottom: 2px solid var(--acid); border-left: 2px solid var(--acid); }
+  .corner-label.br::before { bottom: -12px; right: -14px; border-bottom: 2px solid var(--acid); border-right: 2px solid var(--acid); }
+
+  /* REC indicator over the live feed */
+  .rec-indicator {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    align-items: center;
+    gap: 8px;
+    z-index: 11;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    color: #fff;
+    background: rgba(255,45,0,0.18);
+    border: 1px solid var(--burn);
+    padding: 5px 12px;
+    text-shadow: 0 0 10px rgba(255,45,0,0.8);
+  }
+  .rec-indicator.on { display: flex; }
+  .rec-indicator::before {
+    content: '';
+    width: 9px; height: 9px;
+    background: var(--burn);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--burn);
+    animation: blink 0.9s step-end infinite;
+  }
+
+  /* Idle hint shown on the empty canvas before the camera starts */
+  .canvas-idle {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    color: rgba(0,255,65,0.5);
+    pointer-events: none;
+  }
+  .canvas-idle .big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.4rem, 7vw, 5rem);
+    line-height: 0.9;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    opacity: 0.16;
+  }
+  .canvas-idle .sub { font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase; }
+  .canvas-wrap.live .canvas-idle { display: none; }
 
   /* Glitch bars that randomly appear */
   .glitch-bar {
@@ -140,11 +248,27 @@
   }
 
   .section-title {
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    color: rgba(0,255,65,0.45);
-    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.62rem;
+    letter-spacing: 0.24em;
+    color: var(--ink);
+    margin-bottom: 16px;
     text-transform: uppercase;
+  }
+  .section-title::before {
+    content: '';
+    width: 14px;
+    height: 2px;
+    background: var(--acid);
+    box-shadow: 0 0 8px var(--acid);
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(0,255,65,0.25), transparent);
   }
 
   /* Effect buttons */
@@ -185,8 +309,9 @@
   .fx-btn.active {
     background: var(--acid);
     color: #000;
+    font-weight: 700;
     border-color: var(--acid);
-    box-shadow: 0 0 12px rgba(0,255,65,0.5);
+    box-shadow: 0 0 16px rgba(0,255,65,0.65), inset 0 0 8px rgba(255,255,255,0.4);
   }
 
   .fx-btn.active::before { transform: translateX(0); }
@@ -210,24 +335,40 @@
   input[type=range] {
     -webkit-appearance: none;
     width: 100%;
-    height: 2px;
-    background: rgba(0,255,65,0.2);
+    height: 4px;
+    background: transparent;
     outline: none;
     cursor: pointer;
   }
 
   input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 12px;
-    height: 12px;
+    width: 6px;
+    height: 16px;
+    margin-top: -6px;
     background: var(--acid);
-    box-shadow: 0 0 8px rgba(0,255,65,0.8);
+    box-shadow: 0 0 10px rgba(0,255,65,0.9);
     cursor: pointer;
   }
 
   input[type=range]::-webkit-slider-runnable-track {
-    background: linear-gradient(to right, rgba(0,255,65,0.6) 0%, rgba(0,255,65,0.6) var(--val, 50%), rgba(0,255,65,0.15) var(--val, 50%));
-    height: 2px;
+    background: linear-gradient(to right, var(--acid) 0%, var(--acid) var(--val, 50%), rgba(0,255,65,0.14) var(--val, 50%));
+    height: 4px;
+    box-shadow: 0 0 8px rgba(0,255,65,0.3);
+  }
+
+  input[type=range]::-moz-range-thumb {
+    width: 6px;
+    height: 16px;
+    border: none;
+    border-radius: 0;
+    background: var(--acid);
+    box-shadow: 0 0 10px rgba(0,255,65,0.9);
+    cursor: pointer;
+  }
+  input[type=range]::-moz-range-track {
+    height: 4px;
+    background: rgba(0,255,65,0.14);
   }
 
   /* Preset pills */
@@ -306,8 +447,9 @@
 
   /* Mobile layout */
   @media (max-width: 640px) {
-    header { padding: 10px 14px; }
-    .logo { font-size: 1.4rem; }
+    header { padding: 12px 14px 10px; align-items: center; }
+    .logo { font-size: 1.7rem; }
+    .tagline { display: none; }
     .status { font-size: 0.55rem; }
 
     .main {
@@ -409,13 +551,26 @@
     transition: height 0.1s;
     opacity: 0.7;
   }
+
+  /* Honour reduced-motion: keep the static chromatic split, drop the jumps. */
+  @media (prefers-reduced-motion: reduce) {
+    .logo::before { animation: none; transform: translate(-2px, 0); }
+    .logo::after  { animation: none; transform: translate(2px, 0); }
+    .start-btn.running,
+    .record-btn.recording,
+    .rec-indicator::before,
+    .status span { animation: none; }
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">DATAMOSH.EXE</div>
-  <div class="status">SYS: <span>READY</span> // VER 2.0.1</div>
+  <div class="brand">
+    <h1 class="logo" data-text="DATAMOSH">DATAMOSH</h1>
+    <div class="tagline">Real-time video corruption engine</div>
+  </div>
+  <div class="status">SIG <span>READY</span> · V2.0.1</div>
 </header>
 
 <div class="main">
@@ -426,6 +581,11 @@
     <div class="corner-label tr" id="labelTR">FX:NONE</div>
     <div class="corner-label bl" id="labelBL">W:--- H:---</div>
     <div class="corner-label br" id="labelBR">FRAME:0</div>
+    <div class="rec-indicator" id="recIndicator">REC</div>
+    <div class="canvas-idle" id="canvasIdle">
+      <div class="big">NO SIGNAL</div>
+      <div class="sub">Init webcam to begin corruption</div>
+    </div>
     <div class="glitch-bar" id="glitchBar"></div>
   </div>
 
@@ -536,6 +696,8 @@ const btnFront = document.getElementById('btnFront');
 const btnRear = document.getElementById('btnRear');
 const camFacingRow = document.getElementById('camFacingRow');
 const camSelect = document.getElementById('camSelect');
+const canvasWrap = document.getElementById('canvasWrap');
+const recIndicator = document.getElementById('recIndicator');
 
 let stream = null;
 let running = false;
@@ -570,6 +732,25 @@ let echoDecay = 0.88;    // how fast the echo trail fades (0-1)
 const frameBuffer = [];   // ring buffer of past frames
 const MAX_BUFFER = 40;
 let echoAccum = null;     // accumulating echo canvas data
+
+// Reusable per-frame scratch copy buffer (avoids alloc/GC churn each frame).
+// Effects run sequentially, so one shared buffer is safe.
+let scratchBuf = null;
+function snapshot(data) {
+  if (!scratchBuf || scratchBuf.length !== data.length) scratchBuf = new Uint8ClampedArray(data.length);
+  scratchBuf.set(data);
+  return scratchBuf;
+}
+
+// Fast xorshift PRNG — cheaper than Math.random() in tight per-pixel loops.
+let rngState = 0x9e3779b9 | 0;
+function fastRand() {
+  rngState ^= rngState << 13; rngState ^= rngState >>> 17; rngState ^= rngState << 5;
+  return (rngState >>> 0) / 4294967296;
+}
+
+// Cache VU bars once instead of querying the DOM every frame.
+const vuBars = document.querySelectorAll('.vu-bar');
 
 // Sliders
 function setupSlider(id, valId, min, max, onChange) {
@@ -744,6 +925,7 @@ startBtn.addEventListener('click', async () => {
     stream = null;
     startBtn.textContent = 'INIT WEBCAM';
     startBtn.classList.remove('running');
+    canvasWrap.classList.remove('live');
     labelTL.textContent = 'CAM:OFF // 0fps';
     labelTR.textContent = 'FX:NONE';
     recordBtn.disabled = true;
@@ -767,6 +949,7 @@ startBtn.addEventListener('click', async () => {
     running = true;
     startBtn.textContent = 'TERMINATE';
     startBtn.classList.add('running');
+    canvasWrap.classList.add('live');
     recordBtn.disabled = false;
     requestAnimationFrame(render);
   } catch(e) {
@@ -791,11 +974,13 @@ recordBtn.addEventListener('click', () => {
     recording = true;
     recordBtn.textContent = '⏹ STOP REC';
     recordBtn.classList.add('recording');
+    recIndicator.classList.add('on');
   } else {
     mediaRecorder.stop();
     recording = false;
     recordBtn.textContent = '⏺ RECORD';
     recordBtn.classList.remove('recording');
+    recIndicator.classList.remove('on');
   }
 });
 
@@ -812,14 +997,23 @@ function render(time) {
   lastTime = time;
   frameCount++;
 
-  offscreen.width = canvas.width;
-  offscreen.height = canvas.height;
+  const W = canvas.width, H = canvas.height;
+  // Setting width/height clears the canvas, so only do it on actual resize.
+  if (offscreen.width !== W || offscreen.height !== H) {
+    offscreen.width = W;
+    offscreen.height = H;
+  }
 
   // Draw current frame
-  offCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  let imageData = offCtx.getImageData(0, 0, canvas.width, canvas.height);
+  offCtx.drawImage(video, 0, 0, W, H);
+  let imageData = offCtx.getImageData(0, 0, W, H);
   let data = imageData.data;
-  const W = canvas.width, H = canvas.height;
+
+  // Grab pristine pixels before any effect mutates them (echo needs raw video).
+  // Cheaper than re-drawing the video + a second getImageData inside echo.
+  const echoOn = activeEffects.has('echo');
+  let rawPixels = null;
+  if (echoOn) { rawPixels = new Uint8ClampedArray(data.length); rawPixels.set(data); }
 
   // Frame blend (core datamosh)
   if (activeEffects.has('frameBlend') && prevFrame) {
@@ -835,15 +1029,10 @@ function render(time) {
   // composite a delayed frame onto a fading accumulator. Where the delayed
   // pixel differs from current (motion), we deposit that color into the
   // accumulator. The accumulator decays each frame so trails fade out.
-  if (activeEffects.has('echo')) {
-    // Push current pristine frame into buffer
-    // (We snapshot raw video, not the already-processed data, so echo
-    // doesn't compound with other effects in a runaway way.)
-    const pristine = new Uint8ClampedArray(data.length);
-    // Read raw video again into pristine
-    offCtx.drawImage(video, 0, 0, W, H);
-    const rawImg = offCtx.getImageData(0, 0, W, H);
-    pristine.set(rawImg.data);
+  if (echoOn) {
+    // rawPixels was snapshotted above, before effects mutated data, so echo
+    // doesn't compound with other effects in a runaway way.
+    const pristine = rawPixels;
     frameBuffer.push(pristine);
     if (frameBuffer.length > MAX_BUFFER) frameBuffer.shift();
 
@@ -896,25 +1085,25 @@ function render(time) {
   }
 
   // Pixel drift
-  if (activeEffects.has('pixelDrift')) {
+  if (activeEffects.has('pixelDrift') && chaos > 0) {
     driftX += driftVX * driftSpeed * 0.1;
     driftY += driftVY * driftSpeed * 0.1;
     if (Math.abs(driftX) > W * 0.1) driftVX *= -1;
     if (Math.abs(driftY) > H * 0.05) driftVY *= -1;
 
-    const copy = new Uint8ClampedArray(data);
+    const copy = snapshot(data);
     const dx = Math.round(driftX), dy = Math.round(driftY);
+    const thresh = chaos * 0.3;
     for (let y = 0; y < H; y++) {
+      const srcY = ((y - dy) % H + H) % H;
       for (let x = 0; x < W; x++) {
+        if (fastRand() >= thresh) continue;
         const srcX = ((x - dx) % W + W) % W;
-        const srcY = ((y - dy) % H + H) % H;
         const si = (srcY * W + srcX) * 4;
         const di = (y * W + x) * 4;
-        if (Math.random() < chaos * 0.3) {
-          data[di]   = copy[si];
-          data[di+1] = copy[si+1];
-          data[di+2] = copy[si+2];
-        }
+        data[di]   = copy[si];
+        data[di+1] = copy[si+1];
+        data[di+2] = copy[si+2];
       }
     }
   }
@@ -922,12 +1111,12 @@ function render(time) {
   // Block displacement
   if (activeEffects.has('blockDisplace')) {
     const bs = blockSize;
-    const copy = new Uint8ClampedArray(data);
+    const copy = snapshot(data);
     for (let by = 0; by < H; by += bs) {
       for (let bx = 0; bx < W; bx += bs) {
-        if (Math.random() < chaos * 0.5) {
-          const ox = Math.round((Math.random() - 0.5) * bs * 4);
-          const oy = Math.round((Math.random() - 0.5) * bs * 2);
+        if (fastRand() < chaos * 0.5) {
+          const ox = Math.round((fastRand() - 0.5) * bs * 4);
+          const oy = Math.round((fastRand() - 0.5) * bs * 2);
           for (let dy2 = 0; dy2 < bs; dy2++) {
             for (let dx2 = 0; dx2 < bs; dx2++) {
               const sx = Math.min(W - 1, Math.max(0, bx + dx2 + ox));
@@ -947,7 +1136,7 @@ function render(time) {
   // Channel shift
   if (activeEffects.has('channelShift')) {
     const shift = Math.round(chaos * 30 + 2);
-    const copy = new Uint8ClampedArray(data);
+    const copy = snapshot(data);
     for (let i = 0; i < data.length; i += 4) {
       const ri = Math.min(data.length - 4, i + shift * 4);
       const bi = Math.max(0, i - shift * 4);
@@ -978,7 +1167,7 @@ function render(time) {
     const bs = blockSize * 2;
     for (let by = 0; by < H; by += bs) {
       for (let bx = 0; bx < W; bx += bs) {
-        if (Math.random() < chaos * 0.4) {
+        if (fastRand() < chaos * 0.4) {
           const pi = (by * W + bx) * 4;
           const pr = data[pi], pg = data[pi+1], pb2 = data[pi+2];
           for (let dy2 = 0; dy2 < bs && by+dy2 < H; dy2++) {
@@ -1048,10 +1237,9 @@ function render(time) {
 }
 
 function updateVU(data, W, H) {
-  const bars = document.querySelectorAll('.vu-bar');
-  const n = bars.length;
+  const n = vuBars.length;
   const step = Math.floor(data.length / n / 4);
-  bars.forEach((bar, i) => {
+  vuBars.forEach((bar, i) => {
     const idx = i * step * 4;
     const brightness = (data[idx] + data[idx+1] + data[idx+2]) / 3;
     const h = Math.round(brightness / 255 * 20);
