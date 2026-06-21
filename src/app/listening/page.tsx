@@ -19,6 +19,14 @@ interface ListeningItem {
 
 const currentlyListening: ListeningItem[] = [
   {
+    title: 'Summer 2026',
+    description:
+      'The summer tracks!',
+    type: 'playlist',
+    addedDate: '2026-06-21',
+    spotifyEmbed: 'https://open.spotify.com/embed/playlist/5UyJa0drNZotllrp4Sligh?utm_source=generator&theme=0'
+  },
+  {
     title: 'Spring 2026',
     description:
       'Selection of tracks that I have liked for Spring so far.',
