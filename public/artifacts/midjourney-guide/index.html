@@ -747,6 +747,213 @@
     }
     .hero-bg-text { opacity: 0.035; }
   }
+
+  /* ── PROMPT BUILDER ── */
+  .builder {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+    align-items: start;
+  }
+
+  .builder-form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px;
+  }
+
+  .field { margin-bottom: 16px; }
+  .field:last-child { margin-bottom: 0; }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .field-narrow { max-width: 100%; }
+  .field-row .field-narrow { grid-column: auto; }
+  .field-row:has(.field-narrow) {
+    grid-template-columns: 1fr 90px;
+  }
+
+  .field-label {
+    display: block;
+    font-family: 'Familjen Grotesk', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .field-label code {
+    font-size: 10px;
+    padding: 1px 4px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .req {
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .hint-inline {
+    color: var(--text-dim);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 10px;
+  }
+
+  .val-out {
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    float: right;
+    letter-spacing: 0;
+  }
+
+  .field-input {
+    width: 100%;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'Familjen Grotesk', sans-serif;
+    font-size: 13px;
+    padding: 9px 12px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .field-input::placeholder { color: var(--text-dim); }
+
+  .field-input:focus {
+    outline: none;
+    border-color: var(--accent-dim);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  select.field-input {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23a09890' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 30px;
+  }
+
+  .field-range {
+    width: 100%;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  .toggle-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+
+  .toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+
+  .toggle input { accent-color: var(--accent); cursor: pointer; }
+  .toggle code { font-size: 11px; }
+
+  .output-sticky {
+    position: sticky;
+    top: 24px;
+  }
+
+  .output-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .output-label {
+    font-family: 'Familjen Grotesk', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .copy-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-glow);
+    border: 1px solid var(--accent-dim);
+    border-radius: 4px;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .copy-btn:hover { background: rgba(232,160,80,0.16); }
+  .copy-btn.copied { color: var(--green); border-color: rgba(109,186,138,0.4); background: rgba(109,186,138,0.1); }
+
+  .output-pre {
+    margin: 0;
+    min-height: 120px;
+  }
+
+  .output-pre::before { content: 'PROMPT'; }
+
+  .output-pre code { color: #c8d8b0; }
+
+  .builder-hints {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .hint {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-muted);
+    padding: 9px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    gap: 8px;
+  }
+
+  .hint::before {
+    content: '→';
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+  }
+
+  .hint.tip { border-color: var(--accent-dim); background: var(--accent-glow); color: #c8c2ba; }
+  .hint.tip::before { color: var(--accent); }
+  .hint.warn { border-color: rgba(196,97,74,0.35); background: rgba(196,97,74,0.08); color: #d8b0a8; }
+  .hint.warn::before { color: var(--red); content: '!'; }
+  .hint code { font-size: 11px; }
+
+  @media (max-width: 760px) {
+    .builder { grid-template-columns: 1fr; }
+    .output-sticky { position: static; }
+  }
 </style>
 </head>
 <body>
@@ -798,6 +1005,10 @@
         <a href="#8020" class="nav-link">80/20 Stack</a>
         <a href="#os" class="nav-link">Operating System</a>
         <a href="#tips" class="nav-link">Pro Tips</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Tool</div>
+        <a href="#builder" class="nav-link">Prompt Builder</a>
       </div>
     </nav>
   </aside>
@@ -1421,6 +1632,173 @@ soft overcast light, natural textures, calm atmosphere
         </div>
       </section>
 
+      <!-- PROMPT BUILDER -->
+      <section class="section" id="builder">
+        <h2 class="section-heading">The <em>Prompt Builder</em></h2>
+        <p>Assemble a prompt the way this guide recommends: layer by layer, then parameters. Fill what you need, skip what you don't. The prompt updates live, ordered to match the Master Template.</p>
+
+        <div class="builder">
+          <div class="builder-form">
+
+            <div class="subsection-heading">Components</div>
+            <div class="field">
+              <label class="field-label" for="b-subject">Subject <span class="req">required</span></label>
+              <input class="field-input" id="b-subject" type="text" placeholder="ancient robot gardener, Puerto Rican jazz musician">
+            </div>
+            <div class="field">
+              <label class="field-label" for="b-action">Action / Context</label>
+              <input class="field-input" id="b-action" type="text" placeholder="performing on stage, tending a glass greenhouse">
+            </div>
+            <div class="field">
+              <label class="field-label" for="b-env">Environment</label>
+              <input class="field-input" id="b-env" type="text" placeholder="misty Pacific Northwest courtyard, 1970s recording studio">
+            </div>
+            <div class="field">
+              <label class="field-label" for="b-comp">Composition / Framing</label>
+              <input class="field-input" id="b-comp" type="text" list="comp-list" placeholder="wide establishing shot, macro close-up, low-angle">
+              <datalist id="comp-list">
+                <option>wide establishing shot</option>
+                <option>macro close-up</option>
+                <option>symmetrical front view</option>
+                <option>low-angle cinematic composition</option>
+                <option>full-body portrait</option>
+                <option>overhead flat lay</option>
+              </datalist>
+            </div>
+            <div class="field">
+              <label class="field-label" for="b-medium">Medium</label>
+              <input class="field-input" id="b-medium" type="text" list="medium-list" placeholder="35mm film photo, ink illustration, 3D render">
+              <datalist id="medium-list">
+                <option>35mm film photo</option>
+                <option>editorial product photography</option>
+                <option>ink illustration</option>
+                <option>oil painting</option>
+                <option>architectural rendering</option>
+                <option>cinematic still</option>
+              </datalist>
+            </div>
+            <div class="field">
+              <label class="field-label" for="b-light">Lighting</label>
+              <input class="field-input" id="b-light" type="text" list="light-list" placeholder="golden hour, softbox studio, neon rim light">
+              <datalist id="light-list">
+                <option>golden hour</option>
+                <option>softbox studio light</option>
+                <option>neon rim light</option>
+                <option>volumetric blue lighting</option>
+                <option>soft overcast light</option>
+                <option>dramatic high contrast</option>
+              </datalist>
+            </div>
+            <div class="field">
+              <label class="field-label" for="b-style">Style / Aesthetic</label>
+              <input class="field-input" id="b-style" type="text" placeholder="1970s National Geographic, handmade risograph zine">
+            </div>
+            <div class="field">
+              <label class="field-label" for="b-tech">Technical / Details</label>
+              <input class="field-input" id="b-tech" type="text" placeholder="shallow depth of field, sharp focus, realistic textures">
+            </div>
+
+            <div class="subsection-heading" style="margin-top:28px;">Parameters</div>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="b-model">Model / Quality</label>
+                <select class="field-input" id="b-model">
+                  <option value="--v 8.1">V8.1 (flagship)</option>
+                  <option value="--v 8.1 --sd">V8.1 SD (draft / explore)</option>
+                  <option value="--v 8.1 --hd">V8.1 HD (final)</option>
+                  <option value="--v 7">V7 (Omni Ref)</option>
+                  <option value="--niji 6">Niji (anime)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="field-label" for="b-ar">Aspect Ratio — <code>--ar</code></label>
+                <select class="field-input" id="b-ar">
+                  <option value="">none</option>
+                  <option value="1:1">1:1 — square</option>
+                  <option value="4:5" selected>4:5 — IG portrait</option>
+                  <option value="9:16">9:16 — vertical</option>
+                  <option value="16:9">16:9 — cinematic</option>
+                  <option value="3:2">3:2 — editorial</option>
+                  <option value="2:3">2:3 — poster</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="b-s">Stylize — <code>--s</code> <span class="val-out" id="b-s-out">100</span></label>
+                <input class="field-range" id="b-s" type="range" min="0" max="1000" step="25" value="100">
+              </div>
+              <div class="field">
+                <label class="field-label" for="b-c">Chaos — <code>--c</code> <span class="val-out" id="b-c-out">0</span></label>
+                <input class="field-range" id="b-c" type="range" min="0" max="100" step="5" value="0">
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Toggles</label>
+              <div class="toggle-row">
+                <label class="toggle"><input type="checkbox" id="b-raw"> <code>--raw</code> literal</label>
+                <label class="toggle"><input type="checkbox" id="b-tile"> <code>--tile</code> pattern</label>
+                <label class="toggle"><input type="checkbox" id="b-weird"> <code>--weird</code></label>
+                <label class="toggle"><input type="checkbox" id="b-p"> <code>--p</code> personalize</label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="b-no">Negative — <code>--no</code> <span class="hint-inline">categories, 4–6 max</span></label>
+              <input class="field-input" id="b-no" type="text" placeholder="text, watermark, clutter, extra limbs">
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="b-sref">Style Ref — <code>--sref</code></label>
+                <input class="field-input" id="b-sref" type="text" placeholder="image URL or sref code">
+              </div>
+              <div class="field field-narrow">
+                <label class="field-label" for="b-sw"><code>--sw</code></label>
+                <input class="field-input" id="b-sw" type="number" min="0" max="1000" placeholder="200">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="b-oref">Omni Ref — <code>--oref</code> <span class="hint-inline">V7 only</span></label>
+                <input class="field-input" id="b-oref" type="text" placeholder="subject image URL">
+              </div>
+              <div class="field field-narrow">
+                <label class="field-label" for="b-ow"><code>--ow</code></label>
+                <input class="field-input" id="b-ow" type="number" min="0" max="1000" placeholder="300">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="b-mood">Moodboard — <code>--p</code> code</label>
+                <input class="field-input" id="b-mood" type="text" placeholder="moodboard code">
+              </div>
+              <div class="field field-narrow">
+                <label class="field-label" for="b-seed">Seed</label>
+                <input class="field-input" id="b-seed" type="number" min="0" placeholder="—">
+              </div>
+            </div>
+
+          </div>
+
+          <div class="builder-output">
+            <div class="output-sticky">
+              <div class="output-head">
+                <span class="output-label">Assembled Prompt</span>
+                <button class="copy-btn" id="b-copy" type="button">Copy</button>
+              </div>
+              <pre class="output-pre" id="b-out"><code id="b-out-code"></code></pre>
+              <div class="builder-hints" id="b-hints"></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
     </div>
   </main>
 </div>
@@ -1443,6 +1821,111 @@ soft overcast light, natural textures, calm atmosphere
   }, { rootMargin: '-20% 0px -70% 0px' });
 
   sections.forEach(section => observer.observe(section));
+
+  /* ── PROMPT BUILDER ── */
+  (function () {
+    const $ = id => document.getElementById(id);
+    const outCode = $('b-out-code');
+    const hintsEl = $('b-hints');
+
+    const fields = ['b-subject','b-action','b-env','b-comp','b-medium','b-light','b-style','b-tech',
+      'b-model','b-ar','b-s','b-c','b-no','b-sref','b-sw','b-oref','b-ow','b-mood','b-seed',
+      'b-raw','b-tile','b-weird','b-p'];
+
+    function val(id) { const el = $(id); return el.value.trim(); }
+    function on(id) { return $(id).checked; }
+
+    function build() {
+      // Components, in Master Template order.
+      const parts = [
+        val('b-subject'), val('b-action'), val('b-env'), val('b-light'),
+        val('b-comp'), val('b-medium'), val('b-tech'), val('b-style')
+      ].filter(Boolean);
+
+      let text = parts.join(', ');
+
+      // Parameters.
+      const params = [];
+      if (val('b-ar')) params.push('--ar ' + val('b-ar'));
+      params.push('--s ' + val('b-s'));
+      if (parseInt(val('b-c'), 10) > 0) params.push('--c ' + val('b-c'));
+      if (on('b-raw')) params.push('--raw');
+      if (on('b-tile')) params.push('--tile');
+      if (on('b-weird')) params.push('--weird 250');
+      if (val('b-no')) params.push('--no ' + val('b-no'));
+      if (val('b-sref')) {
+        params.push('--sref ' + val('b-sref'));
+        params.push('--sw ' + (val('b-sw') || '200'));
+      }
+      if (val('b-oref')) {
+        params.push('--oref ' + val('b-oref'));
+        params.push('--ow ' + (val('b-ow') || '300'));
+      }
+      if (on('b-p') || val('b-mood')) params.push('--p' + (val('b-mood') ? ' ' + val('b-mood') : ''));
+      if (val('b-seed')) params.push('--seed ' + val('b-seed'));
+      params.push(val('b-model'));
+
+      const full = text ? (text + ' ' + params.join(' ')) : '';
+      outCode.textContent = full || '— fill in a subject to start —';
+      renderHints();
+    }
+
+    function renderHints() {
+      const h = [];
+      const model = val('b-model');
+      const stylize = parseInt(val('b-s'), 10);
+
+      if (!val('b-subject')) h.push(['tip', 'Start with a concrete <strong>subject</strong>. Specific nouns beat vague adjectives.']);
+
+      // Omni Reference requires V7.
+      if (val('b-oref') && model !== '--v 7') h.push(['warn', '<code>--oref</code> (Omni Reference) requires <strong>V7</strong>. Switch the model or remove the reference.']);
+
+      // Raw + stylize advice.
+      if (on('b-raw') && stylize > 200) h.push(['warn', '<code>--raw</code> with high <code>--s</code> fights itself. For literal output, drop stylize to ~50.']);
+      if (!on('b-raw') && /product|mockup|ui|diagram|documentary|architect/i.test(val('b-subject') + ' ' + val('b-medium') + ' ' + val('b-style')))
+        h.push(['tip', 'For realistic / technical subjects, try <code>--raw</code> and lower <code>--s</code>.']);
+
+      // Negative prompt overload.
+      if (val('b-no') && val('b-no').split(',').filter(Boolean).length > 6) h.push(['warn', 'Keep <code>--no</code> to 4–6 categories. Long wishlists work worse than broad ones like <code>clutter</code>.']);
+
+      // sref + oref combo note.
+      if (val('b-sref') && val('b-oref')) h.push(['tip', 'Omni + Style Ref is the strongest combo for campaign consistency: same subject, new scene, locked look.']);
+
+      // HD during exploration.
+      if (model === '--v 8.1 --hd' && parseInt(val('b-c'), 10) >= 20)
+        h.push(['warn', 'High chaos with <code>--hd</code> burns final-quality renders on exploration. Explore in SD, finalize in HD.']);
+
+      // Niji note.
+      if (model === '--niji 6') h.push(['tip', 'Niji is tuned for anime / manga / Eastern illustration styles.']);
+
+      // Too many style inputs.
+      const styleInputs = [val('b-style'), val('b-sref'), on('b-p') || val('b-mood')].filter(Boolean).length;
+      if (styleInputs >= 3) h.push(['tip', 'Multiple style systems stacked. Powerful, but each competes — commit to one direction if results drift.']);
+
+      hintsEl.innerHTML = h.map(([cls, msg]) => `<div class="hint ${cls}">${msg}</div>`).join('');
+    }
+
+    fields.forEach(id => {
+      const el = $(id);
+      el.addEventListener('input', build);
+      el.addEventListener('change', build);
+    });
+    $('b-s').addEventListener('input', () => $('b-s-out').textContent = $('b-s').value);
+    $('b-c').addEventListener('input', () => $('b-c-out').textContent = $('b-c').value);
+
+    $('b-copy').addEventListener('click', () => {
+      const txt = outCode.textContent;
+      if (!txt || txt.startsWith('—')) return;
+      navigator.clipboard.writeText(txt).then(() => {
+        const btn = $('b-copy');
+        btn.textContent = 'Copied';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+      });
+    });
+
+    build();
+  })();
 </script>
 
 </body>
