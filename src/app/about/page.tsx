@@ -20,9 +20,11 @@ export default function AboutPage() {
               Hello, I&apos;m Omar
             </h2>
             <p>
-              Welcome to my corner of the internet! I&apos;m an Engineering Manager
-              passionate about technology and music. This blog is where I share my
-              thoughts, experiences, and things I&apos;m learning along the way.
+              Welcome to my corner of the internet. I&apos;m an Engineering Manager
+              and product-minded engineer based in Seattle. I build customer-focused web
+              applications, help teams work through complex problems, and stay curious
+              about the tools shaping how we create software. This blog is where I share
+              what I&apos;m learning about technology, creativity, and the work in between.
             </p>
           </section>
 
@@ -33,13 +35,15 @@ export default function AboutPage() {
               What I Do
             </h2>
             <p className="mb-4">
-              I spend most of my time delivering work. My work involves:
+              Most days, I help turn ideas into useful, reliable products. My work
+              includes:
             </p>
             <ul className="list-disc list-inside space-y-2 text-[var(--text)]">
-              <li>Building things with modern web technologies</li>
-              <li>Exploring new ideas and concepts</li>
-              <li>Sharing knowledge with the community</li>
-              <li>Constantly learning and growing</li>
+              <li>Building product-focused web applications with modern technologies</li>
+              <li>Leading, mentoring, and supporting engineering teams</li>
+              <li>Exploring AI-assisted development and developer productivity tools</li>
+              <li>Creating accessible, thoughtful user experiences</li>
+              <li>Writing down what I learn and sharing it with others</li>
             </ul>
           </section>
 
@@ -50,10 +54,11 @@ export default function AboutPage() {
               Why This Blog?
             </h2>
             <p>
-              I started this blog to document my journey and share insights that
-              might help others. Writing helps me clarify my thinking, and I
-              hope my experiences can provide value to readers who are on
-              similar paths.
+              This blog is my working notebook. Writing helps me slow down, clarify what
+              I think, and make sense of the things I&apos;m learning, building, and
+              noticing. I write about technology, creative work, and the occasional idea
+              that is still taking shape. If something here helps you see a problem
+              differently or gives you a useful starting point, then it was worth sharing.
             </p>
           </section>
 
@@ -61,13 +66,14 @@ export default function AboutPage() {
 
           <section>
             <h2 className="text-2xl font-bold mb-4 text-[var(--text)]">
-              Beyond The Screen
+              Beyond the Screen
             </h2>
             <p>
-              When I&apos;m not coding or writing, you&apos;ll find me DJing and making music playlists.
-              I believe in maintaining a healthy balance between
-              work and life, and these activities help me stay creative and
-              energized.
+              When I&apos;m not coding or writing, you&apos;ll probably find me DJing,
+              building playlists, or searching for the next song to share. Music keeps me
+              curious and creative, and it is a good reminder that the best experiences,
+              whether a product or a set, are built with care for the people on the other
+              side.
             </p>
           </section>
 
@@ -96,6 +102,14 @@ export default function AboutPage() {
                 rel="noopener noreferrer"
               >
                 LinkedIn
+              </a>
+              <a
+                href="https://x.com/omar12"
+                className="px-5 py-2.5 text-sm font-medium rounded border border-[var(--border)] text-[var(--text)] hover:border-[var(--primary)] hover:text-[var(--primary)] transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                X.com
               </a>
             </div>
           </section>
