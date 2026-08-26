@@ -1,0 +1,6 @@
+#!/bin/sh
+# Generate a collapsed TL;DR for staged posts that don't have one yet.
+files=$(git diff --cached --name-only --diff-filter=AM -- 'content/*.md')
+[ -z "$files" ] && exit 0
+npx tsx scripts/tldr.ts $files || exit 0
+git add $files

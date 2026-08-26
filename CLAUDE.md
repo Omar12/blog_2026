@@ -9,6 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run lint` — ESLint
 - `npm run proofread "content/posts/my-post.md"` — Proofread a post with Claude API (requires `ANTHROPIC_API_KEY`)
 - `npm run proofread:all` — Proofread all posts
+- `npm run tldr "content/posts/my-post.md"` — Generate the collapsed TL;DR block for a post (requires `ANTHROPIC_API_KEY`)
 
 ## Architecture
 
@@ -17,6 +18,8 @@ Next.js 15 (App Router) personal blog with Tailwind CSS, dark/light theme suppor
 ### Content Pipeline
 
 Blog posts are Markdown files in `content/posts/`. Each has YAML frontmatter with fields defined in `src/lib/types.ts` (`title`, `date`, `excerpt`, `author`, `tags`, `published`, `coverImage`). Only posts with `published: true` are shown. The slug is derived from the filename.
+
+A `.githooks/pre-commit` hook runs `scripts/tldr.ts` over staged `content/*.md` files and prepends a collapsed `<details><summary>TL;DR</summary>` block (Claude-generated) to any post that lacks one, then re-stages it. Enable once with `git config core.hooksPath .githooks`. Missing API key or API failure warns and lets the commit through.
 
 Processing chain: `gray-matter` parses frontmatter → `remark`/`rehype` converts Markdown to HTML (`src/lib/markdown.ts`) → table of contents extracted from headings (`src/lib/table-of-contents.ts`) → heading IDs added for anchor links.
 

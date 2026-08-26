@@ -57,12 +57,17 @@ Edit `.env.local` and add your Anthropic API key if you want to test proofreadin
 ANTHROPIC_API_KEY=your_api_key_here
 ```
 
-4. Run the development server:
+4. Enable the git hooks (adds an auto-generated TL;DR to new posts on commit):
+```bash
+git config core.hooksPath .githooks
+```
+
+5. Run the development server:
 ```bash
 npm run dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+6. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Project Structure
 

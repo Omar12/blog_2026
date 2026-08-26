@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "proofread": "npx tsx scripts/proofread.ts",
+    "tldr": "npx tsx scripts/tldr.ts",
     "proofread:all": "for file in content/posts/*.md; do npm run proofread \"$file\"; done"
   },
   "dependencies": {
