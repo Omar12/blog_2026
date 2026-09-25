@@ -25,7 +25,7 @@ export interface ClaudeArtifact {
 export const CLAUDE_ARTIFACTS: ClaudeArtifact[] = [
   {
     slug: 'claude-cheat-sheet',
-    title: 'Claude Cheat Sheet',
+    title: 'Claude Code Cheat Sheet',
     description: 'A quick reference for using Claude AI',
     date: '2026-05-24',
     tags: ['cheat-sheet', 'claude', 'ai'],
