@@ -44,10 +44,11 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .keys{display:flex;gap:4px;flex-shrink:0}
 kbd{font-family:var(--mono);font-size:10px;font-weight:600;background:var(--surface2);border:1px solid #2a2f3d;border-bottom:2px solid #2a2f3d;border-radius:4px;padding:2px 6px;color:var(--text);white-space:nowrap}
 .shortcut-desc{color:var(--text-dim);font-size:11.5px}
-.tips-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.tip{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:10px 12px;font-size:11.5px;line-height:1.5;color:var(--text-dim);position:relative}
-.tip strong{color:var(--text);font-weight:600;display:block;margin-bottom:2px}
-.tip-num{position:absolute;top:8px;right:10px;font-family:var(--mono);font-size:9px;color:var(--text-muted);font-weight:700}
+.tips-list{display:flex;flex-direction:column;gap:8px}
+.tip{display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:10px 14px;font-size:11.5px;line-height:1.5;color:var(--text-dim)}
+.tip strong{color:var(--text);font-weight:600;display:block;margin-bottom:2px;font-size:12px}
+.tip-num{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--orange-dim);border:1px solid var(--orange);color:var(--orange);font-family:var(--mono);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.tip-body{flex:1;min-width:0}
 .fblock{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:10px 12px;font-family:var(--mono);font-size:11px;color:var(--text-dim);line-height:1.75}
 .fblock .cm{color:var(--text-muted)}
 .fblock .k{color:var(--purple)}
@@ -408,16 +409,18 @@ kbd{font-family:var(--mono);font-size:10px;font-weight:600;background:var(--surf
   </div>
 
   <div class="card orange col-span-3">
-    <div class="card-title">Pro Tips — Maximize Productivity</div>
-    <div class="tips-grid">
-      <div class="tip"><span class="tip-num">01</span><strong>Use /clear often</strong>Start each new task fresh. Old context wastes tokens and can confuse Claude with unrelated conversation history.</div>
-      <div class="tip"><span class="tip-num">02</span><strong>Prefer ! for shell commands</strong>Type <span class="ic">!npm test</span> directly — it bypasses conversational overhead and saves tokens compared to asking Claude to run it.</div>
-      <div class="tip"><span class="tip-num">03</span><strong>Auto-accept mode for safe ops</strong>Press <kbd style="font-family:var(--mono);font-size:9px;background:var(--surface);border:1px solid #2a2f3d;border-radius:3px;padding:1px 5px">Shift+Tab</kbd> twice to enable auto-accept. Only use for low-risk, well-understood operations.</div>
-      <div class="tip"><span class="tip-num">04</span><strong>Build your CLAUDE.md on day one</strong>Run <span class="ic">/init</span>, then edit it. Add build commands, stack details, lint rules, and coding conventions — Claude reads it every session.</div>
-      <div class="tip"><span class="tip-num">05</span><strong>Add hooks to enforce code quality</strong>Use <span class="ic">PostToolUse</span> hooks to auto-run formatters (Prettier, Black) and type-checkers after every file write.</div>
-      <div class="tip"><span class="tip-num">06</span><strong>Esc stops Claude, not Ctrl+C</strong>Press Esc to pause mid-task without exiting. Double-Esc lets you browse and jump to any previous message in the session.</div>
-      <div class="tip"><span class="tip-num">07</span><strong>Use /compact for long sessions</strong>When context grows large, <span class="ic">/compact</span> summarizes history and keeps Claude sharp — especially important for complex multi-file tasks.</div>
-      <div class="tip"><span class="tip-num">08</span><strong>Ctrl+V for image paste</strong>Command+V does not work for images. Use <kbd style="font-family:var(--mono);font-size:9px;background:var(--surface);border:1px solid #2a2f3d;border-radius:3px;padding:1px 5px">Ctrl+V</kbd> to paste screenshots directly into the session for visual debugging context.</div>
+    <div class="card-title">Pro Tips — From Anthropic's Best-Practices Guide</div>
+    <div class="tips-list">
+      <div class="tip"><span class="tip-num">01</span><div class="tip-body"><strong>Give Claude a way to verify its work</strong>A test, a build, a screenshot to diff. Without a pass/fail signal, "looks done" is the only signal — and you become the verification loop.</div></div>
+      <div class="tip"><span class="tip-num">02</span><div class="tip-body"><strong>Explore, then plan, then code</strong>Use plan mode (<kbd style="font-family:var(--mono);font-size:9px;background:var(--surface);border:1px solid #2a2f3d;border-radius:3px;padding:1px 5px">Shift+Tab</kbd>) to research and agree a plan before Claude edits anything. Skip it when you could describe the diff in one sentence.</div></div>
+      <div class="tip"><span class="tip-num">03</span><div class="tip-body"><strong>Two failed corrections? /clear, don't try a third</strong>Context polluted with failed approaches rarely self-corrects. A clean session with a sharper prompt beats a long one full of dead ends.</div></div>
+      <div class="tip"><span class="tip-num">04</span><div class="tip-body"><strong>Delegate research to subagents</strong>"Use subagents to investigate X" keeps exploration out of your main context — they read the files and report back a summary instead of the whole trail.</div></div>
+      <div class="tip"><span class="tip-num">05</span><div class="tip-body"><strong>Add an adversarial review step</strong>Before calling work done, have a fresh subagent review the diff against your plan. A reviewer with no attachment to the code it just wrote catches more.</div></div>
+      <div class="tip"><span class="tip-num">06</span><div class="tip-body"><strong>Treat CLAUDE.md like code, not a wishlist</strong>For every line ask: "would removing this cause mistakes?" A bloated file makes Claude ignore half of it — prune ruthlessly and check it into git.</div></div>
+      <div class="tip"><span class="tip-num">07</span><div class="tip-body"><strong>Feed rich context instead of describing it</strong><span class="ic">@file</span> to point at code, paste screenshots directly, or pipe logs with <span class="ic">cat error.log | claude</span>.</div></div>
+      <div class="tip"><span class="tip-num">08</span><div class="tip-body"><strong>Let Claude interview you before big features</strong>Ask it to use <span class="ic">AskUserQuestion</span> to dig into edge cases and tradeoffs, write a spec, then implement in a fresh session with clean context.</div></div>
+      <div class="tip"><span class="tip-num">09</span><div class="tip-body"><strong>Use hooks for zero-exception rules</strong>CLAUDE.md instructions are advisory; hooks are deterministic. Try "write a hook that runs eslint after every file edit."</div></div>
+      <div class="tip"><span class="tip-num">10</span><div class="tip-body"><strong>Fan out for large migrations</strong>Run <span class="ic">/batch &lt;instruction&gt;</span> to split work across parallel subagents, or script <span class="ic">claude -p</span> in a loop with <span class="ic">--allowedTools</span> scoped to the task.</div></div>
     </div>
   </div>
 
