@@ -79,7 +79,7 @@ kbd{font-family:var(--mono);font-size:10px;font-weight:600;background:var(--surf
       <div class="subtitle">CLI · Slash Commands · Shortcuts · Pro Tips</div>
     </div>
   </div>
-  <div class="badge">v2.1.150 · May 2026</div>
+  <div class="badge">Updated · Sep 2026</div>
 </div>
 
 <div class="grid">
@@ -111,20 +111,22 @@ kbd{font-family:var(--mono);font-size:10px;font-weight:600;background:var(--surf
     <div class="cmd-row"><span class="cmd o">/fast</span><span class="cmd-desc">Enable Fast Mode (Opus at 2.5x speed)</span></div>
     <div class="cmd-row"><span class="cmd o">/plan</span><span class="cmd-desc">Switch to planning / read-only mode</span></div>
     <div class="cmd-row"><span class="cmd o">/code-review [high]</span><span class="cmd-desc">Review for correctness bugs; --comment posts inline to PR</span></div>
+    <div class="cmd-row"><span class="cmd o">/security-review</span><span class="cmd-desc">Audit the diff/PR for security vulnerabilities</span></div>
+    <div class="cmd-row"><span class="cmd o">/simplify [level]</span><span class="cmd-desc">Suggest cleanup &amp; refactors for the current diff</span></div>
     <div class="cmd-row"><span class="cmd o">/usage</span><span class="cmd-desc">Per-category limits breakdown: skills, subagents, plugins, MCP</span></div>
   </div>
 
   <div class="card purple">
     <div class="card-title">More Slash Commands</div>
-    <div class="cmd-row"><span class="cmd p">/todos</span><span class="cmd-desc">List tracked TODO items</span></div>
+    <div class="cmd-row"><span class="cmd p">/todos</span><span class="cmd-desc">Scan for TODO/FIXME markers, build a prioritized artifact</span></div>
     <div class="cmd-row"><span class="cmd p">/add-dir &lt;path&gt;</span><span class="cmd-desc">Add working directory to session</span></div>
     <div class="cmd-row"><span class="cmd p">/doctor</span><span class="cmd-desc">Health check installation</span></div>
-    <div class="cmd-row"><span class="cmd p">/rewind</span><span class="cmd-desc">Revert to previous code state (revert code only option)</span></div>
-    <div class="cmd-row"><span class="cmd p">/bg "task"</span><span class="cmd-desc">Fork session to background and continue working</span></div>
+    <div class="cmd-row"><span class="cmd p">/rewind [N]</span><span class="cmd-desc">Roll back to a checkpoint in code or conversation</span></div>
+    <div class="cmd-row"><span class="cmd p">/memory</span><span class="cmd-desc">Edit CLAUDE.md files and manage auto memory</span></div>
+    <div class="cmd-row"><span class="cmd p">/permissions</span><span class="cmd-desc">Manage allow/ask/deny rules for tool access</span></div>
     <div class="cmd-row"><span class="cmd p">/install-github-app</span><span class="cmd-desc">Enable auto PR review via GitHub</span></div>
     <div class="cmd-row"><span class="cmd p">/keybindings</span><span class="cmd-desc">Edit custom keyboard bindings</span></div>
-    <div class="cmd-row"><span class="cmd p">/rc</span><span class="cmd-desc">Remote control (mobile access)</span></div>
-    <div class="cmd-row"><span class="cmd p">/usage-credits</span><span class="cmd-desc">Check extra usage credit balance</span></div>
+    <div class="cmd-row"><span class="cmd p">/mobile</span><span class="cmd-desc">QR code to install the Claude mobile app</span></div>
   </div>
 
   <div class="card yellow">
@@ -159,10 +161,9 @@ kbd{font-family:var(--mono);font-size:10px;font-weight:600;background:var(--surf
 
   <div class="card orange">
     <div class="card-title">Model Selection Guide</div>
-    <div class="cmd-row"><span class="cmd o">Sonnet 4.5</span><span class="cmd-desc">Default. Best balance for everyday coding tasks</span></div>
+    <div class="cmd-row"><span class="cmd o">Sonnet 5</span><span class="cmd-desc">Default. Best balance for everyday coding tasks</span></div>
     <div class="cmd-row"><span class="cmd o">Haiku 4.5</span><span class="cmd-desc">Fastest and cheapest — use for simple or token-heavy tasks</span></div>
-    <div class="cmd-row"><span class="cmd o">Opus 4.6</span><span class="cmd-desc">Strong for complex planning, architecture, large files</span></div>
-    <div class="cmd-row" style="background:rgba(255,107,53,0.06);border-radius:4px"><span class="cmd o">Opus 4.7 ✨</span><span class="cmd-desc">Latest — stronger coding &amp; long-running tasks, better vision</span></div>
+    <div class="cmd-row" style="background:rgba(255,107,53,0.06);border-radius:4px"><span class="cmd o">Opus 5.5 ✨</span><span class="cmd-desc">Latest — complex planning, architecture, large files</span></div>
     <div class="note"><strong style="color:var(--yellow)">Pro tip:</strong> Pro/Max5 defaults to Sonnet. Use <span class="ic" style="color:var(--orange);background:var(--orange-dim)">/fast</span> for Opus at 2.5x speed. <span class="ic" style="color:var(--orange);background:var(--orange-dim)">/model</span> now changes current session only — press <kbd style="font-family:var(--mono);font-size:9px;background:#181b22;border:1px solid #2a2f3d;border-radius:3px;padding:1px 4px">d</kbd> to set a new default.</div>
   </div>
 
@@ -197,7 +198,7 @@ kbd{font-family:var(--mono);font-size:10px;font-weight:600;background:var(--surf
     <div class="card-title">settings.json — Key Config</div>
     <div class="fblock" style="font-size:10.5px;line-height:1.75">
       <span class="cm">// .claude/settings.json</span><br>
-      <span class="k">"model"</span>: <span class="v">"claude-sonnet-4-20250514"</span>,<br>
+      <span class="k">"model"</span>: <span class="v">"claude-sonnet-5"</span>,<br>
       <span class="k">"permissions"</span>: {<br>
       &nbsp;&nbsp;<span class="k">"allowedTools"</span>: [<span class="v">"Read","Write","Bash(git *)"</span>],<br>
       &nbsp;&nbsp;<span class="k">"deny"</span>: [<span class="v">"Read(./.env)"</span>]<br>
@@ -217,6 +218,7 @@ kbd{font-family:var(--mono);font-size:10px;font-weight:600;background:var(--surf
   <div class="card orange">
     <div class="card-title">GitHub and PR Integration</div>
     <div class="cmd-row"><span class="cmd o">/install-github-app</span><span class="cmd-desc">Enable auto-review of all PRs</span></div>
+    <div class="cmd-row"><span class="cmd o">/pr-comments [pr#]</span><span class="cmd-desc">Post review findings to a PR, one comment per issue</span></div>
     <p style="font-size:11px;color:var(--text-dim);line-height:1.5;margin:8px 0">Customize the review prompt to keep it focused:</p>
     <div class="fblock" style="font-size:10.5px">
       <span class="cm"># claude-code-review.yml</span><br>
@@ -232,6 +234,7 @@ kbd{font-family:var(--mono);font-size:10px;font-weight:600;background:var(--surf
     <div class="cmd-row"><span class="cmd">claude mcp add &lt;name&gt;</span><span class="cmd-desc">Add MCP server to config</span></div>
     <div class="cmd-row"><span class="cmd">claude mcp list</span><span class="cmd-desc">Show all configured servers</span></div>
     <div class="cmd-row"><span class="cmd">claude mcp remove &lt;n&gt;</span><span class="cmd-desc">Remove a server</span></div>
+    <div class="cmd-row"><span class="cmd p">/mcp</span><span class="cmd-desc">Manage connections &amp; OAuth mid-session</span></div>
     <div style="height:8px"></div>
     <div class="cgrid">
       <div class="citem"><div class="cdot t"></div><div class="ctxt"><strong>GitHub MCP</strong> — PRs, issues, repos</div></div>
@@ -300,6 +303,50 @@ kbd{font-family:var(--mono);font-size:10px;font-weight:600;background:var(--surf
     </div>
   </div>
 
+  <div class="card yellow col-span-3">
+    <div class="card-title">🔁 /loop &amp; /schedule — Automation</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--yellow);margin-bottom:8px">Repeat &amp; Schedule</div>
+        <div class="cmd-row" style="border-color:rgba(251,191,36,0.12);padding:4px 0"><span class="cmd y">/loop [interval] [prompt]</span><span class="cmd-desc" style="font-size:10.5px">Repeat a prompt while the session stays open; omit interval to self-pace</span></div>
+        <div class="cmd-row" style="border:none;padding:4px 0"><span class="cmd y">/schedule &lt;interval&gt; &lt;prompt&gt;</span><span class="cmd-desc" style="font-size:10.5px">e.g. <span class="ic">/schedule 1h check if tests pass</span></span></div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--yellow);margin-bottom:8px">Branch &amp; Detach</div>
+        <div class="cmd-row" style="border-color:rgba(251,191,36,0.12);padding:4px 0"><span class="cmd y">/background [prompt]</span><span class="cmd-desc" style="font-size:10.5px">Detach current session to run as a background agent</span></div>
+        <div class="cmd-row" style="border-color:rgba(251,191,36,0.12);padding:4px 0"><span class="cmd y">/fork [prompt]</span><span class="cmd-desc" style="font-size:10.5px">Copy conversation into a new background session</span></div>
+        <div class="cmd-row" style="border:none;padding:4px 0"><span class="cmd y">/branch [name]</span><span class="cmd-desc" style="font-size:10.5px">Branch the conversation at this point</span></div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--yellow);margin-bottom:8px">Goals &amp; Scale</div>
+        <div class="cmd-row" style="border-color:rgba(251,191,36,0.12);padding:4px 0"><span class="cmd y">/goal [condition]</span><span class="cmd-desc" style="font-size:10.5px">Set a goal Claude keeps working toward until met</span></div>
+        <div class="cmd-row" style="border-color:rgba(251,191,36,0.12);padding:4px 0"><span class="cmd y">/batch &lt;instruction&gt;</span><span class="cmd-desc" style="font-size:10.5px">Orchestrate large changes across a codebase in parallel</span></div>
+        <div class="cmd-row" style="border:none;padding:4px 0"><span class="cmd y">/status</span><span class="cmd-desc" style="font-size:10.5px">Model, dir, permissions, MCP, background tasks</span></div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:8px"><strong style="color:var(--yellow)">/loop vs /schedule:</strong> <span class="ic" style="color:var(--yellow);background:var(--yellow-dim)">/loop</span> re-runs a prompt on a fixed or self-chosen interval for as long as the session is open. <span class="ic" style="color:var(--yellow);background:var(--yellow-dim)">/schedule</span> takes an explicit interval up front — good for recurring checks like a daily PR review.</div>
+  </div>
+
+  <div class="card teal col-span-2">
+    <div class="card-title">Other Handy Commands</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 16px">
+      <div>
+        <div class="cmd-row"><span class="cmd">/context [all]</span><span class="cmd-desc">Visualize context usage as a colored grid</span></div>
+        <div class="cmd-row"><span class="cmd">/export [file]</span><span class="cmd-desc">Export the conversation as plain text</span></div>
+        <div class="cmd-row"><span class="cmd">/theme [dark|light]</span><span class="cmd-desc">Switch the UI theme</span></div>
+        <div class="cmd-row"><span class="cmd">/vim</span><span class="cmd-desc">Toggle Vim keybindings (alias /vi)</span></div>
+        <div class="cmd-row"><span class="cmd">/sandbox [name]</span><span class="cmd-desc">Manage sandboxes for testing/running code</span></div>
+      </div>
+      <div>
+        <div class="cmd-row"><span class="cmd">/web-search &lt;query&gt;</span><span class="cmd-desc">Search the web, cite sources</span></div>
+        <div class="cmd-row"><span class="cmd">/release-notes</span><span class="cmd-desc">Show what's new in Claude Code</span></div>
+        <div class="cmd-row"><span class="cmd">/hooks</span><span class="cmd-desc">View hook configurations</span></div>
+        <div class="cmd-row"><span class="cmd">/ide</span><span class="cmd-desc">Manage IDE integrations</span></div>
+        <div class="cmd-row" style="border:none"><span class="cmd">/agents</span><span class="cmd-desc">Reminder to create/manage subagents</span></div>
+      </div>
+    </div>
+  </div>
+
   <div class="card purple col-span-3">
     <div class="card-title">✨ Auto Mode — NEW (Research Preview · Mar 2026)</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
@@ -339,7 +386,7 @@ kbd{font-family:var(--mono);font-size:10px;font-weight:600;background:var(--surf
 
 <div class="footer">
   <span>docs.anthropic.com/en/docs/claude-code/overview</span>
-  <span><span class="pill pt">Sonnet 4.5</span><span class="pill po">Opus 4.6</span><span class="pill pp">Haiku 4.5</span></span>
+  <span><span class="pill pt">Sonnet 5</span><span class="pill po">Opus 5.5</span><span class="pill pp">Haiku 4.5</span></span>
   <span>claude.ai &nbsp;·&nbsp; 2026</span>
 </div>
 
