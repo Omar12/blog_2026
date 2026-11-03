@@ -41,7 +41,7 @@ export const CLAUDE_ARTIFACTS: ClaudeArtifact[] = [
   },
   { slug: 'midjourney-guide',
     title: 'Midjourney Guide',
-    description: 'A comprehensive guide to using Midjourney 8.1.',
+    description: 'A comprehensive guide to using Midjourney 8.2.',
     date: '2026-06-06',
     tags: ['guide', 'midjourney', 'ai-art']
   },

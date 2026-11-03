@@ -956,683 +956,42 @@
   }
 </style>
 </head>
+
 <body>
+
+<!--
+  HOW TO UPDATE THIS GUIDE
+  All content lives in the GUIDE object in the first script block below; the markup is generated from it.
+  - New Midjourney version: change V (and META). Every `${V}` in prompts, tables and the builder follows.
+  - New feature or change: add a row to CHANGELOG, then edit the relevant section's blocks.
+  - New section: add an entry to SECTIONS ({ id, group, nav, title, blocks }). The sidebar updates itself.
+  - Builder model list: edit MODELS.
+  Block types: p, pre, table, callout, cards, steps, layers, stack, os, trouble, sub (subsection).
+-->
 
 <div class="layout">
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">Power User Guide</div>
       <div class="sidebar-title">Midjourney</div>
     </div>
-    <nav class="sidebar-nav">
-      <div class="nav-group">
-        <div class="nav-group-label">Foundation</div>
-        <a href="#mindset" class="nav-link">Power-User Mindset</a>
-        <a href="#models" class="nav-link">Choose Your Model</a>
-        <a href="#anatomy" class="nav-link">Prompt Anatomy</a>
-      </div>
-      <div class="nav-group">
-        <div class="nav-group-label">Parameters</div>
-        <a href="#ar" class="nav-link">Aspect Ratio</a>
-        <a href="#stylize" class="nav-link">Stylize</a>
-        <a href="#chaos" class="nav-link">Chaos</a>
-        <a href="#raw" class="nav-link">Raw Mode</a>
-        <a href="#seed" class="nav-link">Seed</a>
-        <a href="#negative" class="nav-link">Negative Prompts</a>
-        <a href="#other-params" class="nav-link">Tile, Weird + More</a>
-      </div>
-      <div class="nav-group">
-        <div class="nav-group-label">References</div>
-        <a href="#references" class="nav-link">Reference Overview</a>
-        <a href="#sref" class="nav-link">Style Reference</a>
-        <a href="#oref" class="nav-link">Omni Reference</a>
-        <a href="#moodboards" class="nav-link">Moodboards</a>
-        <a href="#personalization" class="nav-link">Personalization</a>
-      </div>
-      <div class="nav-group">
-        <div class="nav-group-label">Workflow</div>
-        <a href="#editing" class="nav-link">Editing Tools</a>
-        <a href="#hd" class="nav-link">HD & Quality</a>
-        <a href="#formulas" class="nav-link">Prompt Formulas</a>
-        <a href="#use-cases" class="nav-link">Use Cases</a>
-        <a href="#troubleshoot" class="nav-link">Troubleshooting</a>
-      </div>
-      <div class="nav-group">
-        <div class="nav-group-label">Reference</div>
-        <a href="#cheatsheet" class="nav-link">Cheat Sheet</a>
-        <a href="#8020" class="nav-link">80/20 Stack</a>
-        <a href="#os" class="nav-link">Operating System</a>
-        <a href="#tips" class="nav-link">Pro Tips</a>
-      </div>
-      <div class="nav-group">
-        <div class="nav-group-label">Tool</div>
-        <a href="#builder" class="nav-link">Prompt Builder</a>
-      </div>
-    </nav>
+    <nav class="sidebar-nav" id="nav"></nav>
   </aside>
 
-  <!-- MAIN -->
   <main class="main">
-
-    <!-- HERO -->
     <header class="hero">
       <div class="hero-bg-text" aria-hidden="true">MJ</div>
-      <div class="hero-eyebrow">V8.1 — May 2026</div>
+      <div class="hero-eyebrow" id="hero-eyebrow"></div>
       <h1 class="hero-heading">The <em>Power User</em><br>Guide to Midjourney</h1>
       <p class="hero-sub">A practical workflow for getting consistent, intentional, production-quality images — from first prompt to final export.</p>
-      <div class="hero-meta">
-        <span><span class="dot"></span> V7 · V8.1 · Niji</span>
-        <span><span class="dot"></span> Style Refs · Omni Ref · Moodboards</span>
-        <span><span class="dot"></span> HD · Editor · Video</span>
-      </div>
+      <div class="hero-meta" id="hero-meta"></div>
     </header>
 
     <div class="content">
+      <div id="guide"></div>
 
-      <!-- MINDSET -->
-      <section class="section" id="mindset">
-        <h2 class="section-heading">The <em>Power-User</em> Mindset</h2>
-        <p>Most beginners prompt like this: <code>"cool cyberpunk samurai in the rain"</code>. Power users think in layers, making deliberate decisions across six axes before generating a single image.</p>
-
-        <div class="layers">
-          <div class="layer">
-            <div class="layer-key">Subject</div>
-            <div class="layer-val">What is the image actually about?</div>
-          </div>
-          <div class="layer">
-            <div class="layer-key">Composition</div>
-            <div class="layer-val">How is it framed and staged?</div>
-          </div>
-          <div class="layer">
-            <div class="layer-key">Medium</div>
-            <div class="layer-val">Photo, illustration, oil painting, 3D, editorial?</div>
-          </div>
-          <div class="layer">
-            <div class="layer-key">Style System</div>
-            <div class="layer-val">Prompt text, sref, Moodboard, Personalization, Raw?</div>
-          </div>
-          <div class="layer">
-            <div class="layer-key">Constraints</div>
-            <div class="layer-val">What should <em>not</em> appear?</div>
-          </div>
-          <div class="layer">
-            <div class="layer-key">Iteration Path</div>
-            <div class="layer-val">Explore fast → select → refine → edit → finalize</div>
-          </div>
-        </div>
-
-        <div class="subsection">
-          <div class="subsection-heading">The Core Workflow</div>
-          <div class="steps">
-            <div class="step"><div class="step-num">01</div><div class="step-content"><strong>Explore</strong><p>Broad lightweight prompts with higher chaos. Cast a wide net.</p></div></div>
-            <div class="step"><div class="step-num">02</div><div class="step-content"><strong>Lock Direction</strong><p>Use seed, references, or personalization to anchor the aesthetic.</p></div></div>
-            <div class="step"><div class="step-num">03</div><div class="step-content"><strong>Refine</strong><p>Tighten parameters and edit the prompt based on what you found.</p></div></div>
-            <div class="step"><div class="step-num">04</div><div class="step-content"><strong>Edit</strong><p>Vary Region, Remix, Pan, Zoom Out, or the web Editor for targeted fixes.</p></div></div>
-            <div class="step"><div class="step-num">05</div><div class="step-content"><strong>Finalize</strong><p>HD generation, upscaling, or export to the correct aspect ratio.</p></div></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- MODELS -->
-      <section class="section" id="models">
-        <h2 class="section-heading">Choose the Right <em>Model</em></h2>
-        <p>The model version changes everything: prompt obedience, style, available parameters, and editing compatibility. Make this decision first.</p>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Use Case</th><th>Best Starting Point</th></tr></thead>
-            <tbody>
-              <tr><td>General high-quality images</td><td><strong>V8.1</strong></td></tr>
-              <tr><td>Fast exploration / drafts</td><td><strong>V8.1 SD</strong> or <strong>V7 Draft</strong></td></tr>
-              <tr><td>Higher-res final images</td><td><strong>V8.1 <code>--hd</code></strong></td></tr>
-              <tr><td>Character / object consistency</td><td><strong>V7 + Omni Reference</strong></td></tr>
-              <tr><td>Anime / manga / Eastern illustration</td><td><strong>Niji</strong></td></tr>
-              <tr><td>Less "Midjourney-pretty" / more literal</td><td><strong>Raw mode</strong></td></tr>
-              <tr><td>Legacy upscalers or older char refs</td><td><strong>V6 / V7</strong> depending on feature</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="callout">
-          <div class="callout-label">V8.1 Focus</div>
-          <p>V8.1 is the current flagship with improved sharpness, image quality, and especially better results with Style References, Moodboards, and HD generation.</p>
-        </div>
-      </section>
-
-      <!-- ANATOMY -->
-      <section class="section" id="anatomy">
-        <h2 class="section-heading">Anatomy of a Strong <em>Prompt</em></h2>
-        <p>Use this structure as a mental checklist — you don't need every component, but knowing them makes every prompt intentional.</p>
-        <pre><code>[subject] + [action/context] + [environment] + [composition/framing]
-+ [medium] + [lighting] + [style/aesthetic]
-+ [technical/camera details] + [constraints] --parameters</code></pre>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Component</th><th>Example</th></tr></thead>
-            <tbody>
-              <tr><td>Subject</td><td>"Puerto Rican jazz musician," "ancient robot gardener"</td></tr>
-              <tr><td>Environment</td><td>"misty Pacific Northwest courtyard," "1970s recording studio"</td></tr>
-              <tr><td>Composition</td><td>"wide establishing shot," "macro close-up," "symmetrical front view"</td></tr>
-              <tr><td>Medium</td><td>"35mm film photo," "ink illustration," "architectural rendering"</td></tr>
-              <tr><td>Lighting</td><td>"golden hour," "softbox studio," "neon rim light"</td></tr>
-              <tr><td>Style</td><td>"brutalist editorial," "Sunset Magazine garden photography"</td></tr>
-              <tr><td>Constraints</td><td>"no text, no watermark, no extra limbs"</td></tr>
-              <tr><td>Parameters</td><td><code>--ar</code>, <code>--s</code>, <code>--chaos</code>, <code>--raw</code>, <code>--seed</code></td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <pre><code>a weathered astronaut DJ performing in a small underground club on Europa,
-crowd reflected in the visor, low-angle cinematic composition,
-volumetric blue lighting, editorial sci-fi photography,
-realistic textures, high contrast, shallow depth of field
---ar 16:9 --stylize 200 --v 8.1</code></pre>
-      </section>
-
-      <!-- ASPECT RATIO -->
-      <section class="section" id="ar">
-        <h2 class="section-heading">Aspect Ratio — <em><code>--ar</code></em></h2>
-        <p>Choose your aspect ratio <strong>before</strong> thinking about composition. A "wide establishing shot" needs <code>16:9</code>; a character portrait needs <code>4:5</code> or <code>2:3</code>. Getting this wrong wastes your composition.</p>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Use Case</th><th>Ratio</th></tr></thead>
-            <tbody>
-              <tr><td>Instagram square</td><td><code>--ar 1:1</code></td></tr>
-              <tr><td>Instagram portrait</td><td><code>--ar 4:5</code></td></tr>
-              <tr><td>Phone wallpaper / vertical poster</td><td><code>--ar 9:16</code></td></tr>
-              <tr><td>YouTube thumbnail / cinematic still</td><td><code>--ar 16:9</code></td></tr>
-              <tr><td>Editorial / photography</td><td><code>--ar 3:2</code></td></tr>
-              <tr><td>Poster</td><td><code>--ar 2:3</code></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- STYLIZE -->
-      <section class="section" id="stylize">
-        <h2 class="section-heading">Stylize — <em><code>--s</code></em></h2>
-        <p>Controls how strongly Midjourney applies its own aesthetic taste over your literal instructions. Low values give you more control; high values give you more beauty.</p>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Value Range</th><th>Effect</th><th>Best For</th></tr></thead>
-            <tbody>
-              <tr><td><code>--s 50</code></td><td>Literal, less decorative</td><td>Product mockups, UI, diagrams</td></tr>
-              <tr><td><code>--s 100–200</code></td><td>Balanced Midjourney style</td><td>General use, portraits</td></tr>
-              <tr><td><code>--s 300–500</code></td><td>More artistic, dramatic</td><td>Posters, album art, fashion</td></tr>
-              <tr><td><code>--s 750</code></td><td>Highly interpretive</td><td>Exploratory, fantasy, abstract</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- CHAOS -->
-      <section class="section" id="chaos">
-        <h2 class="section-heading">Chaos — <em><code>--c</code></em></h2>
-        <p>Increases variation across the grid of outputs. Use high chaos to explore, low chaos once you've found a direction.</p>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Value</th><th>Use</th></tr></thead>
-            <tbody>
-              <tr><td><code>--c 0–10</code></td><td>Controlled, predictable outputs</td></tr>
-              <tr><td><code>--c 20–40</code></td><td>Good creative exploration range</td></tr>
-              <tr><td><code>--c 50+</code></td><td>Wild ideation, moodboarding, happy accidents</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="callout">
-          <div class="callout-label">Explore → Lock Workflow</div>
-          <p>Run a prompt at <code>--c 40</code> to explore. Once you find a direction you like, rerun at <code>--c 5 --seed [seed]</code> to refine consistently.</p>
-        </div>
-      </section>
-
-      <!-- RAW -->
-      <section class="section" id="raw">
-        <h2 class="section-heading">Raw Mode — <em><code>--raw</code></em></h2>
-        <p>Reduces Midjourney's default aesthetic interpretation. Use it when Midjourney keeps "beautifying" things you want to look real.</p>
-
-        <div class="card-grid">
-          <div class="card"><div class="card-label">Use When</div><div class="card-title">Product Photography</div><p>Real-world objects on clean backgrounds with natural lighting</p></div>
-          <div class="card"><div class="card-label">Use When</div><div class="card-title">Documentary Style</div><p>Realistic people, journalism-style, candid shots</p></div>
-          <div class="card"><div class="card-label">Use When</div><div class="card-title">Technical Concepts</div><p>UI mockups, architectural design, diagrams</p></div>
-          <div class="card"><div class="card-label">Use When</div><div class="card-title">Over-Stylized Output</div><p>Any time MJ adds drama, glow, or fantasy you didn't ask for</p></div>
-        </div>
-
-        <pre><code>documentary photo of a small family-owned diner in Seattle on a rainy morning,
-natural light, realistic street photography --raw --ar 3:2 --v 8.1</code></pre>
-      </section>
-
-      <!-- SEED -->
-      <section class="section" id="seed">
-        <h2 class="section-heading">Seed — <em><code>--seed</code></em></h2>
-        <p>Seeds help you reproduce or systematically vary from a similar starting point. Essential for A/B testing prompt changes and building consistent visual series.</p>
-
-        <div class="callout">
-          <div class="callout-label">Important Caveat</div>
-          <p>Seeds are directional, not absolute. Results can shift across model versions, between SD and HD, or with significant prompt changes. Use them as a consistency tool, not a guarantee.</p>
-        </div>
-
-        <p>Use seed when comparing parameter changes, trying alternate styles while preserving composition, or A/B testing prompt wording with a controlled variable.</p>
-      </section>
-
-      <!-- NEGATIVE -->
-      <section class="section" id="negative">
-        <h2 class="section-heading">Negative Prompting — <em><code>--no</code></em></h2>
-        <p>Use <code>--no</code> to remove unwanted elements. Target categories, not exhaustive lists.</p>
-
-        <pre><code>clean product photo of a black ceramic coffee mug on a walnut desk,
-soft morning light --no text, logo, watermark, hands --ar 4:5</code></pre>
-
-        <div class="callout">
-          <div class="callout-label">Power Tip</div>
-          <p>Use <code>--no</code> for <strong>categories</strong>, not wishlists. <code>--no clutter</code> usually works better than listing 20 specific things. Keep it to 4–6 items maximum.</p>
-        </div>
-      </section>
-
-      <!-- TILE + WEIRD -->
-      <section class="section" id="other-params">
-        <h2 class="section-heading">Tile, Weird <em>+ More</em></h2>
-
-        <div class="subsection">
-          <div class="subsection-heading">Tile — <code>--tile</code></div>
-          <p>Creates seamless repeating patterns. Great for wallpaper, textiles, game textures, branding systems, and wrapping paper.</p>
-          <pre><code>hand-drawn botanical pattern, Pacific Northwest ferns and mushrooms,
-vintage textile print --tile --ar 1:1</code></pre>
-        </div>
-
-        <div class="subsection">
-          <div class="subsection-heading">Weird — <code>--weird</code></div>
-          <p>Pushes images into stranger, more unexpected territory. Use when you're stuck in predictable outputs or want genuinely surprising forms.</p>
-          <pre><code>a luxury perfume bottle designed by alien oceanographers,
-iridescent glass, museum product photography --weird 500 --s 400 --ar 4:5</code></pre>
-        </div>
-      </section>
-
-      <!-- REFERENCES OVERVIEW -->
-      <section class="section" id="references">
-        <h2 class="section-heading">Image References: <em>The Real Unlock</em></h2>
-        <p>Midjourney has several distinct reference systems. They are not interchangeable — understanding which to use is a core power-user skill.</p>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Reference Type</th><th>Best For</th><th>Think of it as</th></tr></thead>
-            <tbody>
-              <tr><td>Image Prompt (<code>--iw</code>)</td><td>General visual influence, composition, palette</td><td>"Use this as inspiration"</td></tr>
-              <tr><td>Style Reference (<code>--sref</code>)</td><td>Color, texture, lighting, medium, vibe</td><td>"Make it feel like this"</td></tr>
-              <tr><td>Omni Reference (<code>--oref</code>)</td><td>Specific character / object / creature consistency</td><td>"Put this subject in the new image"</td></tr>
-              <tr><td>Moodboard (<code>--p</code>)</td><td>Broad project-level visual identity</td><td>"Use this world / style system"</td></tr>
-              <tr><td>Personalization (<code>--p</code>)</td><td>Your general aesthetic preference</td><td>"Make it more like what I like"</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="callout green">
-          <div class="callout-label">The Golden Rule</div>
-          <p>Use <strong>Moodboards</strong> for a project, <strong>Style References</strong> for a specific look, <strong>Omni Reference</strong> for a subject, and <strong>Personalization</strong> for taste. These systems can and should be combined.</p>
-        </div>
-      </section>
-
-      <!-- SREF -->
-      <section class="section" id="sref">
-        <h2 class="section-heading">Style Reference — <em><code>--sref</code></em></h2>
-        <p>One of the most important advanced features. Captures the visual vibe of an existing image — colors, medium, textures, and lighting — without copying the objects or people in it.</p>
-
-        <pre><code>a modern chair in a quiet sunlit room --sref [image URL] --sw 200 --ar 4:5 --v 8.1</code></pre>
-
-        <div class="subsection">
-          <div class="subsection-heading">Style Weight — <code>--sw</code></div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Weight</th><th>Effect</th></tr></thead>
-              <tbody>
-                <tr><td><code>--sw 50–100</code></td><td>Subtle style influence, text prompt still dominates</td></tr>
-                <tr><td><code>--sw 200</code></td><td>Balanced — good starting point for most uses</td></tr>
-                <tr><td><code>--sw 500+</code></td><td>Strong visual style lock</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="subsection">
-          <div class="subsection-heading">Consistent Series Recipe</div>
-          <pre><code>[subject], [scene], [composition], [medium]
---sref [style image] --sw 200 --ar [ratio] --seed [number]</code></pre>
-        </div>
-      </section>
-
-      <!-- OREF -->
-      <section class="section" id="oref">
-        <h2 class="section-heading">Omni Reference — <em><code>--oref</code></em></h2>
-        <p>For subject consistency. Lets you put a character, object, vehicle, or creature from a reference image into new creations. Compatible with V7 — not V8.1.</p>
-
-        <div class="callout">
-          <div class="callout-label">V7 Only</div>
-          <p>Omni Reference currently requires <code>--v 7</code>. It also costs more GPU time than regular V7 images, and has limitations with some outpainting workflows. Use it deliberately, not by default.</p>
-        </div>
-
-        <pre><code>a heroic portrait of the same robot gardener standing in a misty Pacific Northwest forest,
-cinematic backlight --oref [robot image] --ow 300 --ar 4:5 --v 7</code></pre>
-
-        <div class="subsection">
-          <div class="subsection-heading">Omni + Style Reference Combo</div>
-          <p>The most powerful reference combination for campaign consistency: same subject, different location, specific visual style.</p>
-          <pre><code>a small orange delivery robot waiting at a rainy bus stop in Tokyo at night,
-cinematic street photography
---oref [robot reference] --ow 350
---sref [neon rainy photo] --sw 250
---ar 16:9 --v 7</code></pre>
-        </div>
-      </section>
-
-      <!-- MOODBOARDS -->
-      <section class="section" id="moodboards">
-        <h2 class="section-heading">Moodboards</h2>
-        <p>Broader than Style References. A Moodboard lets you select a collection of images to create a unique visual world for a project — when words alone aren't enough.</p>
-
-        <div class="subsection">
-          <div class="subsection-heading">Moodboard Workflow</div>
-          <div class="steps">
-            <div class="step"><div class="step-num">01</div><div class="step-content"><strong>Collect 10–30 images</strong><p>Represent the full visual world. Avoid conflicting images unless you want a hybrid style.</p></div></div>
-            <div class="step"><div class="step-num">02</div><div class="step-content"><strong>Test with simple prompts first</strong><p><code>a quiet coffee shop interior, morning light --p [code] --ar 3:2</code></p></div></div>
-            <div class="step"><div class="step-num">03</div><div class="step-content"><strong>Expand from there</strong><p>Add subject-specific detail once the style is confirmed working.</p></div></div>
-            <div class="step"><div class="step-num">04</div><div class="step-content"><strong>Save working combos</strong><p>Document the prompt + moodboard code + parameters that worked.</p></div></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PERSONALIZATION -->
-      <section class="section" id="personalization">
-        <h2 class="section-heading">Personalization — <em><code>--p</code></em></h2>
-        <p>Acts like a style assistant. Learns from images you've liked and uses that information to tailor generations toward your taste. Useful for less generic outputs and building a consistent "house style."</p>
-
-        <pre><code>a minimalist poster of Jupiter over a calm ocean,
-geometric shapes, elegant negative space --p --ar 2:3 --v 8.1</code></pre>
-      </section>
-
-      <!-- EDITING -->
-      <section class="section" id="editing">
-        <h2 class="section-heading">The <em>Editing</em> Workflow</h2>
-        <p>The web Editor combines Remix, Vary Region, Pan, and Zoom Out — and works on both generated images and uploaded personal images.</p>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Tool</th><th>Use It When</th></tr></thead>
-            <tbody>
-              <tr><td>Vary Subtle</td><td>Image is almost right — small adjustments needed</td></tr>
-              <tr><td>Vary Strong</td><td>Direction is right, but needs bigger changes</td></tr>
-              <tr><td>Vary Region</td><td>One specific area needs fixing</td></tr>
-              <tr><td>Remix</td><td>Change the prompt while keeping overall structure</td></tr>
-              <tr><td>Pan</td><td>Extend the scene left / right / up / down</td></tr>
-              <tr><td>Zoom Out</td><td>Reveal more context around the image</td></tr>
-              <tr><td>Editor (web)</td><td>Advanced editing and uploaded image workflows</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subsection">
-          <div class="subsection-heading">Decision Tree</div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Problem</th><th>Best Tool</th></tr></thead>
-              <tbody>
-                <tr><td>Face almost right, slight improvement needed</td><td>Vary Subtle</td></tr>
-                <tr><td>Good composition, but outfit or setting should change</td><td>Remix</td></tr>
-                <tr><td>One hand / object / sign is wrong</td><td>Vary Region</td></tr>
-                <tr><td>Image is too cropped</td><td>Zoom Out</td></tr>
-                <tr><td>Need more space on one side</td><td>Pan</td></tr>
-                <tr><td>Need to edit an uploaded image</td><td>Web Editor</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- HD -->
-      <section class="section" id="hd">
-        <h2 class="section-heading">HD & Final <em>Quality</em></h2>
-        <p>V8.1 supports HD generation. The key rule: <strong>don't burn HD generations during exploration</strong>. Use SD or draft mode to find the right image, then generate the final version in HD.</p>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Stage</th><th>Mode</th></tr></thead>
-            <tbody>
-              <tr><td>Exploration / drafts</td><td><code>--v 8.1 --sd</code></td></tr>
-              <tr><td>Final image</td><td><code>--v 8.1 --hd</code></td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="callout">
-          <div class="callout-label">Note</div>
-          <p>In V8.1, "Run as HD" reruns the job rather than acting as a traditional upscaler — results may shift slightly. Treat the seed as directional, not a guaranteed reproduction.</p>
-        </div>
-      </section>
-
-      <!-- PROMPT FORMULAS -->
-      <section class="section" id="formulas">
-        <h2 class="section-heading">Repeatable <em>Prompt Formulas</em></h2>
-        <p>Copy-paste templates for common image types. Customize the bracketed variables.</p>
-
-        <div class="subsection">
-          <div class="subsection-heading">Cinematic Still</div>
-          <pre><code>[subject] in [environment], [specific action], cinematic still,
-[camera angle], [lens], [lighting], [mood], detailed production design
---ar 16:9 --s 200 --v 8.1</code></pre>
-        </div>
-
-        <div class="subsection">
-          <div class="subsection-heading">Editorial Product Photo</div>
-          <pre><code>[product] on [surface/background], [lighting],
-premium editorial product photography, sharp focus, clean composition
---ar 4:5 --raw --s 80 --v 8.1</code></pre>
-        </div>
-
-        <div class="subsection">
-          <div class="subsection-heading">Character Concept Art</div>
-          <pre><code>[character], [silhouette description], [costume], [personality trait],
-full-body character concept art, neutral background, detailed costume design
---ar 2:3 --s 250 --v 8.1</code></pre>
-        </div>
-
-        <div class="subsection">
-          <div class="subsection-heading">Brand Campaign Image</div>
-          <pre><code>[subject/product] in [scene], [brand adjectives], [composition], [lighting]
---p [moodboard] --sref [style image] --sw 150 --ar 4:5 --v 8.1</code></pre>
-        </div>
-
-        <div class="subsection">
-          <div class="subsection-heading">Architecture / Landscape</div>
-          <pre><code>[space] designed in [style], [materials], [plants/furniture], [lighting],
-architectural visualization, realistic, clean composition
---ar 16:9 --raw --s 100 --v 8.1</code></pre>
-        </div>
-
-        <div class="subsection">
-          <div class="subsection-heading">Master Template</div>
-          <pre><code>[main subject], [action or pose], [environment], [time of day / lighting],
-[composition / camera angle], [medium or rendering style],
-[materials / textures], [mood], [important details], [constraints]
---ar [ratio] --s [value] --c [value]
---raw / --p / --sref / --oref (as needed)
---v [version]</code></pre>
-        </div>
-      </section>
-
-      <!-- USE CASES -->
-      <section class="section" id="use-cases">
-        <h2 class="section-heading">Workflows by <em>Use Case</em></h2>
-
-        <div class="subsection">
-          <div class="subsection-heading">Social Media</div>
-          <p>Generate in <code>--ar 4:5</code> or <code>--ar 9:16</code>. Use strong subject, simple background. Apply <code>--sref</code> for brand consistency. Never try to add text inside Midjourney — do it in Canva or Figma.</p>
-        </div>
-
-        <div class="subsection">
-          <div class="subsection-heading">YouTube Thumbnails</div>
-          <p>Use <code>--ar 16:9</code>. Keep composition simple — one expressive subject. Leave negative space for text overlay. Add text externally.</p>
-          <pre><code>a shocked software engineer staring at a glowing AI dashboard,
-dramatic lighting, clean empty space on left for title,
-cinematic YouTube thumbnail composition
---ar 16:9 --s 250 --v 8.1 --no words, letters, watermark</code></pre>
-        </div>
-
-        <div class="subsection">
-          <div class="subsection-heading">Product Concepts</div>
-          <p>Use <code>--raw</code>, clean backgrounds, avoid excessive stylization. Use image references for form language. Vary Region to fix details.</p>
-        </div>
-
-        <div class="subsection">
-          <div class="subsection-heading">Concept Art</div>
-          <p>Use <code>--s 250–500</code>. Generate multiple with <code>--c 20–40</code>. Use Vary Strong for exploration, Vary Subtle once close.</p>
-        </div>
-
-        <div class="subsection">
-          <div class="subsection-heading">Consistent Series</div>
-          <p>Lock in: same model, same aspect ratio, same Moodboard or Style Reference, consistent camera language, same seed when useful.</p>
-          <pre><code>[location], quiet cinematic editorial photography,
-soft overcast light, natural textures, calm atmosphere
---sref [style reference] --sw 200 --ar 3:2 --v 8.1</code></pre>
-        </div>
-      </section>
-
-      <!-- TROUBLESHOOT -->
-      <section class="section" id="troubleshoot">
-        <h2 class="section-heading"><em>Troubleshooting</em> Guide</h2>
-
-        <div class="trouble-item">
-          <div class="trouble-problem">Image is beautiful but not what I asked for</div>
-          <div class="trouble-solution">Add <code>--raw --s 50</code>. Make the prompt more literal. Remove poetic language. Add concrete constraints. Bad: <code>"mysterious beautiful futuristic vibe"</code> → Better: <code>"realistic photo of a compact electric motorcycle parked outside a concrete apartment building at night"</code></div>
-        </div>
-
-        <div class="trouble-item">
-          <div class="trouble-problem">It keeps adding unwanted text</div>
-          <div class="trouble-solution">Add <code>--no text, letters, words, logo, watermark, signage</code>. Avoid prompts that describe posters with slogans unless you plan to fix text externally.</div>
-        </div>
-
-        <div class="trouble-item">
-          <div class="trouble-problem">Faces or hands are wrong</div>
-          <div class="trouble-solution">Try Vary Region on the problem area. Use simpler prompt, lower stylize, Raw mode, closer portrait framing, or fewer characters in the scene.</div>
-        </div>
-
-        <div class="trouble-item">
-          <div class="trouble-problem">Style is inconsistent across images</div>
-          <div class="trouble-solution">Use <code>--sref [image] --sw 200 --p [moodboard] --seed 12345</code>. Keep prompt grammar consistent across the series.</div>
-        </div>
-
-        <div class="trouble-item">
-          <div class="trouble-problem">Character changes too much between images</div>
-          <div class="trouble-solution">Use Omni Reference in V7: <code>--oref [image] --ow 300 --v 7</code>. Also reinforce key traits in text: <code>"same woman with short silver hair, round glasses, red raincoat..."</code></div>
-        </div>
-
-        <div class="trouble-item">
-          <div class="trouble-problem">Output is too generic</div>
-          <div class="trouble-solution">Increase personality inputs with <code>--sref</code>, <code>--p</code>, <code>--weird</code>, or <code>--chaos</code>. Or add specific art direction like <code>"1970s National Geographic expedition photography"</code> or <code>"handmade risograph zine aesthetic"</code>.</div>
-        </div>
-      </section>
-
-      <!-- CHEAT SHEET -->
-      <section class="section" id="cheatsheet">
-        <h2 class="section-heading">Parameter <em>Cheat Sheet</em></h2>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Goal</th><th>Use This</th></tr></thead>
-            <tbody>
-              <tr><td>More literal output</td><td><code>--raw --s 50</code></td></tr>
-              <tr><td>More beautiful / artistic</td><td><code>--s 300</code> to <code>--s 750</code></td></tr>
-              <tr><td>More variety</td><td><code>--c 30</code> to <code>--c 80</code></td></tr>
-              <tr><td>More consistency</td><td><code>--seed</code>, <code>--sref</code>, <code>--p</code>, lower chaos</td></tr>
-              <tr><td>Remove things</td><td><code>--no</code></td></tr>
-              <tr><td>Match a style</td><td><code>--sref</code> + <code>--sw</code></td></tr>
-              <tr><td>Match a subject</td><td><code>--oref</code> + <code>--ow</code></td></tr>
-              <tr><td>Use your taste</td><td><code>--p</code></td></tr>
-              <tr><td>Use project style</td><td>Moodboard</td></tr>
-              <tr><td>Seamless pattern</td><td><code>--tile</code></td></tr>
-              <tr><td>Final high-res V8.1</td><td><code>--hd</code></td></tr>
-              <tr><td>Anime style</td><td><code>--niji</code></td></tr>
-              <tr><td>Explore faster</td><td>SD / Draft mode</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- 80/20 -->
-      <section class="section" id="8020">
-        <h2 class="section-heading">The 80/20 <em>Power Stack</em></h2>
-        <p>If you only master a few things, master these ten. They cover the vast majority of use cases.</p>
-
-        <div class="stack-grid">
-          <div class="stack-item"><div class="stack-num">01</div><div class="stack-text"><strong>Aspect Ratio</strong> — <code>--ar</code></div></div>
-          <div class="stack-item"><div class="stack-num">02</div><div class="stack-text"><strong>Stylize</strong> — <code>--s</code></div></div>
-          <div class="stack-item"><div class="stack-num">03</div><div class="stack-text"><strong>Raw Mode</strong> — <code>--raw</code></div></div>
-          <div class="stack-item"><div class="stack-num">04</div><div class="stack-text"><strong>Style Reference</strong> — <code>--sref</code></div></div>
-          <div class="stack-item"><div class="stack-num">05</div><div class="stack-text"><strong>Moodboards</strong> for projects</div></div>
-          <div class="stack-item"><div class="stack-num">06</div><div class="stack-text"><strong>Omni Reference</strong> for subject consistency</div></div>
-          <div class="stack-item"><div class="stack-num">07</div><div class="stack-text"><strong>Vary Region</strong> for fixing details</div></div>
-          <div class="stack-item"><div class="stack-num">08</div><div class="stack-text"><strong>Seed</strong> for controlled testing</div></div>
-          <div class="stack-item"><div class="stack-num">09</div><div class="stack-text"><strong>HD only</strong> at the final stage</div></div>
-          <div class="stack-item"><div class="stack-num">10</div><div class="stack-text"><strong>Prompt templates</strong> by use case</div></div>
-        </div>
-      </section>
-
-      <!-- OPERATING SYSTEM -->
-      <section class="section" id="os">
-        <h2 class="section-heading">The Midjourney <em>Operating System</em></h2>
-        <p>A repeatable 7-step framework for every job, from brief to final output.</p>
-
-        <div class="os-flow">
-          <div class="os-step">
-            <div class="os-step-label">Step 01<br>Define</div>
-            <div class="os-step-content"><strong>Define the Job</strong><p>What am I making? Who is it for? Where will it be used? What aspect ratio? Do I need consistency? Realism or style?</p></div>
-          </div>
-          <div class="os-step">
-            <div class="os-step-label">Step 02<br>Pick</div>
-            <div class="os-step-content"><strong>Pick the Control System</strong><p>Just an image → prompt + params. Same style → sref or Moodboard. Same character → Omni Reference. Your taste → Personalization.</p></div>
-          </div>
-          <div class="os-step">
-            <div class="os-step-label">Step 03<br>Explore</div>
-            <div class="os-step-content"><strong>Explore Broadly</strong><pre style="margin:8px 0;padding:12px;"><code>[prompt] --c 30 --s 300 --ar [ratio] --v 8.1</code></pre></div>
-          </div>
-          <div class="os-step">
-            <div class="os-step-label">Step 04<br>Narrow</div>
-            <div class="os-step-content"><strong>Narrow to a Direction</strong><pre style="margin:8px 0;padding:12px;"><code>[refined prompt] --c 5 --s 150 --seed [seed] --ar [ratio] --v 8.1</code></pre></div>
-          </div>
-          <div class="os-step">
-            <div class="os-step-label">Step 05<br>Lock</div>
-            <div class="os-step-content"><strong>Style-Lock</strong><pre style="margin:8px 0;padding:12px;"><code>[prompt] --sref [style image] --sw 200 --p [moodboard] --ar [ratio] --v 8.1</code></pre></div>
-          </div>
-          <div class="os-step">
-            <div class="os-step-label">Step 06<br>Fix</div>
-            <div class="os-step-content"><strong>Fix with Editing Tools</strong><p>Vary Subtle, Vary Region, Remix, Editor, Pan / Zoom Out</p></div>
-          </div>
-          <div class="os-step">
-            <div class="os-step-label">Step 07<br>Final</div>
-            <div class="os-step-content"><strong>Generate Final</strong><pre style="margin:8px 0;padding:12px;"><code>[final prompt] --hd --ar [ratio] --v 8.1</code></pre></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PRO TIPS -->
-      <section class="section" id="tips">
-        <h2 class="section-heading">Final <em>Pro Tips</em></h2>
-
-        <div class="steps">
-          <div class="step"><div class="step-num">—</div><div class="step-content"><strong>Simple prompts + strong references</strong><p>Let the reference do the style work. Don't overload the text prompt when you have a sref or oref active.</p></div></div>
-          <div class="step"><div class="step-num">—</div><div class="step-content"><strong>Specific nouns over vague adjectives</strong><p>"35mm Kodak Portra" beats "warm film photography." "mid-century walnut desk" beats "cozy natural workspace."</p></div></div>
-          <div class="step"><div class="step-num">—</div><div class="step-content"><strong>Never add text inside Midjourney</strong><p>Generate the image clean, add typography manually in Canva, Figma, or Photoshop.</p></div></div>
-          <div class="step"><div class="step-num">—</div><div class="step-content"><strong>Save a prompt journal</strong><p>Track: prompt, model version, seed, references, parameter values, and result notes. Iteration without records is wasted effort.</p></div></div>
-          <div class="step"><div class="step-num">—</div><div class="step-content"><strong>Don't switch model versions mid-series</strong><p>Models have different visual languages. Changing versions can break consistency even with the same prompt and seed.</p></div></div>
-          <div class="step"><div class="step-num">—</div><div class="step-content"><strong>Don't stuff prompts with 20 styles</strong><p>Each aesthetic reference competes with the others. Pick one and commit. Add a second only if you want a deliberate hybrid.</p></div></div>
-          <div class="step"><div class="step-num">—</div><div class="step-content"><strong>Treat MJ like a creative collaborator</strong><p>Explore broadly first, then progressively tighten constraints. The images you don't expect are often the most valuable.</p></div></div>
-        </div>
-      </section>
-
-      <!-- PROMPT BUILDER -->
+      <!-- PROMPT BUILDER (interactive; model options come from MODELS) -->
       <section class="section" id="builder">
         <h2 class="section-heading">The <em>Prompt Builder</em></h2>
         <p>Assemble a prompt the way this guide recommends: layer by layer, then parameters. Fill what you need, skip what you don't. The prompt updates live, ordered to match the Master Template.</p>
@@ -1702,13 +1061,7 @@ soft overcast light, natural textures, calm atmosphere
             <div class="field-row">
               <div class="field">
                 <label class="field-label" for="b-model">Model / Quality</label>
-                <select class="field-input" id="b-model">
-                  <option value="--v 8.1">V8.1 (flagship)</option>
-                  <option value="--v 8.1 --sd">V8.1 SD (draft / explore)</option>
-                  <option value="--v 8.1 --hd">V8.1 HD (final)</option>
-                  <option value="--v 7">V7 (Omni Ref)</option>
-                  <option value="--niji 6">Niji (anime)</option>
-                </select>
+                <select class="field-input" id="b-model"></select>
               </div>
               <div class="field">
                 <label class="field-label" for="b-ar">Aspect Ratio — <code>--ar</code></label>
@@ -1804,6 +1157,553 @@ soft overcast light, natural textures, calm atmosphere
 </div>
 
 <script>
+/* ════════════════════════════════════════════════════════════
+   CONTENT — edit here. Strings may contain inline HTML.
+   ════════════════════════════════════════════════════════════ */
+
+const V = '8.2'; // current default model version
+
+const META = {
+  eyebrow: `V${V} — Updated Nov 2026`,
+  tags: [`V7 · V${V} · Niji 7`, 'Style Refs · Edit Model · Moodboards', 'HD · Draft · Thinking Mode'],
+};
+
+// Builder "Model / Quality" dropdown. First entry is the default.
+const MODELS = [
+  { value: `--v ${V}`,       label: `V${V} (default)` },
+  { value: `--v ${V} --sd`,  label: `V${V} SD (explore)` },
+  { value: `--v ${V} --hd`,  label: `V${V} HD (final)` },
+  { value: '--v 8.1',        label: 'V8.1 (previous)' },
+  { value: '--v 7',          label: 'V7 (Omni Ref)' },
+  { value: '--niji 7',       label: 'Niji 7 (anime)' },
+];
+
+// Newest first. [date, change]
+const CHANGELOG = [
+  ['Oct 2026', '<strong>Thinking Mode</strong> (alpha): "Rerun (Thinking)" on a V8.2 job checks the image against your prompt and regenerates. Aims at prompt accuracy, typography, and coherence.'],
+  ['Oct 2026', '<strong>Shared folders</strong>: invite collaborators or viewers, or share a folder by link.'],
+  ['Sep 2026', '<strong>Inpainting and outpainting now use the Edit Model</strong>: only the selected pixels change, and repeated edits keep their quality. <code>--tile</code> is now seamless on V8.1 and V8.2.'],
+  ['Sep 2026', '<strong>Styles sidebar live previews</strong> (alpha): see your prompt in each liked or featured style, then click to generate.'],
+  ['Aug 2026', '<strong>V8.2 Edit Model</strong>: edit with written instructions, use up to 4 reference images, inpaint and outpaint. Replaces Omni Reference in the V8 family.'],
+  ['Jul 2026', '<strong>V8.2 becomes the default</strong> (Jul 24). Focus: aesthetics, image quality, Personalization. V8.1 stays selectable. The V8.0 alpha is retired.'],
+  ['Jun 2026', 'V8.1 becomes the default, replacing V7.'],
+];
+
+const SECTIONS = [
+  {
+    id: 'whats-new', group: 'Foundation', nav: "What's New",
+    title: "What's <em>New</em>",
+    blocks: [
+      { p: 'Recent Midjourney changes reflected in this guide, newest first.' },
+      { table: [['When', 'Change'], ...CHANGELOG] },
+    ],
+  },
+  {
+    id: 'mindset', group: 'Foundation', nav: 'Power-User Mindset',
+    title: 'The <em>Power-User</em> Mindset',
+    blocks: [
+      { p: 'Most beginners prompt like this: <code>"cool cyberpunk samurai in the rain"</code>. Power users think in layers, making deliberate decisions across six axes before generating a single image.' },
+      { layers: [
+        ['Subject', 'What is the image actually about?'],
+        ['Composition', 'How is it framed and staged?'],
+        ['Medium', 'Photo, illustration, oil painting, 3D, editorial?'],
+        ['Style System', 'Prompt text, sref, Moodboard, Personalization, Raw?'],
+        ['Constraints', 'What should <em>not</em> appear?'],
+        ['Iteration Path', 'Explore fast → select → refine → edit → finalize'],
+      ] },
+      { sub: 'The Core Workflow', blocks: [
+        { steps: [
+          ['Explore', 'Broad lightweight prompts with higher chaos, or Draft Mode. Cast a wide net.'],
+          ['Lock Direction', 'Use seed, references, or personalization to anchor the aesthetic.'],
+          ['Refine', 'Tighten parameters and edit the prompt based on what you found.'],
+          ['Edit', 'Use the Edit Model (instructions, inpaint, outpaint), Vary Region, Remix, Pan, or Zoom Out for targeted fixes.'],
+          ['Finalize', 'Generate in HD and export at the correct aspect ratio.'],
+        ] },
+      ] },
+    ],
+  },
+  {
+    id: 'models', group: 'Foundation', nav: 'Choose Your Model',
+    title: 'Choose the Right <em>Model</em>',
+    blocks: [
+      { p: 'The model version changes everything: prompt obedience, style, available parameters, and editing compatibility. Make this decision first.' },
+      { table: [['Use Case', 'Best Starting Point'],
+        ['General high-quality images', `<strong>V${V}</strong> (default)`],
+        ['Fast exploration / drafts', `<strong>Draft Mode</strong> (24-image grid, web) or <strong>V${V} <code>--sd</code></strong>`],
+        ['Higher-res final images', `<strong>V${V} <code>--hd</code></strong> (native 2048px)`],
+        ['Character / object consistency', `<strong>V${V} Edit Model</strong> with references, or <strong>V7 + Omni Reference</strong>`],
+        ['Anime / manga / Eastern illustration', '<strong>Niji 7</strong>'],
+        ['Less "Midjourney-pretty" / more literal', '<strong>Raw mode</strong>'],
+        ['Matching an existing V8.1 series', '<strong>V8.1</strong> (still selectable)'],
+        ['Omni Reference', '<strong>V7</strong>'],
+      ] },
+      { callout: [`V${V} Focus`, `V${V} has been the default since July 24, 2026. It focuses on aesthetics, image quality, and Personalization, with fewer random low-quality results than V8.1. It also includes the new Edit Model.`] },
+    ],
+  },
+  {
+    id: 'anatomy', group: 'Foundation', nav: 'Prompt Anatomy',
+    title: 'Anatomy of a Strong <em>Prompt</em>',
+    blocks: [
+      { p: "Use this structure as a mental checklist. You don't need every component, but knowing them makes every prompt intentional." },
+      { pre: `[subject] + [action/context] + [environment] + [composition/framing]
++ [medium] + [lighting] + [style/aesthetic]
++ [technical/camera details] + [constraints] --parameters` },
+      { table: [['Component', 'Example'],
+        ['Subject', '"Puerto Rican jazz musician," "ancient robot gardener"'],
+        ['Environment', '"misty Pacific Northwest courtyard," "1970s recording studio"'],
+        ['Composition', '"wide establishing shot," "macro close-up," "symmetrical front view"'],
+        ['Medium', '"35mm film photo," "ink illustration," "architectural rendering"'],
+        ['Lighting', '"golden hour," "softbox studio," "neon rim light"'],
+        ['Style', '"brutalist editorial," "Sunset Magazine garden photography"'],
+        ['Constraints', '"no text, no watermark, no extra limbs"'],
+        ['Parameters', '<code>--ar</code>, <code>--s</code>, <code>--chaos</code>, <code>--raw</code>, <code>--seed</code>'],
+      ] },
+      { pre: `a weathered astronaut DJ performing in a small underground club on Europa,
+crowd reflected in the visor, low-angle cinematic composition,
+volumetric blue lighting, editorial sci-fi photography,
+realistic textures, high contrast, shallow depth of field
+--ar 16:9 --stylize 200 --v ${V}` },
+    ],
+  },
+  {
+    id: 'ar', group: 'Parameters', nav: 'Aspect Ratio',
+    title: 'Aspect Ratio — <em><code>--ar</code></em>',
+    blocks: [
+      { p: 'Choose your aspect ratio <strong>before</strong> thinking about composition. A "wide establishing shot" needs <code>16:9</code>. A character portrait needs <code>4:5</code> or <code>2:3</code>. Getting this wrong wastes your composition.' },
+      { table: [['Use Case', 'Ratio'],
+        ['Instagram square', '<code>--ar 1:1</code>'],
+        ['Instagram portrait', '<code>--ar 4:5</code>'],
+        ['Phone wallpaper / vertical poster', '<code>--ar 9:16</code>'],
+        ['YouTube thumbnail / cinematic still', '<code>--ar 16:9</code>'],
+        ['Editorial / photography', '<code>--ar 3:2</code>'],
+        ['Poster', '<code>--ar 2:3</code>'],
+      ] },
+      { callout: ['Limits', 'The V8 family allows ratios up to <code>14:1</code>, but only up to <code>4:1</code> in HD.'] },
+    ],
+  },
+  {
+    id: 'stylize', group: 'Parameters', nav: 'Stylize',
+    title: 'Stylize — <em><code>--s</code></em>',
+    blocks: [
+      { p: 'Controls how strongly Midjourney applies its own aesthetic taste over your literal instructions. Low values give you more control. High values give you more beauty. Range is 0–1000, default 100.' },
+      { table: [['Value Range', 'Effect', 'Best For'],
+        ['<code>--s 50</code>', 'Literal, less decorative', 'Product mockups, UI, diagrams'],
+        ['<code>--s 100–200</code>', 'Balanced Midjourney style', 'General use, portraits'],
+        ['<code>--s 300–500</code>', 'More artistic, dramatic', 'Posters, album art, fashion'],
+        ['<code>--s 750</code>', 'Highly interpretive', 'Exploratory, fantasy, abstract'],
+      ] },
+    ],
+  },
+  {
+    id: 'chaos', group: 'Parameters', nav: 'Chaos',
+    title: 'Chaos — <em><code>--c</code></em>',
+    blocks: [
+      { p: "Increases variation across the grid of outputs. Use high chaos to explore, and low chaos once you've found a direction." },
+      { table: [['Value', 'Use'],
+        ['<code>--c 0–10</code>', 'Controlled, predictable outputs'],
+        ['<code>--c 20–40</code>', 'Good creative exploration range'],
+        ['<code>--c 50+</code>', 'Wild ideation, moodboarding, happy accidents'],
+      ] },
+      { callout: ['Explore → Lock Workflow', 'Run a prompt at <code>--c 40</code> to explore. Once you find a direction you like, rerun at <code>--c 5 --seed [seed]</code> to refine consistently.'] },
+    ],
+  },
+  {
+    id: 'raw', group: 'Parameters', nav: 'Raw Mode',
+    title: 'Raw Mode — <em><code>--raw</code></em>',
+    blocks: [
+      { p: 'Reduces Midjourney\'s default aesthetic interpretation. Use it when Midjourney keeps "beautifying" things you want to look real. On V7 the long form is <code>--style raw</code>.' },
+      { cards: [
+        ['Use When', 'Product Photography', 'Real-world objects on clean backgrounds with natural lighting'],
+        ['Use When', 'Documentary Style', 'Realistic people, journalism-style, candid shots'],
+        ['Use When', 'Technical Concepts', 'UI mockups, architectural design, diagrams'],
+        ['Use When', 'Over-Stylized Output', "Any time MJ adds drama, glow, or fantasy you didn't ask for"],
+      ] },
+      { pre: `documentary photo of a small family-owned diner in Seattle on a rainy morning,
+natural light, realistic street photography --raw --ar 3:2 --v ${V}` },
+    ],
+  },
+  {
+    id: 'seed', group: 'Parameters', nav: 'Seed',
+    title: 'Seed — <em><code>--seed</code></em>',
+    blocks: [
+      { p: 'Seeds help you reproduce or systematically vary from a similar starting point. Essential for A/B testing prompt changes and building consistent visual series.' },
+      { callout: ['Important Caveat', 'Seeds are directional, not absolute. On the V8 family the same seed and prompt give near-identical results, not exact copies. Results also shift across model versions, between SD and HD, or with significant prompt changes.'] },
+      { p: 'Use seed when comparing parameter changes, trying alternate styles while preserving composition, or A/B testing prompt wording with a controlled variable.' },
+    ],
+  },
+  {
+    id: 'negative', group: 'Parameters', nav: 'Negative Prompts',
+    title: 'Negative Prompting — <em><code>--no</code></em>',
+    blocks: [
+      { p: 'Use <code>--no</code> to remove unwanted elements. Target categories, not exhaustive lists.' },
+      { pre: `clean product photo of a black ceramic coffee mug on a walnut desk,
+soft morning light --no text, logo, watermark, hands --ar 4:5` },
+      { callout: ['Power Tip', 'Use <code>--no</code> for <strong>categories</strong>, not wishlists. <code>--no clutter</code> usually works better than listing 20 specific things. Keep it to 4–6 items maximum.'] },
+    ],
+  },
+  {
+    id: 'other-params', group: 'Parameters', nav: 'Tile, Weird + More',
+    title: 'Tile, Weird <em>+ More</em>',
+    blocks: [
+      { sub: 'Tile — <code>--tile</code>', blocks: [
+        { p: 'Creates seamless repeating patterns. Great for wallpaper, textiles, game textures, branding systems, and wrapping paper. Since September 2026, tiles on V8.1 and V8.2 blend without visible seams. <code>--tile</code> does not work with attached images or the Edit Model.' },
+        { pre: `hand-drawn botanical pattern, Pacific Northwest ferns and mushrooms,
+vintage textile print --tile --ar 1:1` },
+      ] },
+      { sub: 'Weird — <code>--weird</code>', blocks: [
+        { p: "Pushes images into stranger, more unexpected territory. Use when you're stuck in predictable outputs or want genuinely surprising forms. Range is 0–3000." },
+        { pre: `a luxury perfume bottle designed by alien oceanographers,
+iridescent glass, museum product photography --weird 500 --s 400 --ar 4:5` },
+      ] },
+      { sub: 'Not on V8', blocks: [
+        { p: '<code>--q</code> (quality) works only on V7. <code>--cref</code> (Character Reference) is gone: use the Edit Model on V8, or Omni Reference on V7.' },
+      ] },
+    ],
+  },
+  {
+    id: 'references', group: 'References', nav: 'Reference Overview',
+    title: 'Image References: <em>The Real Unlock</em>',
+    blocks: [
+      { p: 'Midjourney has several distinct reference systems. They are not interchangeable. Knowing which to use is a core power-user skill.' },
+      { table: [['Reference Type', 'Best For', 'Think of it as'],
+        ['Image Prompt (<code>--iw</code>)', 'General visual influence, composition, palette', '"Use this as inspiration"'],
+        ['Style Reference (<code>--sref</code>)', 'Color, texture, lighting, medium, vibe', '"Make it feel like this"'],
+        [`Edit Model (V${V})`, 'Subject consistency, instruction edits, up to 4 refs', '"Put these subjects in a new image"'],
+        ['Omni Reference (<code>--oref</code>, V7)', 'Specific character / object on V7', '"Put this subject in the new image"'],
+        ['Moodboard (<code>--p</code>)', 'Broad project-level visual identity', '"Use this world / style system"'],
+        ['Personalization (<code>--p</code>)', 'Your general aesthetic preference', '"Make it more like what I like"'],
+      ] },
+      { callout: ['The Golden Rule', 'Use <strong>Moodboards</strong> for a project, <strong>Style References</strong> for a specific look, the <strong>Edit Model</strong> for a subject, and <strong>Personalization</strong> for taste. These systems can and should be combined.', 'green'] },
+    ],
+  },
+  {
+    id: 'sref', group: 'References', nav: 'Style Reference',
+    title: 'Style Reference — <em><code>--sref</code></em>',
+    blocks: [
+      { p: 'One of the most important advanced features. Captures the visual vibe of an existing image (colors, medium, textures, lighting) without copying the objects or people in it.' },
+      { pre: `a modern chair in a quiet sunlit room --sref [image URL] --sw 200 --ar 4:5 --v ${V}` },
+      { sub: 'Style Weight — <code>--sw</code>', blocks: [
+        { table: [['Weight', 'Effect'],
+          ['<code>--sw 50–100</code>', 'Subtle style influence, text prompt still dominates'],
+          ['<code>--sw 200</code>', 'Balanced. Good starting point for most uses'],
+          ['<code>--sw 500+</code>', 'Strong visual style lock'],
+        ] },
+      ] },
+      { sub: 'Consistent Series Recipe', blocks: [
+        { pre: `[subject], [scene], [composition], [medium]
+--sref [style image] --sw 200 --ar [ratio] --seed [number]` },
+      ] },
+    ],
+  },
+  {
+    id: 'oref', group: 'References', nav: 'Edit Model + Omni Ref',
+    title: 'Edit Model <em>+ Omni Reference</em>',
+    blocks: [
+      { p: `For subject consistency on V${V}, use the <strong>Edit Model</strong> (August 2026). It replaces Omni Reference in the V8 family. Give it written instructions and up to 4 reference images. It also handles inpainting and outpainting.` },
+      { sub: 'Using the Edit Model', blocks: [
+        { steps: [
+          ['Web', 'Drag images into the prompt bar, click <strong>edit</strong> in the lightbox, or upload in the <strong>edit</strong> tab.'],
+          ['Discord', 'Add <code>--edit</code> followed by image URLs.'],
+          ['Aspect ratio', 'Without <code>--ar</code>, the result matches the first attached image.'],
+          ['Styles', 'Personalization, Moodboards, and srefs work, but Moodboards and srefs may need extra prompt direction.'],
+        ] },
+        { pre: `put this robot in a misty Pacific Northwest forest, heroic portrait,
+cinematic backlight --edit [robot image URL] --ar 4:5` },
+      ] },
+      { sub: 'Omni Reference — <code>--oref</code> (V7)', blocks: [
+        { callout: ['V7 Only', 'Omni Reference requires <code>--v 7</code> and does not work on V8. It costs more GPU time than regular V7 images and has limits with some outpainting workflows.'] },
+        { pre: `a heroic portrait of the same robot gardener standing in a misty Pacific Northwest forest,
+cinematic backlight --oref [robot image] --ow 300 --ar 4:5 --v 7` },
+        { p: 'Combine it with a Style Reference for campaign consistency: same subject, new location, locked look.' },
+        { pre: `a small orange delivery robot waiting at a rainy bus stop in Tokyo at night,
+cinematic street photography
+--oref [robot reference] --ow 350
+--sref [neon rainy photo] --sw 250
+--ar 16:9 --v 7` },
+      ] },
+    ],
+  },
+  {
+    id: 'moodboards', group: 'References', nav: 'Moodboards',
+    title: 'Moodboards',
+    blocks: [
+      { p: "Broader than Style References. A Moodboard lets you select a collection of images to create a unique visual world for a project, for when words alone aren't enough." },
+      { sub: 'Moodboard Workflow', blocks: [
+        { steps: [
+          ['Collect 10–30 images', 'Represent the full visual world. Avoid conflicting images unless you want a hybrid style.'],
+          ['Test with simple prompts first', '<code>a quiet coffee shop interior, morning light --p [code] --ar 3:2</code>'],
+          ['Expand from there', 'Add subject-specific detail once the style is confirmed working.'],
+          ['Save working combos', 'Document the prompt + moodboard code + parameters that worked.'],
+        ] },
+      ] },
+    ],
+  },
+  {
+    id: 'personalization', group: 'References', nav: 'Personalization',
+    title: 'Personalization — <em><code>--p</code></em>',
+    blocks: [
+      { p: 'Acts like a style assistant. Learns from images you\'ve liked and uses that information to tailor generations toward your taste. Useful for less generic outputs and building a consistent "house style."' },
+      { pre: `a minimalist poster of Jupiter over a calm ocean,
+geometric shapes, elegant negative space --p --ar 2:3 --v ${V}` },
+      { callout: ['Profiles Across Versions', 'Your global V7 profile works on V8.1 and V8.2. V8 profiles do not work on V7. A new profile targets your current default version, so set the version before you click New Profile.'] },
+    ],
+  },
+  {
+    id: 'editing', group: 'Workflow', nav: 'Editing Tools',
+    title: 'The <em>Editing</em> Workflow',
+    blocks: [
+      { p: 'The web Editor combines the Edit Model, Remix, Vary Region, Pan, and Zoom Out. It works on generated images and on images you upload. Since September 2026, inpainting and outpainting use the Edit Model: only the pixels you select change, and repeated edits keep their quality.' },
+      { table: [['Tool', 'Use It When'],
+        ['Edit (instructions)', 'Describe the change in words: "make it night," "swap the jacket for a red raincoat"'],
+        ['Vary Subtle', 'Image is almost right. Small adjustments needed'],
+        ['Vary Strong', 'Direction is right, but needs bigger changes'],
+        ['Vary Region', 'One specific area needs fixing'],
+        ['Remix', 'Change the prompt while keeping overall structure'],
+        ['Pan', 'Extend the scene left / right / up / down'],
+        ['Zoom Out', 'Reveal more context around the image'],
+        ['Rerun (Thinking)', 'Alpha, V8.2 only. The model checks the image against your prompt and regenerates'],
+      ] },
+      { sub: 'Decision Tree', blocks: [
+        { table: [['Problem', 'Best Tool'],
+          ['Face almost right, slight improvement needed', 'Vary Subtle'],
+          ['Good composition, but outfit or setting should change', 'Edit (instructions) or Remix'],
+          ['One hand / object / sign is wrong', 'Vary Region'],
+          ['Image ignores part of the prompt or garbles text', 'Rerun (Thinking), alpha'],
+          ['Image is too cropped', 'Zoom Out'],
+          ['Need more space on one side', 'Pan'],
+          ['Need to edit an uploaded image', 'Edit tab / Web Editor'],
+        ] },
+      ] },
+    ],
+  },
+  {
+    id: 'hd', group: 'Workflow', nav: 'HD & Quality',
+    title: 'HD & Final <em>Quality</em>',
+    blocks: [
+      { p: "The key rule: <strong>don't burn HD generations during exploration</strong>. Use Draft Mode or SD to find the right image, then generate the final version in HD." },
+      { table: [['Stage', 'Mode', 'Cost'],
+        ['Rapid ideation', 'Draft Mode (web): 24 images at 512px', '0.4 GPU min'],
+        ['Exploration', `<code>--v ${V} --sd</code>`, '0.8 GPU min'],
+        ['Final image', `<code>--v ${V} --hd</code>: native 2048px, no upscale step`, '1.3 GPU min'],
+      ] },
+      { callout: ['Note', '"Run as HD" reruns the job rather than upscaling it, so results may shift slightly. Pan, Zoom Out, and Vary Region on an HD image produce an SD result. Upscale it to get back to HD.'] },
+    ],
+  },
+  {
+    id: 'formulas', group: 'Workflow', nav: 'Prompt Formulas',
+    title: 'Repeatable <em>Prompt Formulas</em>',
+    blocks: [
+      { p: 'Copy-paste templates for common image types. Customize the bracketed variables.' },
+      { sub: 'Cinematic Still', blocks: [{ pre: `[subject] in [environment], [specific action], cinematic still,
+[camera angle], [lens], [lighting], [mood], detailed production design
+--ar 16:9 --s 200 --v ${V}` }] },
+      { sub: 'Editorial Product Photo', blocks: [{ pre: `[product] on [surface/background], [lighting],
+premium editorial product photography, sharp focus, clean composition
+--ar 4:5 --raw --s 80 --v ${V}` }] },
+      { sub: 'Character Concept Art', blocks: [{ pre: `[character], [silhouette description], [costume], [personality trait],
+full-body character concept art, neutral background, detailed costume design
+--ar 2:3 --s 250 --v ${V}` }] },
+      { sub: 'Brand Campaign Image', blocks: [{ pre: `[subject/product] in [scene], [brand adjectives], [composition], [lighting]
+--p [moodboard] --sref [style image] --sw 150 --ar 4:5 --v ${V}` }] },
+      { sub: 'Architecture / Landscape', blocks: [{ pre: `[space] designed in [style], [materials], [plants/furniture], [lighting],
+architectural visualization, realistic, clean composition
+--ar 16:9 --raw --s 100 --v ${V}` }] },
+      { sub: 'Master Template', blocks: [{ pre: `[main subject], [action or pose], [environment], [time of day / lighting],
+[composition / camera angle], [medium or rendering style],
+[materials / textures], [mood], [important details], [constraints]
+--ar [ratio] --s [value] --c [value]
+--raw / --p / --sref / --edit (as needed)
+--v [version]` }] },
+    ],
+  },
+  {
+    id: 'use-cases', group: 'Workflow', nav: 'Use Cases',
+    title: 'Workflows by <em>Use Case</em>',
+    blocks: [
+      { sub: 'Social Media', blocks: [
+        { p: 'Generate in <code>--ar 4:5</code> or <code>--ar 9:16</code>. Use a strong subject and a simple background. Apply <code>--sref</code> for brand consistency. Add text in Canva or Figma, not in Midjourney.' },
+      ] },
+      { sub: 'YouTube Thumbnails', blocks: [
+        { p: 'Use <code>--ar 16:9</code>. Keep composition simple: one expressive subject. Leave negative space for text overlay. Add text externally.' },
+        { pre: `a shocked software engineer staring at a glowing AI dashboard,
+dramatic lighting, clean empty space on left for title,
+cinematic YouTube thumbnail composition
+--ar 16:9 --s 250 --v ${V} --no words, letters, watermark` },
+      ] },
+      { sub: 'Product Concepts', blocks: [
+        { p: 'Use <code>--raw</code> and clean backgrounds, and avoid heavy stylization. Use image references for form language. Use Vary Region or the Edit Model to fix details.' },
+      ] },
+      { sub: 'Concept Art', blocks: [
+        { p: 'Use <code>--s 250–500</code>. Generate many with <code>--c 20–40</code> or Draft Mode. Use Vary Strong for exploration, Vary Subtle once close.' },
+      ] },
+      { sub: 'Consistent Series', blocks: [
+        { p: 'Lock in: same model, same aspect ratio, same Moodboard or Style Reference, consistent camera language, same seed when useful. For a recurring character, attach it to the Edit Model each time.' },
+        { pre: `[location], quiet cinematic editorial photography,
+soft overcast light, natural textures, calm atmosphere
+--sref [style reference] --sw 200 --ar 3:2 --v ${V}` },
+      ] },
+    ],
+  },
+  {
+    id: 'troubleshoot', group: 'Workflow', nav: 'Troubleshooting',
+    title: '<em>Troubleshooting</em> Guide',
+    blocks: [
+      { trouble: [
+        ['Image is beautiful but not what I asked for', 'Add <code>--raw --s 50</code>. Make the prompt more literal. Remove poetic language. Add concrete constraints. On V8.2, try Rerun (Thinking) (alpha). Bad: <code>"mysterious beautiful futuristic vibe"</code> → Better: <code>"realistic photo of a compact electric motorcycle parked outside a concrete apartment building at night"</code>'],
+        ['It keeps adding unwanted text', 'Add <code>--no text, letters, words, logo, watermark, signage</code>. Avoid prompts that describe posters with slogans unless you plan to fix text externally.'],
+        ['Faces or hands are wrong', 'Try Vary Region on the problem area, or describe the fix to the Edit Model. Use a simpler prompt, lower stylize, Raw mode, closer portrait framing, or fewer characters in the scene.'],
+        ['Style is inconsistent across images', 'Use <code>--sref [image] --sw 200 --p [moodboard] --seed 12345</code>. Keep prompt grammar consistent across the series.'],
+        ['Character changes too much between images', `On V${V}, attach the character image to the Edit Model (up to 4 refs). On V7, use <code>--oref [image] --ow 300 --v 7</code>. Also reinforce key traits in text: <code>"same woman with short silver hair, round glasses, red raincoat..."</code>`],
+        ['Output is too generic', 'Increase personality inputs with <code>--sref</code>, <code>--p</code>, <code>--weird</code>, or <code>--chaos</code>. Or add specific art direction like <code>"1970s National Geographic expedition photography"</code> or <code>"handmade risograph zine aesthetic"</code>.'],
+        ['<code>--oref</code> is ignored', `Omni Reference only works on <code>--v 7</code>. On V${V}, use the Edit Model instead.`],
+      ] },
+    ],
+  },
+  {
+    id: 'cheatsheet', group: 'Reference', nav: 'Cheat Sheet',
+    title: 'Parameter <em>Cheat Sheet</em>',
+    blocks: [
+      { table: [['Goal', 'Use This'],
+        ['More literal output', '<code>--raw --s 50</code>'],
+        ['More beautiful / artistic', '<code>--s 300</code> to <code>--s 750</code>'],
+        ['More variety', '<code>--c 30</code> to <code>--c 80</code>'],
+        ['More consistency', '<code>--seed</code>, <code>--sref</code>, <code>--p</code>, lower chaos'],
+        ['Remove things', '<code>--no</code>'],
+        ['Match a style', '<code>--sref</code> + <code>--sw</code>'],
+        ['Match a subject', `Edit Model (<code>--edit</code>) on V${V}; <code>--oref</code> + <code>--ow</code> on V7`],
+        ['Edit with words', 'Edit Model'],
+        ['Use your taste', '<code>--p</code>'],
+        ['Use project style', 'Moodboard'],
+        ['Seamless pattern', '<code>--tile</code>'],
+        ['Final high-res', '<code>--hd</code>'],
+        ['Anime style', '<code>--niji 7</code>'],
+        ['Explore faster', 'Draft Mode or <code>--sd</code>'],
+        ['Fix prompt mismatches', 'Rerun (Thinking), alpha'],
+      ] },
+    ],
+  },
+  {
+    id: '8020', group: 'Reference', nav: '80/20 Stack',
+    title: 'The 80/20 <em>Power Stack</em>',
+    blocks: [
+      { p: 'If you only master a few things, master these ten. They cover the vast majority of use cases.' },
+      { stack: [
+        '<strong>Aspect Ratio</strong> — <code>--ar</code>',
+        '<strong>Stylize</strong> — <code>--s</code>',
+        '<strong>Raw Mode</strong> — <code>--raw</code>',
+        '<strong>Style Reference</strong> — <code>--sref</code>',
+        '<strong>Moodboards</strong> for projects',
+        '<strong>Edit Model</strong> for subjects and fixes',
+        '<strong>Vary Region</strong> for fixing details',
+        '<strong>Seed</strong> for controlled testing',
+        '<strong>HD only</strong> at the final stage',
+        '<strong>Prompt templates</strong> by use case',
+      ] },
+    ],
+  },
+  {
+    id: 'os', group: 'Reference', nav: 'Operating System',
+    title: 'The Midjourney <em>Operating System</em>',
+    blocks: [
+      { p: 'A repeatable 7-step framework for every job, from brief to final output.' },
+      { os: [
+        ['Define', 'Define the Job', { p: 'What am I making? Who is it for? Where will it be used? What aspect ratio? Do I need consistency? Realism or style?' }],
+        ['Pick', 'Pick the Control System', { p: 'Just an image → prompt + params. Same style → sref or Moodboard. Same character → Edit Model. Your taste → Personalization.' }],
+        ['Explore', 'Explore Broadly', { pre: `[prompt] --c 30 --s 300 --ar [ratio] --v ${V} --sd` }],
+        ['Narrow', 'Narrow to a Direction', { pre: `[refined prompt] --c 5 --s 150 --seed [seed] --ar [ratio] --v ${V}` }],
+        ['Lock', 'Style-Lock', { pre: `[prompt] --sref [style image] --sw 200 --p [moodboard] --ar [ratio] --v ${V}` }],
+        ['Fix', 'Fix with Editing Tools', { p: 'Edit Model, Vary Subtle, Vary Region, Remix, Pan / Zoom Out' }],
+        ['Final', 'Generate Final', { pre: `[final prompt] --hd --ar [ratio] --v ${V}` }],
+      ] },
+    ],
+  },
+  {
+    id: 'tips', group: 'Reference', nav: 'Pro Tips',
+    title: 'Final <em>Pro Tips</em>',
+    blocks: [
+      { steps: [
+        ['Simple prompts + strong references', "Let the reference do the style work. Don't overload the text prompt when you have a sref or reference image attached."],
+        ['Specific nouns over vague adjectives', '"35mm Kodak Portra" beats "warm film photography." "mid-century walnut desk" beats "cozy natural workspace."'],
+        ['Add text outside Midjourney', 'Generate the image clean, then add typography in Canva, Figma, or Photoshop.'],
+        ['Save a prompt journal', 'Track: prompt, model version, seed, references, parameter values, and result notes. Iteration without records is wasted effort.'],
+        ["Don't switch model versions mid-series", 'Models have different visual languages. Changing versions can break consistency even with the same prompt and seed.'],
+        ["Don't stuff prompts with 20 styles", 'Each aesthetic reference competes with the others. Pick one and commit. Add a second only if you want a deliberate hybrid.'],
+        ['Treat MJ like a creative collaborator', "Explore broadly first, then progressively tighten constraints. The images you don't expect are often the most valuable."],
+      ], num: '—' },
+    ],
+  },
+];
+
+// Sidebar-only entries for hand-written sections (the builder).
+const EXTRA_NAV = [{ id: 'builder', group: 'Tool', nav: 'Prompt Builder' }];
+
+/* ════════════════════════════════════════════════════════════
+   RENDERING — no content below this line.
+   ════════════════════════════════════════════════════════════ */
+
+const pad = i => String(i + 1).padStart(2, '0');
+
+const RENDER = {
+  p: b => `<p>${b.p}</p>`,
+  pre: b => `<pre><code>${b.pre}</code></pre>`,
+  table: b => {
+    const [head, ...rows] = b.table;
+    return `<div class="table-wrap"><table>
+      <thead><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>
+    </table></div>`;
+  },
+  callout: b => {
+    const [label, text, tone = ''] = b.callout;
+    return `<div class="callout ${tone}"><div class="callout-label">${label}</div><p>${text}</p></div>`;
+  },
+  cards: b => `<div class="card-grid">${b.cards.map(([label, title, text]) =>
+    `<div class="card"><div class="card-label">${label}</div><div class="card-title">${title}</div><p>${text}</p></div>`).join('')}</div>`,
+  steps: b => `<div class="steps">${b.steps.map(([title, text], i) =>
+    `<div class="step"><div class="step-num">${b.num || pad(i)}</div><div class="step-content"><strong>${title}</strong><p>${text}</p></div></div>`).join('')}</div>`,
+  layers: b => `<div class="layers">${b.layers.map(([k, v]) =>
+    `<div class="layer"><div class="layer-key">${k}</div><div class="layer-val">${v}</div></div>`).join('')}</div>`,
+  stack: b => `<div class="stack-grid">${b.stack.map((text, i) =>
+    `<div class="stack-item"><div class="stack-num">${pad(i)}</div><div class="stack-text">${text}</div></div>`).join('')}</div>`,
+  os: b => `<div class="os-flow">${b.os.map(([label, title, body], i) =>
+    `<div class="os-step"><div class="os-step-label">Step ${pad(i)}<br>${label}</div><div class="os-step-content"><strong>${title}</strong>${
+      body.pre ? `<pre style="margin:8px 0;padding:12px;"><code>${body.pre}</code></pre>` : `<p>${body.p}</p>`}</div></div>`).join('')}</div>`,
+  trouble: b => b.trouble.map(([problem, fix]) =>
+    `<div class="trouble-item"><div class="trouble-problem">${problem}</div><div class="trouble-solution">${fix}</div></div>`).join(''),
+  sub: b => `<div class="subsection"><div class="subsection-heading">${b.sub}</div>${renderBlocks(b.blocks)}</div>`,
+};
+
+function renderBlocks(blocks) {
+  return blocks.map(b => {
+    const type = Object.keys(b)[0];
+    if (!RENDER[type]) throw new Error('Unknown block type: ' + type);
+    return RENDER[type](b);
+  }).join('');
+}
+
+document.getElementById('hero-eyebrow').textContent = META.eyebrow;
+document.getElementById('hero-meta').innerHTML = META.tags.map(t => `<span><span class="dot"></span> ${t}</span>`).join('');
+
+document.getElementById('guide').innerHTML = SECTIONS.map(s =>
+  `<section class="section" id="${s.id}"><h2 class="section-heading">${s.title}</h2>${renderBlocks(s.blocks)}</section>`).join('');
+
+// Sidebar: group sections in order of first appearance.
+const groups = new Map();
+[...SECTIONS, ...EXTRA_NAV].forEach(s => {
+  if (!groups.has(s.group)) groups.set(s.group, []);
+  groups.get(s.group).push(s);
+});
+document.getElementById('nav').innerHTML = [...groups].map(([label, items]) =>
+  `<div class="nav-group"><div class="nav-group-label">${label}</div>${
+    items.map(s => `<a href="#${s.id}" class="nav-link">${s.nav}</a>`).join('')}</div>`).join('');
+
+document.getElementById('b-model').innerHTML = MODELS.map(m => `<option value="${m.value}">${m.label}</option>`).join('');
+
+// Re-apply the URL hash now that the target section exists.
+if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+</script>
+
+<script>
   const sections = document.querySelectorAll('.section[id]');
   const navLinks = document.querySelectorAll('.nav-link');
 
@@ -1877,8 +1777,8 @@ soft overcast light, natural textures, calm atmosphere
 
       if (!val('b-subject')) h.push(['tip', 'Start with a concrete <strong>subject</strong>. Specific nouns beat vague adjectives.']);
 
-      // Omni Reference requires V7.
-      if (val('b-oref') && model !== '--v 7') h.push(['warn', '<code>--oref</code> (Omni Reference) requires <strong>V7</strong>. Switch the model or remove the reference.']);
+      // Omni Reference requires V7; V8 uses the Edit Model instead.
+      if (val('b-oref') && model !== '--v 7') h.push(['warn', '<code>--oref</code> (Omni Reference) requires <strong>V7</strong>. On V8, attach the subject image to the Edit Model instead.']);
 
       // Raw + stylize advice.
       if (on('b-raw') && stylize > 200) h.push(['warn', '<code>--raw</code> with high <code>--s</code> fights itself. For literal output, drop stylize to ~50.']);
@@ -1892,11 +1792,11 @@ soft overcast light, natural textures, calm atmosphere
       if (val('b-sref') && val('b-oref')) h.push(['tip', 'Omni + Style Ref is the strongest combo for campaign consistency: same subject, new scene, locked look.']);
 
       // HD during exploration.
-      if (model === '--v 8.1 --hd' && parseInt(val('b-c'), 10) >= 20)
+      if (model.endsWith('--hd') && parseInt(val('b-c'), 10) >= 20)
         h.push(['warn', 'High chaos with <code>--hd</code> burns final-quality renders on exploration. Explore in SD, finalize in HD.']);
 
       // Niji note.
-      if (model === '--niji 6') h.push(['tip', 'Niji is tuned for anime / manga / Eastern illustration styles.']);
+      if (model.startsWith('--niji')) h.push(['tip', 'Niji is tuned for anime / manga / Eastern illustration styles.']);
 
       // Too many style inputs.
       const styleInputs = [val('b-style'), val('b-sref'), on('b-p') || val('b-mood')].filter(Boolean).length;
